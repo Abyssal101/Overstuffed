@@ -1,0 +1,23 @@
+{
+  "item.tutorialmod.zircon": "Zircon",
+  "item.tutorialmod.raw_zircon": "Raw Zircon",
+
+  "item.tutorialmod.eight_ball": "Eight Ball",
+
+  "block.tutorialmod.jumpy_block": "Jumpy Block",
+  "block.tutorialmod.zircon_lamp": "Zircon Lamp",
+
+  "block.tutorialmod.zircon_block": "Zircon Block",
+  "block.tutorialmod.zircon_ore": "Zircon Ore",
+  "block.tutorialmod.deepslate_zircon_ore": "Deepslate Zircon Ore",
+
+  "entity.minecraft.villager.tutorialmod.jumpy_master": "Jumpy Fucking Master",
+
+  "itemGroup.tutorialTab": "Zircon Tutorial Tab",
+
+  "key.category.tutorialmod.tutorial": "Tutorial Mod",
+  "key.tutorialmod.drink_water": "Drink Water",
+  "message.tutorialmod.drink_water": "Drinking Water",
+  "message.tutorialmod.drink_water_failed":"No water nearby"
+
+}
