@@ -12,6 +12,8 @@ public class ClientCPMConfigData {
 
     private static String lastWeightLayer="";
 
+    //AN array of Strings for all toggleable settings just so it's visually easier
+
     //just data
 
     private static IClientAPI playersAPI;
@@ -70,12 +72,31 @@ public class ClientCPMConfigData {
     public static void playWeight()
     {
 //        if(!ClientCPMConfigData.getWeightLayer().contentEquals(""))
-//        {
-            int outof255=(int)((((double)ClientWeightBarData.getPlayerWeight())/ClientWeightBarData.getMaxWeight())*255);
-            System.out.println(outof255+" dddd "+ playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outof255));
-            playersAPI.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
+            if(ClientTogglesData.getToggle(0)==false)
+            {
+                int outof255=(int)((((double)ClientWeightBarData.getPlayerWeight())/ClientWeightBarData.getMaxWeight())*255);
+                System.out.println(outof255+" dddd "+ playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outof255));
+                playersAPI.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
+            }
+            else {
+                if(ClientWeightBarData.getLastWeightStage()==-1)
+                {
 
-        // }
+                   int calculatedPercentage=(int)((double)(ClientWeightBarData.getPlayerWeight()/ClientWeightBarData.getMaxWeight()*100));
+                   int xOf5=calculatedPercentage/20;
+                   ClientWeightBarData.setLastWeightStage(xOf5);
+                }
+                    //this is the starting point, the stage if you will
+                    playersAPI.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
+
+                    int outOf255=(int)(ClientWeightBarData.getLastWeightStage()*0.2*255);
+                     System.out.println("Stage 255"+outOf255);
+                    System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
+                    playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outOf255+ ClientWeightBarData.getAmountThroughStage());
+
+
+                }
+            }
     }
 
-}
+

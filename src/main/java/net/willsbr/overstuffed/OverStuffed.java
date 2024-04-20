@@ -18,6 +18,7 @@ import net.willsbr.overstuffed.Block.ModBlocks;
 import net.willsbr.overstuffed.CPMCompat.CPMCompat;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.sound.ModSounds;
 import org.slf4j.Logger;
 
 import java.util.function.Supplier;
@@ -35,10 +36,11 @@ public class OverStuffed
     public OverStuffed()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModSounds.register(modEventBus);
+        ModSounds.createArrays();
+
        // ModEntities.ENTITY_TYPES.register(modEventBus);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
@@ -46,9 +48,6 @@ public class OverStuffed
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-
-
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 

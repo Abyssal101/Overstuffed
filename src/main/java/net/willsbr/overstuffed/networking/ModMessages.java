@@ -64,20 +64,34 @@ public class ModMessages {
                 .consumerMainThread(WeightBarC2SPacket::handle)
                 .add();
 
+        net.messageBuilder(WeightBarGainSettingS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(WeightBarGainSettingS2C::new)
+                .encoder(WeightBarGainSettingS2C::toBytes)
+                .consumerMainThread(WeightBarGainSettingS2C::handle)
+                .add();
         net.messageBuilder(WeightBarDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(WeightBarDataSyncPacketS2C::new)
                 .encoder(WeightBarDataSyncPacketS2C::toBytes)
                 .consumerMainThread(WeightBarDataSyncPacketS2C::handle)
                 .add();
 
+        net.messageBuilder(BurstGainDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BurstGainDataSyncPacketS2C::new)
+                .encoder(BurstGainDataSyncPacketS2C::toBytes)
+                .consumerMainThread(BurstGainDataSyncPacketS2C::handle)
+                .add();
+
+
         net.messageBuilder(setMinWeightDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(setMinWeightDataSyncPacketS2C::new)
                 .encoder(setMinWeightDataSyncPacketS2C::toBytes)
                 .consumerMainThread(setMinWeightDataSyncPacketS2C::handle)
                 .add();
-
-
-
+        net.messageBuilder(PlayerToggleUpdateS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerToggleUpdateS2C::new)
+                .encoder(PlayerToggleUpdateS2C::toBytes)
+                .consumerMainThread(PlayerToggleUpdateS2C::handle)
+                .add();
     }
 
 

@@ -33,6 +33,12 @@ public class PlayerWeightBar {
     private int weightLossDelay;
     private long savedTickforWeightLoss;
 
+    //this is the boolean controlling if it's gradual or if it rapidly increases in stages
+    private int lastWeightStage;
+
+    private int amountThroughStage;
+
+
 
 
     public int getCurrentWeight()
@@ -129,6 +135,7 @@ public class PlayerWeightBar {
        this.readyToUpdateWeight=source.readyToUpdateWeight;
        this.savedTickForWeight=source.savedTickForWeight;
        this.weightUpdateDelay=source.weightUpdateDelay;
+       this.lastWeightStage=source.lastWeightStage;
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -144,8 +151,10 @@ public class PlayerWeightBar {
         }
         nbt.putIntArray("changestack", savingArray);
 
+        nbt.putInt("weightstage", this.lastWeightStage);
         //Probably not important because it'll just reset, max a few extra seconds for someone to change.
         //nbt.putBoolean("updateweight", this.readyToUpdateWeight);
+
 
     }
     public void loadNBTData(CompoundTag nbt)
@@ -159,7 +168,7 @@ public class PlayerWeightBar {
             this.weightChanges.add(savingArray[i]);
         }
 
-
+        this.lastWeightStage=nbt.getInt("weightstage");
     }
 
     public int getWeightUpdateDelay() {
@@ -184,5 +193,23 @@ public class PlayerWeightBar {
 
     public void setSavedTickforWeightLoss(int savedTickforWeightLoss) {
         this.savedTickforWeightLoss = savedTickforWeightLoss;
+    }
+
+    public void setLastWeightStage(int i)
+    {
+        this.lastWeightStage=i;
+    }
+    public int getLastWeightStage()
+    {
+        return this.lastWeightStage;
+    }
+
+
+    public int getAmountThroughStage() {
+        return amountThroughStage;
+    }
+
+    public void setAmountThroughStage(int amountThroughStage) {
+        this.amountThroughStage = amountThroughStage;
     }
 }

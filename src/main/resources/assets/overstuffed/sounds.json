@@ -1,0 +1,67 @@
+{
+  "burp1": {
+    "subtitle": "sounds.overstuffed.burp",
+    "sounds": [
+      "overstuffed:burp1"
+    ]
+  },
+  "belch2": {
+    "subtitle": "sounds.overstuffed.burp",
+    "sounds": [
+      "overstuffed:belch2"
+    ]
+  },
+  "belch3": {
+    "subtitle": "sounds.overstuffed.burp",
+    "sounds": [
+      "overstuffed:belch3"
+    ]
+  },
+  "belch4": {
+    "subtitle": "sounds.overstuffed.burp",
+    "sounds": [
+      "overstuffed:belch4"
+    ]
+  },
+  "belch5": {
+    "subtitle": "sounds.overstuffed.burp",
+    "sounds": [
+      "overstuffed:belch5"
+    ]
+  },
+  "gurgle1": {
+    "subtitle": "sounds.overstuffed.gurgle",
+    "sounds": [
+      "overstuffed:gurgle1"
+    ]
+  },
+  "gurgle2": {
+    "subtitle": "sounds.overstuffed.gurgle",
+    "sounds": [
+      "overstuffed:gurgle2"
+    ]
+  },
+  "gurgle3": {
+    "subtitle": "sounds.overstuffed.gurgle",
+    "sounds": [
+      "overstuffed:gurgle3"
+    ]
+  },
+  "gurgle4": {
+    "subtitle": "sounds.overstuffed.gurgle",
+    "sounds": [
+      "overstuffed:gurgle4"
+    ]
+  },
+  "gurgle5": {
+    "subtitle": "sounds.overstuffed.gurgle",
+    "sounds": [
+      "overstuffed:gurgle5"
+    ]
+  }
+
+
+
+
+
+}

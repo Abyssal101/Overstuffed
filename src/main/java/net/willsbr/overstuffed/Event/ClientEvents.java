@@ -15,10 +15,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.willsbr.overstuffed.Command.SetLayer;
-import net.willsbr.overstuffed.Command.clearLayers;
-import net.willsbr.overstuffed.Command.setMaxWeight;
-import net.willsbr.overstuffed.Command.viewLayers;
+import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Menu.ConfigMenu;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.client.HudOverlay;
@@ -81,14 +78,11 @@ public class ClientEvents {
             CommandDispatcher commands=event.getDispatcher();
             SetLayer.register(commands, event.getBuildContext());
             setMaxWeight.register(commands, event.getBuildContext());
+            setMinWeight.register(commands,event.getBuildContext());
             clearLayers.register(commands, event.getBuildContext());
             viewLayers.register(commands, event.getBuildContext());
+            setWGMethod.register(commands,event.getBuildContext());
         }
-
-
-
-
-
     }
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents
@@ -98,7 +92,6 @@ public class ClientEvents {
         {
             event.register(KeyBinding.STUFFED_CONFIG);
         }
-
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {

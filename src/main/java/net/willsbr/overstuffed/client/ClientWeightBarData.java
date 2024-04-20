@@ -11,6 +11,13 @@ public class ClientWeightBarData {
 
     private static int minWeight;
 
+    private static boolean burstGain;
+
+    //this is the percent for burstGain
+    private static int lastWeightStage=0;
+
+    private static int amountThroughStage;
+
 
 
     public static void  setCurrentWeight(int newWeight)
@@ -38,5 +45,29 @@ public class ClientWeightBarData {
 
     public static void setMinWeight(int minWeight) {
         ClientWeightBarData.minWeight = minWeight;
+    }
+
+    public static boolean isBurstGain() {
+        return burstGain;
+    }
+
+    public static void setBurstGain(boolean burstGain) {
+        ClientWeightBarData.burstGain = burstGain;
+    }
+
+    public static int getLastWeightStage() {
+        return lastWeightStage;
+    }
+
+    public static void setLastWeightStage(int lastWeightStage) {
+        ClientWeightBarData.lastWeightStage = lastWeightStage;
+    }
+
+    public static int getAmountThroughStage() {
+        return amountThroughStage;
+    }
+
+    public static void setAmountThroughStage(int amountThroughStage) {
+        ClientWeightBarData.amountThroughStage = amountThroughStage;
     }
 }

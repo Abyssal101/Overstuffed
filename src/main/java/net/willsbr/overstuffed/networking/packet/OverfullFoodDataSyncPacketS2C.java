@@ -1,11 +1,11 @@
 package net.willsbr.overstuffed.networking.packet;
 
-import com.tom.cpm.api.IClientAPI;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.client.ClientCPMConfigData;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
+import net.willsbr.overstuffed.sound.ModSounds;
 
 import java.util.function.Supplier;
 
@@ -49,6 +49,11 @@ public class OverfullFoodDataSyncPacketS2C {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
             ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
+            System.out.println("HUSK HUSK HUSK?");
+            context.getSender().getLevel().playSound(null, context.getSender().blockPosition(), SoundEvents.HUSK_HURT,
+                    context.getSender().getSoundSource(), 1f, 1f);
+            context.getSender().playSound(ModSounds.BURP1.get());
+
 
             CPMData.checkIfUpdateCPM("stuffed");
         });

@@ -27,9 +27,6 @@ public abstract class MixinFinishUsingItem {
     @Inject(method = "finishUsingItem",at =@At("RETURN"))
     protected void canEat(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, CallbackInfoReturnable<ItemStack> cir)
     {
-        //this.abilities.invulnerable ||
-
-        System.out.println("fuck");
         ModMessages.sendToServer(new OverfullFoodC2SPacket());
         if(pStack.getItem().isEdible())
         {
@@ -42,10 +39,7 @@ public abstract class MixinFinishUsingItem {
                 {
                     ModMessages.sendToServer(new OverfullFoodC2SPacket());
                 }
-
             }
-
-            //cir.setReturnValue(true);
         }
 
          }

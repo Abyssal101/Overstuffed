@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.willsbr.overstuffed.CPMCompat.CPMMessageSenders;
 import net.willsbr.overstuffed.client.ClientCPMConfigData;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
+import net.willsbr.overstuffed.client.ClientTogglesData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 public class CPMData {
@@ -59,6 +60,7 @@ public class CPMData {
                 ClientCPMConfigData.playStuffed();
             }
             else if(type.contentEquals("weight")){
+                System.out.println("CPM is about to go");
                 //System.out.println("playerStuffedBarO");
                 ClientCPMConfigData.playWeight();
             }

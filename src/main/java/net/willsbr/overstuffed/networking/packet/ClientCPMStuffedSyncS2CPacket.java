@@ -35,6 +35,7 @@ public class ClientCPMStuffedSyncS2CPacket {
     public void toBytes(FriendlyByteBuf buf){
         buf.writeUtf(this.stuffedLayer);
 
+
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
