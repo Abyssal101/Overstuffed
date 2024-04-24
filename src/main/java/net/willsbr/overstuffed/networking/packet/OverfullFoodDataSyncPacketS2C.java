@@ -49,13 +49,8 @@ public class OverfullFoodDataSyncPacketS2C {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
             ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
-            System.out.println("HUSK HUSK HUSK?");
-            context.getSender().getLevel().playSound(null, context.getSender().blockPosition(), SoundEvents.HUSK_HURT,
-                    context.getSender().getSoundSource(), 1f, 1f);
-            context.getSender().playSound(ModSounds.BURP1.get());
-
-
             CPMData.checkIfUpdateCPM("stuffed");
+
         });
         return true;
     }

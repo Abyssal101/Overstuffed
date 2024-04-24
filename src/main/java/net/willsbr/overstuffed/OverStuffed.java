@@ -1,6 +1,7 @@
 package net.willsbr.overstuffed;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,8 +17,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.willsbr.overstuffed.Block.ModBlocks;
 //import net.willsbr.overstuffed.CPMCompat.CPMCompat;
 import net.willsbr.overstuffed.CPMCompat.CPMCompat;
+import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.potion.ModPotions;
 import net.willsbr.overstuffed.sound.ModSounds;
 import org.slf4j.Logger;
 
@@ -40,6 +43,9 @@ public class OverStuffed
         ModBlocks.register(modEventBus);
         ModSounds.register(modEventBus);
         ModSounds.createArrays();
+        ModPotions.register(modEventBus);
+        ModEffects.register(modEventBus);
+
 
        // ModEntities.ENTITY_TYPES.register(modEventBus);
 

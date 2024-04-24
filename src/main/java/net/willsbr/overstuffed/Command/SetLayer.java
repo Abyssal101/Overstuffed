@@ -30,9 +30,16 @@ public class SetLayer {
 
     private static int setStuffed(CommandSourceStack pSource, Player player, String stuffedLayerName) throws CommandSyntaxException {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
-            cpmData.setStuffed(stuffedLayerName);
-            ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(stuffedLayerName),(ServerPlayer) player);
-            player.sendSystemMessage(Component.literal("Stuffed Layer successfully updated"));
+            if(!stuffedLayerName.contentEquals(cpmData.getStuffedLayerName()))
+            {
+                cpmData.setStuffed(stuffedLayerName);
+                ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(stuffedLayerName),(ServerPlayer) player);
+                player.sendSystemMessage(Component.literal("Stuffed Layer successfully updated"));
+            }
+            else {
+                player.sendSystemMessage(Component.literal("Your stuffed layer already has that name"));
+            }
+
 
             //CPMData.checkIfUpdateCPM("stuffed");
         });

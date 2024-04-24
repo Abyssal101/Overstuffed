@@ -39,8 +39,6 @@ public class WeightBarDataSyncPacketS2C {
             //here we are on the client!
             ClientWeightBarData.setCurrentWeight(weight);
             CPMData.checkIfUpdateCPM("weight");
-            System.out.println("SOUND PLEASE");
-
 
 
             //CPMData.checkIfUpdateCPM();

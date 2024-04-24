@@ -49,7 +49,6 @@ public class HudOverlay {
             {
                // GuiComponent.blit(poseStack,x - 94 + (i * 9), y - 54,0,0,12,
                       //  12,6,6);
-                //System.out.println("FAk");
                 GuiComponent.blit(poseStack,x, y,0,0,0,5,5,5,5);
                         //  12,6,6);
             }

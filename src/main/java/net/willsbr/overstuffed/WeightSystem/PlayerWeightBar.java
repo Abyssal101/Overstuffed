@@ -48,7 +48,6 @@ public class PlayerWeightBar {
 
     public void addWeight()
     {
-        //System.out.println("This should be adding weight"+ currentWeight+" and "+" queued weight2" + queuedWeight +" compared to " +curMaxWeight);
         if(currentWeight+1<=this.curMaxWeight && queuedWeight>0)
         {
             currentWeight++;
