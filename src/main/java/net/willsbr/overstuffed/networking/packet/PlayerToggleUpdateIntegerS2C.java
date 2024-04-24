@@ -7,26 +7,26 @@ import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;
 
-public class PlayerToggleUpdateS2C {
+public class PlayerToggleUpdateIntegerS2C {
 
-   private boolean settingStatus;
+   private int settingValue;
 
    private int settingIndex;
    //sending data from server to client here
 
 
-    public PlayerToggleUpdateS2C(int index, boolean inputBoolean){
-        this.settingStatus = inputBoolean;
+    public PlayerToggleUpdateIntegerS2C(int index, int value){
+        this.settingValue = value;
         this.settingIndex=index;
     }
 
-    public PlayerToggleUpdateS2C(FriendlyByteBuf buf){
-        this.settingStatus =buf.readBoolean();
+    public PlayerToggleUpdateIntegerS2C(FriendlyByteBuf buf){
+        this.settingValue =buf.readInt();
         this.settingIndex=buf.readInt();
     }
 
     public void toBytes(FriendlyByteBuf buf){
-        buf.writeBoolean(settingStatus);
+        buf.writeInt(settingValue);
         buf.writeInt(settingIndex);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -35,16 +35,7 @@ public class PlayerToggleUpdateS2C {
         context.enqueueWork(() ->
         {
          //on client
-            ClientTogglesData.setToggle(this.settingIndex,this.settingStatus);
-
-            //specific code for client based
-            if(this.settingIndex==0 && this.settingStatus==false)
-            {
-                ClientWeightBarData.setLastWeightStage(-1);
-            }
-
-
-
+            ClientTogglesData.setValueToggle(this.settingIndex,this.settingValue);
         });
         return true;
     }

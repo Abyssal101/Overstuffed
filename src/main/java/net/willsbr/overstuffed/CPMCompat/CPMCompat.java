@@ -26,7 +26,6 @@ public class CPMCompat implements ICPMPlugin {
                 (player, message) -> {
                     //this plays the new animation
                     int temp=message.getInteger("currentweight");
-                        System.out.println("WHAT ARE YOU "+temp);
                     api.playAnimation(ClientCPMConfigData.getWeightLayer(),temp);
                     //this resets the old one if any
                     api.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);

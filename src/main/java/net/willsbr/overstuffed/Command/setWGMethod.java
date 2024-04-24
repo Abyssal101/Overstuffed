@@ -1,11 +1,9 @@
 package net.willsbr.overstuffed.Command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.sun.jdi.connect.Connector;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -13,8 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerTogglesProvider;
-import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -39,7 +35,7 @@ public class setWGMethod {
                     weightBar.setLastWeightStage(-1);
                         });
 
-                ModMessages.sendToPlayer(new PlayerToggleUpdateS2C(0,false),(ServerPlayer) player);
+                ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(0,false),(ServerPlayer) player);
             }
             else  if(input.toLowerCase().contentEquals("true"))
             {
@@ -50,7 +46,7 @@ public class setWGMethod {
                     weightBar.setLastWeightStage(xOf5);
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),(ServerPlayer) player);
                 });
-                ModMessages.sendToPlayer(new PlayerToggleUpdateS2C(0,true),(ServerPlayer) player);
+                ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(0,true),(ServerPlayer) player);
 
             }
             else

@@ -5,7 +5,13 @@
 
 
   "sounds.overstuffed.burp": "Burp",
-  "sounds.overstuffed.gurgle": "Gurgle"
+  "sounds.overstuffed.gurgle": "Gurgle",
+
+  "effect.overstuffed.goldendiet" : "Golden Diet",
+
+  "message.overstuffed.effect": "Overstuffed Effect Failed",
+  "advancement.overstuffed.fattytitle": "Fatty",
+  "advancement.overstuffed.fattydescription": "You managed to reach your max weight!"
 
 
 }
