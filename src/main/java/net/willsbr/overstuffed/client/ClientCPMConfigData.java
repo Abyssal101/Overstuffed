@@ -2,6 +2,8 @@ package net.willsbr.overstuffed.client;
 
 import com.tom.cpm.api.IClientAPI;
 import net.willsbr.overstuffed.CPMCompat.StuffedSender;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBar;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 
 public class ClientCPMConfigData {
 
@@ -63,7 +65,7 @@ public class ClientCPMConfigData {
     {
         if(!ClientCPMConfigData.getStuffedBellyLayer().contentEquals(""))
         {
-            Double percentFull= ClientStuffedBarData.getPlayerStuffedBar()/(ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getCurrentFirmLimit()*1.0);
+            Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
             int outOf255=(int)(percentFull*255);
             playersAPI.playAnimation(ClientCPMConfigData.getStuffedBellyLayer(),outOf255);
             //System.out.println(outOf255+"Is this properly playing: "+playersAPI.getAnimationPlaying(ClientCPMConfigData.getStuffedBellyLayer()));

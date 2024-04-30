@@ -3,10 +3,8 @@ package net.willsbr.overstuffed.Event;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -103,6 +101,9 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.SERVER) {
+
+            //ServerPlayer serverplayer=(ServerPlayer)event.player;
+            //serverplayer.getAdvancements()
             //stuffed filling hunger bar logic
             event.player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
                 if(stuffedBar.getCurrentStuffedLevel() > 0 && event.player.getRandom().nextFloat() < 0.005f
@@ -110,6 +111,13 @@ public class ModEvent {
 
                     stuffedBar.subStuffedLevel(1);
                     event.player.getFoodData().setFoodLevel(event.player.getFoodData().getFoodLevel()+1);
+                    stuffedBar.addStuffedLossed();
+                    if( stuffedBar.getCurrentStuffedLevel()+1>stuffedBar.getFullPoints() && stuffedBar.getStuffedLossed()>= stuffedBar.getInterval())
+                    {
+                        if(stuffedBar.getCurrentStuffedLevel()+1>(stuffedBar.getFullPoints()+stuffedBar.getStuffedPoints()))
+                        stuffedBar.addStuffedLossed();
+                    }
+                    stuffedBar.addStuffedLossed();
                     event.player.sendSystemMessage(Component.literal("Subtracted Hunger:"+stuffedBar.getCurrentStuffedLevel()));
                     //adagsdagasgd
 
@@ -253,6 +261,7 @@ public class ModEvent {
         //System.out.println(weightBar.getLastWeightStage()+" Last stage");
         if(xOf5!=weightBar.getLastWeightStage())
         {
+
 
             //Come back to if really jarring
             if((event.player.tickCount&5)==0)
