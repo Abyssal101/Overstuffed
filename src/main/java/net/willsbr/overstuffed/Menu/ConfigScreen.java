@@ -4,7 +4,9 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.OptionsList;
@@ -37,6 +39,9 @@ public class ConfigScreen extends Screen {
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
     private OptionsList optionsList;
+
+    //OPTION INSTANCES ARE BUTTONS
+    private OptionInstance stageBasedWeight= OptionInstance.createBoolean("Stage Based Weight", false);
 
     // ## CPM Value Layers
     // - Stuffed: `____`
@@ -89,6 +94,8 @@ public class ConfigScreen extends Screen {
                 Component.literal("Weight Layer"));
         this.weightLayerEditBox.setValue(OverstuffedConfig.weightLayerConfigEntry.get());
 
+
+
         // Create the options list
         // It must be created in this method instead of in the constructor,
         // or it will not be displayed properly
@@ -98,6 +105,9 @@ public class ConfigScreen extends Screen {
                 this.height - OPTIONS_LIST_BOTTOM_OFFSET,
                 OPTIONS_LIST_ITEM_HEIGHT
         );
+        optionsList.addSmall(OptionInstance.createBoolean("test",false),OptionInstance.createBoolean("test2",false));
+
+
 
         // FIXME: Add OptionInstance<String> instead of EditBox?
 
@@ -106,6 +116,7 @@ public class ConfigScreen extends Screen {
         this.addRenderableWidget(this.optionsList);
 
         this.addRenderableWidget(this.weightLayerEditBox);
+
 
         // Add the "Done" button
         this.addRenderableWidget(new Button(
@@ -150,6 +161,9 @@ public class ConfigScreen extends Screen {
         // Draw the title
         drawCenteredString(pose, font, this.getTitle().getString(),
                 this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
+
+
+
         // pose.popPose();
         // Render things after widgets (tooltips)
     }
