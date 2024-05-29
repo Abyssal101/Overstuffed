@@ -1,6 +1,7 @@
 package net.willsbr.overstuffed;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,9 +20,11 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.willsbr.overstuffed.Block.ModBlocks;
 import net.willsbr.overstuffed.CPMCompat.CPMCompat;
+import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.potion.ModPotions;
 import net.willsbr.overstuffed.sound.ModSounds;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import org.slf4j.Logger;
@@ -46,7 +49,8 @@ public class OverStuffed
         ModSounds.register(modEventBus);
         ModSounds.createArrays();
         //ModEntities.ENTITY_TYPES.register(modEventBus);
-
+        ModPotions.register(modEventBus);
+        ModEffects.register(modEventBus);
         // Register the methods for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC); // CPM Compat

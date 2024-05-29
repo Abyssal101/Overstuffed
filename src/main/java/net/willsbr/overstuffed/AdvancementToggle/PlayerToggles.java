@@ -19,7 +19,8 @@ public class PlayerToggles {
         //Pre-emptively do 10 for my sake
         settings=new int[10];
         //Index 0- Stage Based Gain(If true, enabled, if false, sets to gradual)
-        //Index 1-
+        //Index 1- Burps Enabled (0-10 on frequency, with 10 being highest)
+        //Index 2 - Gurgles enabled (0-10 on frequency, with 10 being highest)
     }
 
 
@@ -29,8 +30,28 @@ public class PlayerToggles {
     }
     public boolean getToggle(int index)
     {
+        //this handles the 0-10 logic
         return intToBoolean(settings[index]);
     }
+
+    //for situations in where I don't use the 0-1 situation and actually store a value
+    public int getToggleValue(int index)
+    {
+            return settings[index];
+    }
+    public void setToggleValue(int index, int input)
+    {
+        if(index==1 || index==2)
+        {
+            settings[index]=input;
+        }
+        else {
+            System.out.println("The toggle for index "+index+" is not setup");
+        }
+    }
+
+
+
     public int getLength()
     {
         return settings.length;

@@ -63,6 +63,12 @@ public class ModMessages {
                 .encoder(WeightBarC2SPacket::toBytes)
                 .consumerMainThread(WeightBarC2SPacket::handle)
                 .add();
+        net.messageBuilder(OverstuffedEffectC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(OverstuffedEffectC2SPacket::new)
+                .encoder(OverstuffedEffectC2SPacket::toBytes)
+                .consumerMainThread(OverstuffedEffectC2SPacket::handle)
+                .add();
+
 
         net.messageBuilder(WeightBarGainSettingS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(WeightBarGainSettingS2C::new)
@@ -87,11 +93,22 @@ public class ModMessages {
                 .encoder(setMinWeightDataSyncPacketS2C::toBytes)
                 .consumerMainThread(setMinWeightDataSyncPacketS2C::handle)
                 .add();
-        net.messageBuilder(PlayerToggleUpdateS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerToggleUpdateS2C::new)
-                .encoder(PlayerToggleUpdateS2C::toBytes)
-                .consumerMainThread(PlayerToggleUpdateS2C::handle)
+        net.messageBuilder(PlayerToggleUpdateBooleanS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerToggleUpdateBooleanS2C::new)
+                .encoder(PlayerToggleUpdateBooleanS2C::toBytes)
+                .consumerMainThread(PlayerToggleUpdateBooleanS2C::handle)
                 .add();
+        net.messageBuilder(PlayerToggleUpdateIntegerS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerToggleUpdateIntegerS2C::new)
+                .encoder(PlayerToggleUpdateIntegerS2C::toBytes)
+                .consumerMainThread(PlayerToggleUpdateIntegerS2C::handle)
+                .add();
+        net.messageBuilder(WeightMomentumSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(WeightMomentumSyncS2CPacket::new)
+                .encoder(WeightMomentumSyncS2CPacket::toBytes)
+                .consumerMainThread(WeightMomentumSyncS2CPacket::handle)
+                .add();
+
     }
 
 

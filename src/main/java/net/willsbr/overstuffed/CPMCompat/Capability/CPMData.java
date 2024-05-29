@@ -39,6 +39,7 @@ public class CPMData {
         {
            this.lastStuffedLayerName=this.stuffedLayerName;
         }
+
         this.stuffedLayerName=stuffedInput;
        // checkIfUpdateCPM("stuffed");
     }
@@ -60,7 +61,6 @@ public class CPMData {
                 ClientCPMConfigData.playStuffed();
             }
             else if(type.contentEquals("weight")){
-                System.out.println("CPM is about to go");
                 //System.out.println("playerStuffedBarO");
                 ClientCPMConfigData.playWeight();
             }
