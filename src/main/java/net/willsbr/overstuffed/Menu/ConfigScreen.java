@@ -6,12 +6,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.awt.Color;
@@ -41,7 +41,15 @@ public class ConfigScreen extends Screen {
     private OptionsList optionsList;
 
     //OPTION INSTANCES ARE BUTTONS
-    private OptionInstance stageBasedWeight= OptionInstance.createBoolean("Stage Based Weight", false);
+    private ToggleButton stageBasedWeight;
+
+    private ToggleButton weightEffect;
+
+    private ToggleButton momentum;
+
+
+
+
 
     // ## CPM Value Layers
     // - Stuffed: `____`
@@ -52,6 +60,8 @@ public class ConfigScreen extends Screen {
     // - `[ ]` `<icon>` Weight Effects
 
     private EditBox weightLayerEditBox;
+    private EditBox stuffedLayerEditBox;
+
 
     private int centerW;
     private int centerH;
@@ -62,6 +72,8 @@ public class ConfigScreen extends Screen {
 
     private Window curWindow;
     private Font font;
+
+    private int lastGuiScale;
 
     public ConfigScreen() {
         super(Component
@@ -77,7 +89,7 @@ public class ConfigScreen extends Screen {
 
         curWindow = Minecraft.getInstance().getWindow();
         font = Minecraft.getInstance().font;
-
+        lastGuiScale=(int)curWindow.getGuiScale();
         screenW = curWindow.getGuiScaledWidth();
         screenH = curWindow.getGuiScaledHeight();
         centerW = screenW / 2;
@@ -85,14 +97,8 @@ public class ConfigScreen extends Screen {
         leftBackX = (int) (this.width / 4 * (1 / curWindow.getGuiScale()));
         leftBackY = (int) (this.height / 7 * (1 / curWindow.getGuiScale()));
 
-        this.weightLayerEditBox = new EditBox(
-                font,
-                leftBackX + (width / 60),
-                leftBackY + (height / 40),
-                130,
-                30,
-                Component.literal("Weight Layer"));
-        this.weightLayerEditBox.setValue(OverstuffedConfig.weightLayerConfigEntry.get());
+
+
 
 
 
@@ -105,25 +111,53 @@ public class ConfigScreen extends Screen {
                 this.height - OPTIONS_LIST_BOTTOM_OFFSET,
                 OPTIONS_LIST_ITEM_HEIGHT
         );
-        optionsList.addSmall(OptionInstance.createBoolean("test",false),OptionInstance.createBoolean("test2",false));
+
+        //buttons
+        this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,"Stage Based Weight",OverstuffedConfig.returnSetting(0));
+        this.momentum= new ToggleButton(centerW+10,70,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(1), true);
+        this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(2));
 
 
 
-        // FIXME: Add OptionInstance<String> instead of EditBox?
+        //ALL editbox sizes are based off this first editbox.
+        this.weightLayerEditBox = new EditBox(
+                font,
+                centerW - (width / 60)-150,
+                centerH,
+                130,
+                25,
+                Component.literal("Weight Layer"));
+        this.weightLayerEditBox.setValue(OverstuffedConfig.weightLayerConfigEntry.get());
+
+        this.stuffedLayerEditBox = new EditBox(
+                font,
+                weightLayerEditBox.x,
+                weightLayerEditBox.y+weightLayerEditBox.getHeight()+15*1,
+                weightLayerEditBox.getWidth(),
+                weightLayerEditBox.getHeight(),
+                Component.literal("Stuffed Layer"));
+        this.stuffedLayerEditBox.setValue(OverstuffedConfig.stuffedLayerConfigEntry.get());
+
+
 
         // Add the options list as this screen's child
         // If this is not done, users cannot click on items in the list
-        this.addRenderableWidget(this.optionsList);
+       //this.addRenderableWidget(this.optionsList);
+        this.addRenderableWidget(stageBasedWeight);
+        this.addRenderableWidget(momentum);
+        this.addRenderableWidget(weightEffect);
+
+
 
         this.addRenderableWidget(this.weightLayerEditBox);
-
+        this.addRenderableWidget(this.stuffedLayerEditBox);
 
         // Add the "Done" button
         this.addRenderableWidget(new Button(
                 (this.width - BUTTON_WIDTH) / 2,
                 this.height - DONE_BUTTON_TOP_OFFSET,
                 BUTTON_WIDTH, BUTTON_HEIGHT,
-                Component.literal("Done"),
+                Component.literal("Save"),
                 button -> this.onClose()
         ));
     }
@@ -131,22 +165,44 @@ public class ConfigScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-
         // Add ticking logic for EditBox in editBox
         this.weightLayerEditBox.tick();
+        this.stuffedLayerEditBox.tick();
     }
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
         if (weightLayerEditBox.isFocused()) {
-            // FIXME: caps lock toggle not working?
-            System.out.println("keyPressed " + pKeyCode);
             if (!weightLayerEditBox.keyPressed(pKeyCode, pScanCode, pModifiers)) {
                 if ((pKeyCode >= 'A' && pKeyCode <= 'Z') || (pKeyCode >= 'a' && pKeyCode <= 'z')) {
-                    return weightLayerEditBox.charTyped((char)pKeyCode, pModifiers);
+                    if(Screen.hasShiftDown())
+                    {
+                        weightLayerEditBox.insertText(Character.toUpperCase((char)pKeyCode)+"");
+                    }
+                    else {
+                          weightLayerEditBox.insertText(Character.toLowerCase((char)pKeyCode)+"");
+                    }
+                    return true;
                 }
             }
         }
+        else if(stuffedLayerEditBox.isFocused())
+        {
+            if (!stuffedLayerEditBox.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+                if ((pKeyCode >= 'A' && pKeyCode <= 'Z') || (pKeyCode >= 'a' && pKeyCode <= 'z')) {
+                    if(Screen.hasShiftDown())
+                    {
+                        stuffedLayerEditBox.insertText(Character.toUpperCase((char)pKeyCode)+"");
+                    }
+                    else {
+                        stuffedLayerEditBox.insertText(Character.toLowerCase((char)pKeyCode)+"");
+                    }
+                    return true;
+                }
+            }
+        }
+
+
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
@@ -161,6 +217,13 @@ public class ConfigScreen extends Screen {
         // Draw the title
         drawCenteredString(pose, font, this.getTitle().getString(),
                 this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
+        //drawing the edit box's title
+
+        drawCenteredString(pose,font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.y,Color.white.hashCode());
+        drawCenteredString(pose,font, "Name of value layer for weight animations", this.width/ 2+100,weightLayerEditBox.y+10,Color.GRAY.hashCode());
+
+        drawCenteredString(pose,font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.y,Color.white.hashCode());
+        drawCenteredString(pose,font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.y+10,Color.GRAY.hashCode());
 
 
 
@@ -176,6 +239,13 @@ public class ConfigScreen extends Screen {
     public void onClose() {
         // Save mod configuration
         OverstuffedConfig.weightLayerConfigEntry.set(this.weightLayerEditBox.getValue());
+        OverstuffedConfig.stuffedLayerConfigEntry.set(this.stuffedLayerEditBox.getValue());
+        OverstuffedConfig.setSetting(0, stageBasedWeight.getSetting());
+        OverstuffedConfig.setSetting(1, momentum.getSetting());
+        OverstuffedConfig.setSetting(2, weightEffect.getSetting());
+
+
+
         OverstuffedConfig.saveConfig();
 
         // Call last in case it interferes with the override
