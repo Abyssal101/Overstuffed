@@ -21,8 +21,8 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.Command.*;
+import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.Effects.ModEffects;
-import net.willsbr.overstuffed.Menu.ConfigMenu;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -35,17 +35,13 @@ public class ClientEvents {
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
     public static class ClientForgeEvents
     {
-
-
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key input)
         {
-            if(KeyBinding.STUFFED_CONFIG.consumeClick()){
-                Minecraft.getInstance().setScreen(new ConfigMenu(
-                        Component.literal("Overstuffed Config Menu").withStyle(ChatFormatting.BLUE)));
+            if (KeyBinding.STUFFED_CONFIG.consumeClick()) {
+                Minecraft.getInstance().setScreen(new ConfigScreen());
             }
         }
-
 
         @SubscribeEvent
         public static void onFoodUse(LivingEntityUseItemEvent.Finish useItemEvent)
