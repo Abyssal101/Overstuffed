@@ -9,6 +9,15 @@ public class ClientTogglesData {
     {
         settings[index]=booleanToInt(input);
     }
+
+    static public void setValueToggle(int index, int input)
+    {
+        settings[index]=input;
+    }
+    static public int getValueToggle(int index)
+    {
+        return settings[index];
+    }
     static public boolean getToggle(int index)
     {
         return intToBoolean(settings[index]);

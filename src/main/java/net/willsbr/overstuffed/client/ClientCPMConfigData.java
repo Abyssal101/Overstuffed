@@ -2,6 +2,8 @@ package net.willsbr.overstuffed.client;
 
 import com.tom.cpm.api.IClientAPI;
 import net.willsbr.overstuffed.CPMCompat.StuffedSender;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBar;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 
 public class ClientCPMConfigData {
 
@@ -63,9 +65,10 @@ public class ClientCPMConfigData {
     {
         if(!ClientCPMConfigData.getStuffedBellyLayer().contentEquals(""))
         {
-            Double percentFull= ClientStuffedBarData.getPlayerStuffedBar()/(ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getCurrentFirmLimit()*1.0);
+            Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
             int outOf255=(int)(percentFull*255);
-            System.out.println("Test"+playersAPI.playAnimation(ClientCPMConfigData.getStuffedBellyLayer(),outOf255));
+            playersAPI.playAnimation(ClientCPMConfigData.getStuffedBellyLayer(),outOf255);
+            //System.out.println(outOf255+"Is this properly playing: "+playersAPI.getAnimationPlaying(ClientCPMConfigData.getStuffedBellyLayer()));
             playersAPI.playAnimation(ClientCPMConfigData.getLastStuffedBellyLayer(),0);
         }
     }
@@ -75,7 +78,7 @@ public class ClientCPMConfigData {
             if(ClientTogglesData.getToggle(0)==false)
             {
                 int outof255=(int)((((double)ClientWeightBarData.getPlayerWeight())/ClientWeightBarData.getMaxWeight())*255);
-                System.out.println(outof255+" dddd "+ playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outof255));
+                 playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outof255);
                 playersAPI.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
             }
             else {
@@ -90,8 +93,8 @@ public class ClientCPMConfigData {
                     playersAPI.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
 
                     int outOf255=(int)(ClientWeightBarData.getLastWeightStage()*0.2*255);
-                     System.out.println("Stage 255"+outOf255);
-                    System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
+                     //System.out.println("Stage 255"+outOf255);
+                    //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
                     playersAPI.playAnimation(ClientCPMConfigData.getWeightLayer(),outOf255+ ClientWeightBarData.getAmountThroughStage());
 
 

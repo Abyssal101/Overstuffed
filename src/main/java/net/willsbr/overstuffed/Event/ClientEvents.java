@@ -4,9 +4,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -17,10 +22,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
+import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.OverfullFoodC2SPacket;
+import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
 import net.willsbr.overstuffed.networking.packet.WeightBarC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
 
@@ -46,8 +53,26 @@ public class ClientEvents {
                 if(currentLevel.isClientSide())
                 {
                     ItemStack heldItem=useItemEvent.getItem();
-                    if(heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
+                    //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
+                    //322 is id for golden apple
+                    if(heldItem.is(Items.GOLDEN_APPLE))
                     {
+                        int duration=600;
+                        int amplifier=0;
+                    //  currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,amplifier));
+                        ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
+
+                    }
+                    else if(heldItem.is(Items.GOLDEN_CARROT))
+                    {
+                        int duration=200;
+                        int amplifier=0;
+                      // currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,0));
+                        ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
+                    }
+                    else if(heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
+                    {
+
                         //currentPlayer.startUsingItem(currentPlayer.getUsedItemHand());
                         //InteractionResultHolder.consume(heldItem);
                        // heldItem.shrink(1);
@@ -78,6 +103,8 @@ public class ClientEvents {
             clearLayers.register(commands, event.getBuildContext());
             viewLayers.register(commands, event.getBuildContext());
             setWGMethod.register(commands,event.getBuildContext());
+            setBurpFrequency.register(commands, event.getBuildContext());
+            setGurgleFrequency.register(commands, event.getBuildContext());
         }
     }
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)

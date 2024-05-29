@@ -9,6 +9,8 @@ public class ClientStuffedBarData {
     private static int currentFirmLimit;
     private static int currentHardLimit;
 
+    private static int max=9;
+
     public static void  set(int input, int soft,int firm, int hard)
     {
         ClientStuffedBarData.playerStuffedBar=input;
@@ -32,4 +34,7 @@ public class ClientStuffedBarData {
 
     public static int getCurrentFirmLimit(){return currentFirmLimit;}
 
+    public static int getMax() {
+        return max;
+    }
 }
