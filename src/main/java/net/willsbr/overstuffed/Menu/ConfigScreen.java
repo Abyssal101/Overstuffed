@@ -115,7 +115,7 @@ public class ConfigScreen extends Screen {
         //buttons
         this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,"Stage Based Weight",OverstuffedConfig.returnSetting(0));
         this.momentum= new ToggleButton(centerW+10,70,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(1), true);
-        this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(2));
+        this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Effects",OverstuffedConfig.returnSetting(2));
 
 
 
@@ -225,7 +225,11 @@ public class ConfigScreen extends Screen {
         drawCenteredString(pose,font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.y,Color.white.hashCode());
         drawCenteredString(pose,font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.y+10,Color.GRAY.hashCode());
 
+        if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
+        {
+            drawCenteredString(pose,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y+,Color.RED.hashCode());
 
+        }
 
         // pose.popPose();
         // Render things after widgets (tooltips)
