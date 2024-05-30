@@ -35,6 +35,12 @@ public class ModMessages {
                 .consumerMainThread(OverfullFoodC2SPacket::handle)
                 .add();
 
+        net.messageBuilder(MovementUpdatesC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(MovementUpdatesC2S::new)
+                .encoder(MovementUpdatesC2S::toBytes)
+                .consumerMainThread(MovementUpdatesC2S::handle)
+                .add();
+
         //since we are sending to client we need to change it to play to clinet
         net.messageBuilder(OverfullFoodDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(OverfullFoodDataSyncPacketS2C::new)
