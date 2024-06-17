@@ -1,17 +1,11 @@
 package net.willsbr.overstuffed.Event;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -22,13 +16,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
-import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.OverfullFoodC2SPacket;
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
-import net.willsbr.overstuffed.networking.packet.WeightBarC2SPacket;
+import net.willsbr.overstuffed.networking.packet.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
 
 public class ClientEvents {
@@ -50,7 +44,7 @@ public class ClientEvents {
 
                Player currentPlayer=(Player)useItemEvent.getEntity();
                 Level currentLevel=currentPlayer.getLevel();
-                if(currentLevel.isClientSide())
+            if(currentLevel.isClientSide())
                 {
                     ItemStack heldItem=useItemEvent.getItem();
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
@@ -73,18 +67,15 @@ public class ClientEvents {
                     else if(heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
 
-                        //currentPlayer.startUsingItem(currentPlayer.getUsedItemHand());
-                        //InteractionResultHolder.consume(heldItem);
-                       // heldItem.shrink(1);
 
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
                         int weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
                         //Makes weight have more of an impact I guess
-                        ModMessages.sendToServer(new WeightBarC2SPacket(weightForQueue));
+                        ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
 
-
+                        System.out.println("Player's Client Weight:"+ ClientWeightBarData.getPlayerWeight());
 
                         //    currentPlayer.stopUsingItem();
                     }
@@ -100,11 +91,13 @@ public class ClientEvents {
             SetLayer.register(commands, event.getBuildContext());
             setMaxWeight.register(commands, event.getBuildContext());
             setMinWeight.register(commands,event.getBuildContext());
+            setCurrentWeight.register(commands,event.getBuildContext());
             clearLayers.register(commands, event.getBuildContext());
             viewLayers.register(commands, event.getBuildContext());
             setWGMethod.register(commands,event.getBuildContext());
             setBurpFrequency.register(commands, event.getBuildContext());
             setGurgleFrequency.register(commands, event.getBuildContext());
+
         }
     }
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)

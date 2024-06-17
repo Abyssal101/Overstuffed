@@ -12,8 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.WeightSettingsDataSyncPacketS2C;
-import net.willsbr.overstuffed.networking.packet.setMinWeightDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.setMinWeightDataSyncPacketC2S;
 
 public class setMinWeight {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
@@ -27,7 +26,7 @@ public class setMinWeight {
     private static int setMinWeight(CommandSourceStack pSource, Player player, int index) throws CommandSyntaxException {
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
            // weightBar.set
-            ModMessages.sendToPlayer(new setMinWeightDataSyncPacketS2C(index),(ServerPlayer) player);
+            ModMessages.sendToPlayer(new setMinWeightDataSyncPacketC2S(index),(ServerPlayer) player);
         });
 
 

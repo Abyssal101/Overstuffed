@@ -16,9 +16,21 @@ public class OverstuffedConfig {
     }
 
     public static ForgeConfigSpec.ConfigValue<String> weightLayerConfigEntry;
+    public static String lastWeightLayer="";
+
     public static ForgeConfigSpec.ConfigValue<String> stuffedLayerConfigEntry;
+    public static String lastStuffedLayer="";
+
 
     public static ForgeConfigSpec.ConfigValue<String> toggleList;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> burpFrequency;
+    public static ForgeConfigSpec.ConfigValue<Integer> gurgleFrequency;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> maxWeight;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> minWeight;
+
 
 
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
@@ -27,6 +39,8 @@ public class OverstuffedConfig {
         weightLayerConfigEntry = builder
                 .comment(" Name of CPM Value Layer for Weight.")
                 .define("weight_layer_config_entry", "weight");
+
+
         stuffedLayerConfigEntry = builder
                 .comment(" Name of CPM Value Layer for Stuffed.")
                 .define("stuffed_layer_config_entry", "stuffed");
@@ -35,6 +49,16 @@ public class OverstuffedConfig {
         //0 1 1
         toggleList=builder.comment("List of the boolean values for the settings")
                 .define("config_toggle_values","0 1 1");
+
+        burpFrequency=builder.comment("1-10, the frequency that burps occur")
+                .define("config_burp_frequency,",5);
+        gurgleFrequency=builder.comment("1-10, the frequency that gurgles occur")
+                .define("config_gurgle_frequency,",3);
+
+        maxWeight=builder.comment("The maximum displayable weight.")
+                .define("max_weight,",300);
+        minWeight=builder.comment("The minimum displayable weight.")
+                .define("min_weight,",100);
 
         builder.pop();
 
@@ -47,6 +71,8 @@ public class OverstuffedConfig {
         weightLayerConfigEntry.save();
         stuffedLayerConfigEntry.save();
         toggleList.save();
+        burpFrequency.save();
+        gurgleFrequency.save();
     }
 
     public static boolean returnSetting(int index)
@@ -55,7 +81,6 @@ public class OverstuffedConfig {
         String[] tempString=toggleList.get().split(" ");
         if(index>=0 && index<tempString.length)
         {
-            System.out.println(tempString[index]+"FUcken");
             int result=Integer.parseInt(tempString[index]);
 
             if(result==1)
@@ -74,6 +99,23 @@ public class OverstuffedConfig {
         }
         return false;
     }
+    public static void setWeightLayer(String newLayer)
+    {
+        if(!weightLayerConfigEntry.get().contentEquals("") && !weightLayerConfigEntry.get().contentEquals(newLayer))
+        {
+            lastWeightLayer=weightLayerConfigEntry.get();
+        }
+        weightLayerConfigEntry.set(newLayer);
+    }
+    public static void setStuffedLayer(String newLayer)
+    {
+        if(!stuffedLayerConfigEntry.get().contentEquals("") && !stuffedLayerConfigEntry.get().contentEquals(newLayer))
+        {
+            lastStuffedLayer=stuffedLayerConfigEntry.get();
+        }
+        stuffedLayerConfigEntry.set(newLayer);
+    }
+
 
     public static void setSetting(int index, boolean input)
     {
@@ -89,7 +131,6 @@ public class OverstuffedConfig {
             {
                 tempString[index]="0";
             }
-            System.out.println("TEmpINDEX"+tempString[index]);
             String combine="";
             for(int i=0;i<tempString.length;i++)
             {

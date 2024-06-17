@@ -2,12 +2,13 @@ package net.willsbr.overstuffed.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.util.function.Supplier;
 
-public class PlayerToggleUpdateBooleanS2C {
+public class PlayerToggleUpdateBooleanC2S {
 
    private boolean settingStatus;
 
@@ -15,12 +16,12 @@ public class PlayerToggleUpdateBooleanS2C {
    //sending data from server to client here
 
 
-    public PlayerToggleUpdateBooleanS2C(int index, boolean inputBoolean){
+    public PlayerToggleUpdateBooleanC2S(int index, boolean inputBoolean){
         this.settingStatus = inputBoolean;
         this.settingIndex=index;
     }
 
-    public PlayerToggleUpdateBooleanS2C(FriendlyByteBuf buf){
+    public PlayerToggleUpdateBooleanC2S(FriendlyByteBuf buf){
         this.settingStatus =buf.readBoolean();
         this.settingIndex=buf.readInt();
     }
@@ -34,12 +35,11 @@ public class PlayerToggleUpdateBooleanS2C {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
         {
-         //on client
-            OverstuffedConfig.setSetting(this.settingIndex,this.settingStatus);
-            if(this.settingIndex==0 && this.settingStatus==false)
-            {
-                ClientWeightBarData.setLastWeightStage(-1);
-            }
+         //on Server
+            context.getSender().getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(settings ->
+                    {
+                        settings.setToggle(this.settingIndex,this.settingStatus);
+                    });
 
 
 

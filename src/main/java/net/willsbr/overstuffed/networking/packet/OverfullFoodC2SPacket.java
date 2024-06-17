@@ -1,14 +1,13 @@
 package net.willsbr.overstuffed.networking.packet;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerTogglesProvider;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.sound.ModSounds;
 
@@ -44,9 +43,9 @@ public class OverfullFoodC2SPacket {
                         {
                             ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
                             stuffedBar.addStuffedLevel(1, level.getGameTime(), lastFood.getUseDuration());
-                            player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+                            player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
                                 //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
-                                if(player.getRandom().nextIntBetweenInclusive(0,10)<playerToggles.getToggleValue(1))
+                                if(player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
                                 {
                                     player.getLevel().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
                                                     player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),

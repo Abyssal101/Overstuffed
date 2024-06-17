@@ -12,10 +12,10 @@ public class PlayerWeightBar {
 
     private int currentWeight;
 
-    private int minWeight=100;
+    private int minWeight;
 
     //this is what options will determine for display
-    private int curMaxWeight=200;
+    private int curMaxWeight;
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
     private int[] maxWeightSettings= {200,300,500,1000};
@@ -45,6 +45,9 @@ public class PlayerWeightBar {
     {
         return this.currentWeight;
     }
+    public void setCurrentWeight(int i)
+    {this.currentWeight=i;}
+
 
     public void addWeight()
     {
@@ -53,12 +56,15 @@ public class PlayerWeightBar {
             currentWeight++;
             queuedWeight--;
         }
-        //do this so you can't store like infinte amounts of weight
+        else if(queuedWeight>0)
+        {
+            queuedWeight--;
+        }
 
     }
     public void loseWeight()
     {
-        if(currentWeight-1>0)
+        if(currentWeight-1>this.minWeight)
         {
             currentWeight--;
         }
@@ -72,10 +78,7 @@ public class PlayerWeightBar {
     }
     public void setMaxWeight(int i)
     {
-        if(i>=0 && i<=3)
-        {
-            this.curMaxWeight=maxWeightSettings[i];
-        }
+        this.curMaxWeight=i;
     }
     public void addWeightChanges(int input)
     {
@@ -129,18 +132,22 @@ public class PlayerWeightBar {
     {
        this.currentWeight=source.getCurrentWeight();
        this.curMaxWeight=source.getCurMaxWeight();
+       this.minWeight=source.getMinWeight();
        this.queuedWeight=source.queuedWeight;
        this.weightChanges=source.weightChanges;
        this.readyToUpdateWeight=source.readyToUpdateWeight;
        this.savedTickForWeight=source.savedTickForWeight;
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
+
+
     }
 
     public void saveNBTData(CompoundTag nbt)
     {
         nbt.putInt("currentweight", currentWeight);
         nbt.putInt("maxweight", curMaxWeight);
+        nbt.putInt("minweight",minWeight);
         //call it stack weight because queing is atrocious to spell ever time
         nbt.putInt("stackweight", queuedWeight);
         int[] savingArray= new int[weightChanges.size()];
@@ -160,6 +167,7 @@ public class PlayerWeightBar {
     {
         this.currentWeight =nbt.getInt("currentweight");
         this.curMaxWeight =nbt.getInt("maxweight");
+        this.minWeight=nbt.getInt("minweight");
         this.queuedWeight =nbt.getInt("stackweight");
         int[] savingArray= nbt.getIntArray("changestack");
         for(int i=0;i<savingArray.length;i++)
@@ -210,5 +218,13 @@ public class PlayerWeightBar {
 
     public void setAmountThroughStage(int amountThroughStage) {
         this.amountThroughStage = amountThroughStage;
+    }
+
+    public int getMinWeight() {
+        return minWeight;
+    }
+
+    public void setMinWeight(int minWeight) {
+        this.minWeight = minWeight;
     }
 }

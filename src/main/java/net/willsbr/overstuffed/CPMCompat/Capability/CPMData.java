@@ -1,13 +1,7 @@
 package net.willsbr.overstuffed.CPMCompat.Capability;
 
-import com.tom.cpl.nbt.NBTTagCompound;
-import com.tom.cpm.api.IClientAPI;
 import net.minecraft.nbt.CompoundTag;
-import net.willsbr.overstuffed.CPMCompat.CPMMessageSenders;
-import net.willsbr.overstuffed.client.ClientCPMConfigData;
-import net.willsbr.overstuffed.client.ClientStuffedBarData;
-import net.willsbr.overstuffed.client.ClientTogglesData;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
+import net.willsbr.overstuffed.client.ClientCPMData;
 
 public class CPMData {
 
@@ -58,11 +52,11 @@ public class CPMData {
         //ALL THIS SHOULD BE EXECUTED ON THE CLIENT
             if(type.contentEquals("stuffed"))
             {
-                ClientCPMConfigData.playStuffed();
+                ClientCPMData.playStuffed();
             }
             else if(type.contentEquals("weight")){
                 //System.out.println("playerStuffedBarO");
-                ClientCPMConfigData.playWeight();
+                ClientCPMData.playWeight();
             }
             
 

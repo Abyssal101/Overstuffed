@@ -6,7 +6,7 @@ public abstract class CPMMessageSenders {
 
     //now we need to be able to create these at the begining but shouldn't tie them directly to a class
     //this saves me the issue of figure out how the fuck any of this works
-    //all the personalized data will be handled in ClientCPMConfigData
+    //all the personalized data will be handled in ClientCPMData
 
     public static IClientAPI.MessageSender bellyPlaySender;
 

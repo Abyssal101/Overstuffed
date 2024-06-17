@@ -10,9 +10,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerTogglesProvider;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.PlayerToggleUpdateBooleanS2C;
 import net.willsbr.overstuffed.networking.packet.PlayerToggleUpdateIntegerS2C;
 
 public class setBurpFrequency {
@@ -25,10 +24,10 @@ public class setBurpFrequency {
     }
 
     private static int setBurpFrequency(CommandSourceStack pSource, Player player, int value) throws CommandSyntaxException {
-        player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+        player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
             if(value>=0 && value<=10)
             {
-                playerToggles.setToggleValue(1,value);
+                //playerToggles.setToggleValue(1,value);
                 ModMessages.sendToPlayer(new PlayerToggleUpdateIntegerS2C(1, value),  (ServerPlayer) player);
             }
             else {

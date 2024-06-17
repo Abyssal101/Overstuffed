@@ -2,22 +2,23 @@ package net.willsbr.overstuffed.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;
 
-public class setMinWeightDataSyncPacketS2C {
+public class setMinWeightDataSyncPacketC2S {
 
    private int minWeight;
-   //sending data from server to client here
+   //sending data from Client to Server here
 
 
-    public setMinWeightDataSyncPacketS2C(int weight){
+    public setMinWeightDataSyncPacketC2S(int weight){
         this.minWeight =weight;
 
     }
 
-    public setMinWeightDataSyncPacketS2C(FriendlyByteBuf buf){
+    public setMinWeightDataSyncPacketC2S(FriendlyByteBuf buf){
         this.minWeight =buf.readInt();
 
 
@@ -34,7 +35,12 @@ public class setMinWeightDataSyncPacketS2C {
         {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
-            ClientWeightBarData.setMinWeight(this.minWeight);
+
+            context.getSender().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
+            {
+                weightBar.setMinWeight(this.minWeight);
+
+            });
             //CPMData.checkIfUpdateCPM();
         });
         return true;

@@ -13,8 +13,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerToggles;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerTogglesProvider;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocks;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.Effects.ModEffects;
@@ -24,6 +24,7 @@ import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.*;
 import net.willsbr.overstuffed.sound.ModSounds;
@@ -46,8 +47,8 @@ public class ModEvent {
             if(!event.getObject().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).isPresent()) {
                 event.addCapability(new ResourceLocation(OverStuffed.MODID, "weightbar"), new PlayerWeightBarProvider());
             }
-            if(!event.getObject().getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "overstuffedtoggles"), new PlayerTogglesProvider());
+            if(!event.getObject().getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).isPresent()) {
+                event.addCapability(new ResourceLocation(OverStuffed.MODID, "overstuffedtoggles"), new PlayerUnlocksProvider());
             }
         }
     }
@@ -79,8 +80,8 @@ public class ModEvent {
                 });
             });
 
-            event.getOriginal().getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(oldStore -> {
-                event.getEntity().getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(newStore -> {
+            event.getOriginal().getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -96,7 +97,7 @@ public class ModEvent {
         event.register(PlayerStuffedBar.class);
         event.register(CPMData.class);
         event.register(PlayerWeightBar.class);
-        event.register(PlayerToggles.class);
+        event.register(PlayerUnlocks.class);
     }
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -122,12 +123,12 @@ public class ModEvent {
                     //adagsdagasgd
 
                     //Playing sound logic
-                    event.player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+                    event.player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerUnlocks -> {
 
 
                         //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
-                        if(event.player.getRandom().nextIntBetweenInclusive(0,10)<playerToggles.getToggleValue(1))
-                        {//testing
+                        if(event.player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
+                        {
                             event.player.getLevel().playSound(null, event.player.blockPosition(),ModSounds.BURP_SOUNDS.get(
                                     event.player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size())-1).get(),
                                     event.player.getSoundSource(), 1f, 1f);
@@ -153,16 +154,16 @@ public class ModEvent {
 
             //make it so that the visible weight bar begins to update here
             event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                event.player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+                event.player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerUnlocks -> {
                             //create weight updates here
 
-                            //System.out.println(playerToggles.getToggle(0));
-                            if(playerToggles.getToggle(0))
+                            //System.out.println(playerUnlocks.getToggle(0));
+                            if(playerUnlocks.getToggle(0))
                             {
                                     burstGain(weightBar,event);
                             }
 
-                            if(!(playerToggles.getToggleValue(2)==0) & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.0005f*Math.sqrt(playerToggles.getToggleValue(2))))
+                            if(!(playerUnlocks.getToggleValue(2)==0) & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.0005f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
                             {
                                 event.player.getLevel().playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
                                         event.player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size())-1).get(),
@@ -221,7 +222,6 @@ public class ModEvent {
                             weightBar.setWeightLossDelay((int)(200-event.player.getFoodData().getExhaustionLevel()*5));
 
                         }
-                        //weightBar.setWeightLossDelay(10);
                     }  else if ((event.player.tickCount-weightBar.getSavedTickforWeightLoss()>weightBar.getWeightLossDelay())){
                         //
                         weightBar.loseWeight();
@@ -230,12 +230,6 @@ public class ModEvent {
                     }
 
                 }
-
-                //Random Gurgle Sounded
-
-
-
-
 
                 });
 //                if((stuffedBar.lastCallTime!=-1 && (event.player.level.getGameTime()- stuffedBar.lastCallTime)>stuffedBar.lastFoodDuration))
@@ -255,7 +249,8 @@ public class ModEvent {
     }
     public static void burstGain(PlayerWeightBar weightBar,TickEvent.PlayerTickEvent event)
     {
-        int calculatedPercentage=(int)(((double)ClientWeightBarData.getPlayerWeight())/ClientWeightBarData.getMaxWeight()*100);
+        int calculatedPercentage=(int)((((double)(weightBar.getCurrentWeight()-weightBar.getMinWeight()))/(weightBar.getCurMaxWeight()- weightBar.getMinWeight()))*100);
+        System.out.println("Percentage for Burst"+calculatedPercentage);
         int xOf5=calculatedPercentage/20;
         //System.out.println("of5:"+xOf5+"  percent:"+calculatedPercentage);
         //System.out.println(weightBar.getLastWeightStage()+" Last stage");
@@ -330,10 +325,10 @@ public class ModEvent {
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                         ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
                 });
-                player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
-                    for(int i=0;i<playerToggles.getLength();i++)
+                player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerUnlocks -> {
+                    for(int i = 0; i< playerUnlocks.getLength(); i++)
                     {
-                        ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(i, playerToggles.getToggle(i)) ,player);
+                        ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(i, playerUnlocks.getToggle(i)) ,player);
                     }
 
                 });
