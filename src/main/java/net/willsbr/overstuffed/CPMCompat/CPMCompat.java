@@ -3,10 +3,10 @@ package net.willsbr.overstuffed.CPMCompat;
 import com.tom.cpm.api.ICPMPlugin;
 import com.tom.cpm.api.IClientAPI;
 import com.tom.cpm.api.ICommonAPI;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.OverStuffed;
-import net.willsbr.overstuffed.client.ClientCPMConfigData;
+import net.willsbr.overstuffed.client.ClientCPMData;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 public class CPMCompat implements ICPMPlugin {
     public void initClient(IClientAPI api) {
@@ -15,20 +15,22 @@ public class CPMCompat implements ICPMPlugin {
 //                  (player, message) -> {
 //              //this plays the new animatiom
 //
-//              api.playAnimation(ClientCPMConfigData.getStuffedBellyLayer(),message.getInteger("stuffedvalue"));
+//              api.playAnimation(ClientCPMData.getStuffedBellyLayer(),message.getInteger("stuffedvalue"));
 //              //this resets the old one if any
-//              api.playAnimation(ClientCPMConfigData.getLastStuffedBellyLayer(),0);
+//              api.playAnimation(ClientCPMData.getLastStuffedBellyLayer(),0);
 //
 //              })));
-        ClientCPMConfigData.setPlayersAPI(api);
+        ClientCPMData.setPlayersAPI(api);
 
+
+        //Is not used, but plays animations for EVERY player with the matching one. Sync Dances I guess?
         CPMMessageSenders.weightLevelSender=(api.registerPluginMessage(Player.class, "weightlevel",
                 (player, message) -> {
                     //this plays the new animation
                     int temp=message.getInteger("currentweight");
-                    api.playAnimation(ClientCPMConfigData.getWeightLayer(),temp);
+                    api.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),temp);
                     //this resets the old one if any
-                    api.playAnimation(ClientCPMConfigData.getLastWeightLayer(),0);
+                    api.playAnimation(OverstuffedConfig.lastWeightLayer,0);
                 }, true));
     }
 

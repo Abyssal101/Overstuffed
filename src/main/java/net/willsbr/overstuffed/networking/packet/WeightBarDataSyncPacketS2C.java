@@ -1,11 +1,8 @@
 package net.willsbr.overstuffed.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.client.ClientTogglesData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;

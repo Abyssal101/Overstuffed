@@ -2,51 +2,51 @@ package net.willsbr.overstuffed.AdvancementToggle;
 
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
-public class PlayerToggles {
+public class PlayerUnlocks {
     //so this is how this is ogoing to work
     //Two Array of booleans
     //One for if a setting is enabled, another for seeing if that settings is unlocked
     //I'll make note of what each index is.
 
     //this is an int array because I can't store a boolean array, so I'll just make getters and setters set it accordingly
-    int[] settings;
-    public PlayerToggles()
+    int[] unlocks;
+
+    int[] settingStatus;
+    public PlayerUnlocks()
     {
+        //FIXME MAKE UNLOCKS ACTUALLY BE USED
         //should all default to false?
         //Pre-emptively do 10 for my sake
-        settings=new int[10];
-        //Index 0- Stage Based Gain(If true, enabled, if false, sets to gradual)
-        //Index 1- Burps Enabled (0-10 on frequency, with 10 being highest)
-        //Index 2 - Gurgles enabled (0-10 on frequency, with 10 being highest)
+        unlocks =new int[10];
+        settingStatus=new int[10];
+        //Index 0- Stage Based Gain
+
     }
 
 
     public void setToggle(int index, boolean input)
     {
-        settings[index]=booleanToInt(input);
+        settingStatus[index]=booleanToInt(input);
     }
     public boolean getToggle(int index)
     {
         //this handles the 0-10 logic
-        return intToBoolean(settings[index]);
+        return intToBoolean(settingStatus[index]);
     }
 
     //for situations in where I don't use the 0-1 situation and actually store a value
     public int getToggleValue(int index)
     {
-            return settings[index];
+            return settingStatus[index];
     }
     public void setToggleValue(int index, int input)
     {
         if(index==1 || index==2)
         {
-            settings[index]=input;
+            settingStatus[index]=input;
         }
         else {
-            System.out.println("The toggle for index "+index+" is not setup");
+            System.out.println("The unlock for index "+index+" is not setup");
         }
     }
 
@@ -54,24 +54,24 @@ public class PlayerToggles {
 
     public int getLength()
     {
-        return settings.length;
+        return settingStatus.length;
     }
 
 
-    public void copyFrom(PlayerToggles source)
+    public void copyFrom(PlayerUnlocks source)
     {
-        this.settings=source.settings;
+        this.settingStatus =source.settingStatus;
     }
 
     public void saveNBTData(CompoundTag nbt)
     {
        // nbt.putInt("currentweight", currentWeight);
-        nbt.putIntArray("settingarray", this.settings);
+        nbt.putIntArray("settingarray", this.settingStatus);
 
     }
     public void loadNBTData(CompoundTag nbt)
     {
-        this.settings=nbt.getIntArray("settingarray");
+        this.settingStatus =nbt.getIntArray("settingarray");
        // this.burstGain=nbt.getBoolean("burst");
     }
 

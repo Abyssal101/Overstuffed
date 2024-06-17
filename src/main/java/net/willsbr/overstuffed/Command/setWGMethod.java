@@ -10,9 +10,10 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerTogglesProvider;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.*;
 
@@ -27,7 +28,7 @@ public class setWGMethod {
 
     private static int levelBasedGaining(CommandSourceStack pSource, Player player, String input) throws CommandSyntaxException {
 
-        player.getCapability(PlayerTogglesProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+        player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
             if(input.toLowerCase().contentEquals("false"))
             {
                 playerToggles.setToggle(0,false);
@@ -41,7 +42,7 @@ public class setWGMethod {
             {
                 playerToggles.setToggle(0,true);
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                    int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight())/ClientWeightBarData.getMaxWeight()*100);
+                    int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get())/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get())*100);
                     int xOf5=calculatedPercentage/20;
                     weightBar.setLastWeightStage(xOf5);
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),(ServerPlayer) player);

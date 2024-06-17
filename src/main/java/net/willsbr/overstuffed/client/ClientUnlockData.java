@@ -1,27 +1,27 @@
 package net.willsbr.overstuffed.client;
 
-public class ClientTogglesData {
+public class ClientUnlockData {
 
-    static int[] settings= new int[10];
+    static int[] customAdvancements = new int[10];
 
 
-    static public void setToggle(int index, boolean input)
-    {
-        settings[index]=booleanToInt(input);
-    }
+//    static public void setToggle(int index, boolean input)
+//    {
+//        settings[index]=booleanToInt(input);
+//    }
 
-    static public void setValueToggle(int index, int input)
+    static public void setAdvancementStatus(int index, int input)
     {
-        settings[index]=input;
+        customAdvancements[index]=input;
     }
-    static public int getValueToggle(int index)
+    static public int getAdvancementStatus(int index)
     {
-        return settings[index];
+        return customAdvancements[index];
     }
-    static public boolean getToggle(int index)
-    {
-        return intToBoolean(settings[index]);
-    }
+    //static public boolean getToggle(int index)
+//    {
+//        return intToBoolean(settings[index]);
+//    }
 
     static public boolean intToBoolean(int inputInt)
     {

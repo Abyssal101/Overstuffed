@@ -4,15 +4,19 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
+import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
+import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.*;
 
 import java.awt.Color;
 import javax.annotation.Nonnull;
@@ -46,6 +50,13 @@ public class ConfigScreen extends Screen {
     private ToggleButton weightEffect;
 
     private ToggleButton momentum;
+
+    private OptionSlider burpFrequency;
+
+    private OptionSlider gurgleFrequency;
+
+    private EditBox maxWeight;
+    private EditBox minWeight;
 
 
 
@@ -116,7 +127,8 @@ public class ConfigScreen extends Screen {
         this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,"Stage Based Weight",OverstuffedConfig.returnSetting(0));
         this.momentum= new ToggleButton(centerW+10,70,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(1), true);
         this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Effects",OverstuffedConfig.returnSetting(2));
-
+        this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
+        this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
 
 
         //ALL editbox sizes are based off this first editbox.
@@ -138,6 +150,28 @@ public class ConfigScreen extends Screen {
                 Component.literal("Stuffed Layer"));
         this.stuffedLayerEditBox.setValue(OverstuffedConfig.stuffedLayerConfigEntry.get());
 
+        this.maxWeight= new EditBox(
+                font,
+                this.centerW+105-50,
+                stuffedLayerEditBox.y+65,
+                50,
+                weightLayerEditBox.getHeight(),
+                Component.literal("Max Weight"));
+        this.maxWeight.setValue(OverstuffedConfig.maxWeight.get()+"");
+        //So you can't go above 9999 because of this
+        this.maxWeight.setMaxLength(4);
+
+        this.minWeight= new EditBox(
+                font,
+                this.centerW-105,
+                stuffedLayerEditBox.y+65,
+                50,
+                weightLayerEditBox.getHeight(),
+                Component.literal("Min Weight"));
+        this.minWeight.setValue(OverstuffedConfig.minWeight.get()+"");
+        //So you can't go above 9999 because of this
+        this.minWeight.setMaxLength(4);
+
 
 
         // Add the options list as this screen's child
@@ -146,8 +180,10 @@ public class ConfigScreen extends Screen {
         this.addRenderableWidget(stageBasedWeight);
         this.addRenderableWidget(momentum);
         this.addRenderableWidget(weightEffect);
-
-
+        this.addRenderableWidget(burpFrequency);
+        this.addRenderableWidget(gurgleFrequency);
+        this.addRenderableWidget(maxWeight);
+        this.addRenderableWidget(minWeight);
 
         this.addRenderableWidget(this.weightLayerEditBox);
         this.addRenderableWidget(this.stuffedLayerEditBox);
@@ -170,42 +206,6 @@ public class ConfigScreen extends Screen {
         this.stuffedLayerEditBox.tick();
     }
 
-    @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if (weightLayerEditBox.isFocused()) {
-            if (!weightLayerEditBox.keyPressed(pKeyCode, pScanCode, pModifiers)) {
-                if ((pKeyCode >= 'A' && pKeyCode <= 'Z') || (pKeyCode >= 'a' && pKeyCode <= 'z')) {
-                    if(Screen.hasShiftDown())
-                    {
-                        weightLayerEditBox.insertText(Character.toUpperCase((char)pKeyCode)+"");
-                    }
-                    else {
-                          weightLayerEditBox.insertText(Character.toLowerCase((char)pKeyCode)+"");
-                    }
-                    return true;
-                }
-            }
-        }
-        else if(stuffedLayerEditBox.isFocused())
-        {
-            if (!stuffedLayerEditBox.keyPressed(pKeyCode, pScanCode, pModifiers)) {
-                if ((pKeyCode >= 'A' && pKeyCode <= 'Z') || (pKeyCode >= 'a' && pKeyCode <= 'z')) {
-                    if(Screen.hasShiftDown())
-                    {
-                        stuffedLayerEditBox.insertText(Character.toUpperCase((char)pKeyCode)+"");
-                    }
-                    else {
-                        stuffedLayerEditBox.insertText(Character.toLowerCase((char)pKeyCode)+"");
-                    }
-                    return true;
-                }
-            }
-        }
-
-
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
-    }
-
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
     // on the screen
     @Override
@@ -225,10 +225,19 @@ public class ConfigScreen extends Screen {
         drawCenteredString(pose,font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.y,Color.white.hashCode());
         drawCenteredString(pose,font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.y+10,Color.GRAY.hashCode());
 
+        drawCenteredString(pose,font, "Max Weight", centerW+80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
+        drawCenteredString(pose,font, "Range:0-9999", centerW+80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+
+        drawCenteredString(pose,font, "Min Weight", centerW-80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
+        drawCenteredString(pose,font, "Range:0-9999", centerW-80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+
+        //FIXME ERROR CODES FOR THE RANGE OF WEIGHT BEING OPPOSITE,NO DIFFERENCE AND ETC
+
+
+
         if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
         {
-            drawCenteredString(pose,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y+,Color.RED.hashCode());
-
+            drawCenteredString(pose,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y,Color.RED.hashCode());
         }
 
         // pose.popPose();
@@ -242,15 +251,77 @@ public class ConfigScreen extends Screen {
     @Override
     public void onClose() {
         // Save mod configuration
-        OverstuffedConfig.weightLayerConfigEntry.set(this.weightLayerEditBox.getValue());
-        OverstuffedConfig.stuffedLayerConfigEntry.set(this.stuffedLayerEditBox.getValue());
+        if(!OverstuffedConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayerEditBox.getValue()))
+        {
+            OverstuffedConfig.setWeightLayer(this.weightLayerEditBox.getValue());
+        }
+        if(!OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayerEditBox.getValue()))
+        {
+            OverstuffedConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
+        }
+
         OverstuffedConfig.setSetting(0, stageBasedWeight.getSetting());
+        ModMessages.sendToServer(new PlayerToggleUpdateBooleanC2S(0,stageBasedWeight.getSetting()));
+
         OverstuffedConfig.setSetting(1, momentum.getSetting());
         OverstuffedConfig.setSetting(2, weightEffect.getSetting());
+        System.out.println(burpFrequency.getValue()+"Burp");
+        OverstuffedConfig.burpFrequency.set(burpFrequency.getValue());
+        OverstuffedConfig.gurgleFrequency.set(gurgleFrequency.getValue());
+
+        int max;
+        int min;
+        try{
+            max=Integer.parseInt(maxWeight.getValue());
+            min=Integer.parseInt(minWeight.getValue());
+            if(minWeight.getValue()!=maxWeight.getValue() && max>min)
+            {
+                if(max-min>100)
+                {
+                    System.out.println("CLient Weight:"+ClientWeightBarData.getPlayerWeight());
+                    System.out.println("CLient Min Weight:"+min);
+
+                    double weightRatio=((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get());
+                    weightRatio=weightRatio/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get());
+                    System.out.println("Ratio"+weightRatio);
+                    int newRange=max-min;
+
+                    int relativeWeight=(int)Math.round(weightRatio*newRange)+min;
+                    ClientWeightBarData.setCurrentWeight(relativeWeight);
+                    System.out.println(ClientWeightBarData.getPlayerWeight());
+                    ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
+
+                    OverstuffedConfig.maxWeight.set(max);
+                    OverstuffedConfig.minWeight.set(min);
+                    ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
+                    ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
+                }
+                else {
+                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +
+                            "eight is too low. Must be at least 100"));
+                }
+
+
+            }
+            else
+            {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Values are the same or min is greater than max"));
+            }
+        }
+        catch (Exception e)
+        {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
+        }
+
+
+
 
 
 
         OverstuffedConfig.saveConfig();
+        CPMData.checkIfUpdateCPM("weight");
+        CPMData.checkIfUpdateCPM("stuffed");
+
 
         // Call last in case it interferes with the override
         super.onClose();

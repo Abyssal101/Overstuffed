@@ -7,9 +7,6 @@ public class ClientWeightBarData {
 
     private static int currentWeight;
 
-    private static int maxWeight=200;
-
-    private static int minWeight;
 
     private static boolean burstGain;
 
@@ -30,22 +27,6 @@ public class ClientWeightBarData {
         return currentWeight;
     }
 
-
-    public static int getMaxWeight() {
-        return maxWeight;
-    }
-
-    public static void setMaxWeight(int maxWeight) {
-        ClientWeightBarData.maxWeight = maxWeight;
-    }
-
-    public static int getMinWeight() {
-        return minWeight;
-    }
-
-    public static void setMinWeight(int minWeight) {
-        ClientWeightBarData.minWeight = minWeight;
-    }
 
     public static boolean isBurstGain() {
         return burstGain;

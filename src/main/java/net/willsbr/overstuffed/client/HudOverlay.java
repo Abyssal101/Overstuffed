@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 public class HudOverlay {
         private static final ResourceLocation STUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/stuffedpoint.png");
@@ -94,7 +95,7 @@ public class HudOverlay {
         poseStack.scale(2,2,2);
         poseStack.translate( 0,0,0);
 
-        GuiComponent.drawString(poseStack, gui.getFont(), "Weight:  "+(ClientWeightBarData.getPlayerWeight()+ ClientWeightBarData.getMinWeight())+" / "+(ClientWeightBarData.getMaxWeight()+ClientWeightBarData.getMinWeight()), 20,20,255);
+        GuiComponent.drawString(poseStack, gui.getFont(), "Weight:  "+ClientWeightBarData.getPlayerWeight()+" / "+OverstuffedConfig.maxWeight.get(), 20,20,255);
         poseStack.popPose();
       //  RenderSystem.setShaderTexture(0, STUFFED_POINT);
 

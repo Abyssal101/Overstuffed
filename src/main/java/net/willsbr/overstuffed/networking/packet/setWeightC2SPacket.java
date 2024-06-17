@@ -1,35 +1,30 @@
 package net.willsbr.overstuffed.networking.packet;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.networking.ModMessages;
 
 import java.util.function.Supplier;
 
-public class WeightBarC2SPacket {
+public class setWeightC2SPacket {
     private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.WeightBar";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
-    private static  int foodWeight;
-    public WeightBarC2SPacket(int foodCal){
-        foodWeight=foodCal;
+    private static  int weight;
+    public setWeightC2SPacket(int inputWeight){
+        weight =inputWeight;
 
     }
 
-    public WeightBarC2SPacket(FriendlyByteBuf buf){
-        foodWeight=buf.readInt();
+    public setWeightC2SPacket(FriendlyByteBuf buf){
+        weight =buf.readInt();
 
     }
 
     public void toBytes(FriendlyByteBuf buf){
-        buf.writeInt(foodWeight);
+        buf.writeInt(weight);
 
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -47,9 +42,8 @@ public class WeightBarC2SPacket {
                         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
                         {
                             //this adds the eaten food to the weight queue to get updated
-                            weightBar.addWeightChanges(foodWeight);
+                            weightBar.setCurrentWeight(this.weight);
 
-                            //ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(foodWeight),player);
                         });
                     }
 

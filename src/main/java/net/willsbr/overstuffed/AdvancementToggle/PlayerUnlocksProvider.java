@@ -11,21 +11,21 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerTogglesProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerUnlocksProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<PlayerToggles> PLAYER_TOGGLES = CapabilityManager.get(
-            new CapabilityToken<PlayerToggles>() {});
-    private PlayerToggles playerToggles =null;
-    private final LazyOptional<PlayerToggles> optional=LazyOptional.of(this::createToggles);
+    public static Capability<PlayerUnlocks> PLAYER_TOGGLES = CapabilityManager.get(
+            new CapabilityToken<PlayerUnlocks>() {});
+    private PlayerUnlocks playerUnlocks =null;
+    private final LazyOptional<PlayerUnlocks> optional=LazyOptional.of(this::createToggles);
 
-    private PlayerToggles createToggles() {
-        if(this.playerToggles ==null)
+    private PlayerUnlocks createToggles() {
+        if(this.playerUnlocks ==null)
         {
-            this.playerToggles =new PlayerToggles();
+            this.playerUnlocks =new PlayerUnlocks();
 
             //COme back for default setup
         }
-        return this.playerToggles;
+        return this.playerUnlocks;
     }
 
     @Override
