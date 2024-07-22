@@ -7,6 +7,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.server.commands.AdvancementCommands;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -19,11 +20,9 @@ public class CustomTrigger extends SimpleCriterionTrigger {
 
     @Override
     protected AbstractCriterionTriggerInstance createInstance(JsonObject pJson, EntityPredicate.Composite pPlayer, DeserializationContext pContext) {
-        return null;
+        return createInstance(pJson,pPlayer,pContext);
+
     }
-
-
-
 
 
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {

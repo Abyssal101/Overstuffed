@@ -17,6 +17,7 @@ public class PlayerStuffedBar {
     private int stuffedLost=0;
     private int addState=0;
 
+    //what the amount of stuffed lost should be before it adds new
     private int interval=30;
 
 
@@ -27,21 +28,6 @@ public class PlayerStuffedBar {
     public int getCurrentStuffedLevel()
     {
         return currentStuffedLevel;
-    }
-
-    public int getStuffedMax()
-    {
-        return fullLevel;
-    }
-
-    public int getOverstuffedMax()
-    {
-        return this.stuffedLevel;
-    }
-
-    public int getSuperStuffedMax()
-    {
-        return overstuffedLevel;
     }
 
 
@@ -113,7 +99,6 @@ public class PlayerStuffedBar {
         nbt.putInt("stuffedlost", this.stuffedLost);
         nbt.putInt("addstate",this.addState);
 
-
     }
     public void loadNBTData(CompoundTag nbt)
     {
@@ -123,6 +108,18 @@ public class PlayerStuffedBar {
         overstuffedLevel=nbt.getInt("overstuffed");
         stuffedLost=nbt.getInt("stuffedlost");
         addState=nbt.getInt("addstate");
+    }
+
+    public CompoundTag updateNBTData()
+    {
+        CompoundTag nbt= new CompoundTag();
+        nbt.putInt("stuffedbar", currentStuffedLevel);
+        nbt.putInt("full", this.fullLevel);
+        nbt.putInt("stuffed", this.stuffedLevel);
+        nbt.putInt("overstuffed", this.overstuffedLevel);
+        nbt.putInt("stuffedlost", this.stuffedLost);
+        nbt.putInt("addstate",this.addState);
+        return nbt;
     }
 
 
@@ -148,5 +145,10 @@ public class PlayerStuffedBar {
 
     public int getInterval() {
         return interval;
+    }
+
+    public int getAddState()
+    {
+        return addState;
     }
 }

@@ -52,7 +52,7 @@ public class OverfullFoodC2SPacket {
                                             player.getSoundSource(), 1f, 1f);
                                 }
                             });
-                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getStuffedMax(),stuffedBar.getOverstuffedMax() ,stuffedBar.getSuperStuffedMax()),player);
+                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(),stuffedBar.getStuffedPoints() ,stuffedBar.getOverstuffedPoints()),player);
                         });
                     }
                 }
