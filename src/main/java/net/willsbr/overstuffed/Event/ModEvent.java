@@ -113,10 +113,9 @@ public class ModEvent {
                     stuffedBar.subStuffedLevel(1);
                     event.player.getFoodData().setFoodLevel(event.player.getFoodData().getFoodLevel()+1);
                     stuffedBar.addStuffedLossed();
-                    if( stuffedBar.getCurrentStuffedLevel()+1>stuffedBar.getFullPoints() && stuffedBar.getStuffedLossed()>= stuffedBar.getInterval())
+                    if(stuffedBar.getStuffedLossed()>= stuffedBar.getInterval())
                     {
-                        if(stuffedBar.getCurrentStuffedLevel()+1>(stuffedBar.getFullPoints()+stuffedBar.getStuffedPoints()))
-                        stuffedBar.addStuffedLossed();
+                        stuffedBar.addStuffedPoint();
                     }
                     stuffedBar.addStuffedLossed();
                     event.player.sendSystemMessage(Component.literal("Subtracted Hunger:"+stuffedBar.getCurrentStuffedLevel()));
@@ -136,8 +135,8 @@ public class ModEvent {
                             });
                     //sound logic end
 
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getStuffedMax(), stuffedBar.getOverstuffedMax(),
-                            stuffedBar.getSuperStuffedMax()),(ServerPlayer) event.player);
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(), stuffedBar.getStuffedPoints(),
+                            stuffedBar.getOverstuffedPoints()),(ServerPlayer) event.player);
 
                 }
 //                if((stuffedBar.lastCallTime!=-1 && (event.player.level.getGameTime()- stuffedBar.lastCallTime)>stuffedBar.lastFoodDuration))
@@ -316,8 +315,8 @@ public class ModEvent {
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getStuffedMax(),stuffedBar.getOverstuffedMax(),
-                            stuffedBar.getSuperStuffedMax()), player);
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(),stuffedBar.getOverstuffedPoints(),
+                            stuffedBar.getOverstuffedPoints()), player);
                 });
                 player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
                     ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(cpmData.getStuffedLayerName()),player);

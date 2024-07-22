@@ -1,7 +1,10 @@
 package net.willsbr.overstuffed.Event;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -24,6 +28,8 @@ import net.willsbr.overstuffed.networking.packet.OverfullFoodC2SPacket;
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
 import net.willsbr.overstuffed.networking.packet.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
+
+import java.util.HashMap;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
@@ -69,6 +75,10 @@ public class ClientEvents {
 
 
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
+                        currentPlayer.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
+                        {
+                        stuffedBar.updateNBTData();
+                        });
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
                         int weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
@@ -93,7 +103,7 @@ public class ClientEvents {
             setMinWeight.register(commands,event.getBuildContext());
             setCurrentWeight.register(commands,event.getBuildContext());
             clearLayers.register(commands, event.getBuildContext());
-            viewLayers.register(commands, event.getBuildContext());
+            debugView.register(commands, event.getBuildContext());
             setWGMethod.register(commands,event.getBuildContext());
             setBurpFrequency.register(commands, event.getBuildContext());
             setGurgleFrequency.register(commands, event.getBuildContext());
