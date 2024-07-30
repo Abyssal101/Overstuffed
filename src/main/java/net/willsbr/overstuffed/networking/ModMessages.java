@@ -131,11 +131,15 @@ public class ModMessages {
                 .encoder(PlayerToggleUpdateBooleanC2S::toBytes)
                 .consumerMainThread(PlayerToggleUpdateBooleanC2S::handle)
                 .add();
-
         net.messageBuilder(PlayerToggleUpdateIntegerS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PlayerToggleUpdateIntegerS2C::new)
                 .encoder(PlayerToggleUpdateIntegerS2C::toBytes)
                 .consumerMainThread(PlayerToggleUpdateIntegerS2C::handle)
+                .add();
+        net.messageBuilder(PlayerUnlockUpdateBooleanS2C.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerUnlockUpdateBooleanS2C::new)
+                .encoder(PlayerUnlockUpdateBooleanS2C::toBytes)
+                .consumerMainThread(PlayerUnlockUpdateBooleanS2C::handle)
                 .add();
         net.messageBuilder(WeightMomentumSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(WeightMomentumSyncS2CPacket::new)

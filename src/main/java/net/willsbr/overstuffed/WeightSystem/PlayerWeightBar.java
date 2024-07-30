@@ -3,6 +3,7 @@ package net.willsbr.overstuffed.WeightSystem;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.nbt.CompoundTag;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -10,16 +11,15 @@ import java.util.Queue;
 public class PlayerWeightBar {
     //
 
-    private int currentWeight;
+    private int minWeight= OverstuffedConfig.minWeight.get();
+    private int currentWeight=minWeight;
 
-    private int minWeight;
+
 
     //this is what options will determine for display
     private int curMaxWeight;
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
-    private int[] maxWeightSettings= {200,300,500,1000};
-
     //food queue situation so you slowly gain weight
     private int queuedWeight;
 

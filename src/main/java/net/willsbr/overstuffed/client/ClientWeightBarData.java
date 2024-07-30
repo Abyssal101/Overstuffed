@@ -1,11 +1,13 @@
 package net.willsbr.overstuffed.client;
 
+import net.willsbr.overstuffed.config.OverstuffedConfig;
+
 import java.util.ArrayList;
 import java.util.Queue;
 
 public class ClientWeightBarData {
 
-    private static int currentWeight;
+    private static int currentWeight= OverstuffedConfig.minWeight.get();
 
 
     private static boolean burstGain;

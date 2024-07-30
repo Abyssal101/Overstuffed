@@ -1,10 +1,6 @@
 package net.willsbr.overstuffed.config;
 
-import com.sun.jdi.connect.Connector;
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class OverstuffedConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
@@ -30,6 +26,12 @@ public class OverstuffedConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> maxWeight;
 
     public static ForgeConfigSpec.ConfigValue<Integer> minWeight;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayX;
+    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayY;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudXOffset;
+    public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudYOffset;
 
 
 
@@ -61,7 +63,20 @@ public class OverstuffedConfig {
                 .define("min_weight,",100);
 
         builder.pop();
+        builder.comment("This section is for graphics related settings");
+        builder.push("Overstuffed Graphics Options");
 
+        weightDisplayX=builder.comment("The weight display's current X position")
+                .define("weightdisplayx,",100);
+
+        weightDisplayY=builder.comment("The weight display's current Y position")
+                .define("weightdisplayy,",10);
+
+        stuffedHudXOffset =builder.comment("The stuffed hud's X offset from it's default position")
+                .define("stuffedhudx,",0);
+
+        stuffedHudYOffset =builder.comment("The stuffed hud's Y offset from it's default position")
+                .define("stuffedhudy,",0);
 
 
 

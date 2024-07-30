@@ -5,13 +5,7 @@ import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 public class ClientCPMData {
 
-    //private static String stuffedBellyLayer="";
-   // private static String weightLayer="";
-
-
-    //AN array of Strings for all toggleable settings just so it's visually easier
-
-    //just data
+    //just static helper methods to help converse with the config file and cpm
     private static IClientAPI playersAPI;
 
 
@@ -50,11 +44,8 @@ public class ClientCPMData {
         {
             Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
             int outOf255=(int)(percentFull*255);
-            System.out.println(OverstuffedConfig.stuffedLayerConfigEntry.get()+"New stuffed Layer");
 
             playersAPI.playAnimation(OverstuffedConfig.stuffedLayerConfigEntry.get(),outOf255);
-            //System.out.println(outOf255+"Is this properly playing: "+playersAPI.getAnimationPlaying(ClientCPMData.getStuffedBellyLayer()));
-            System.out.println(OverstuffedConfig.lastStuffedLayer+"Last stuffed Layer");
             playersAPI.playAnimation(OverstuffedConfig.lastStuffedLayer,0);
         }
     }
@@ -66,9 +57,7 @@ public class ClientCPMData {
                 double weightRatio=((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get());
                 weightRatio=weightRatio/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get());
 
-
                 int outof255=(int)(weightRatio*255);
-                System.out.println(outof255+"outof255");
                  playersAPI.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),outof255);
 
                 playersAPI.playAnimation(OverstuffedConfig.lastWeightLayer,0);
@@ -87,7 +76,6 @@ public class ClientCPMData {
                     playersAPI.playAnimation(OverstuffedConfig.lastWeightLayer,0);
 
                     int outOf255=(int)(ClientWeightBarData.getLastWeightStage()*0.2*255);
-                     //System.out.println("Stage 255"+outOf255);
                     //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
                     playersAPI.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),outOf255+ ClientWeightBarData.getAmountThroughStage());
 

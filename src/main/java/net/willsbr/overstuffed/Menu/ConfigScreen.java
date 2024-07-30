@@ -42,9 +42,7 @@ public class ConfigScreen extends Screen {
     /** List of options shown on the screen */
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
-    private OptionsList optionsList;
 
-    //OPTION INSTANCES ARE BUTTONS
     private ToggleButton stageBasedWeight;
 
     private ToggleButton weightEffect;
@@ -72,6 +70,8 @@ public class ConfigScreen extends Screen {
 
     private EditBox weightLayerEditBox;
     private EditBox stuffedLayerEditBox;
+
+    private Button toGraphicsConfig;
 
 
     private int centerW;
@@ -116,15 +116,12 @@ public class ConfigScreen extends Screen {
         // Create the options list
         // It must be created in this method instead of in the constructor,
         // or it will not be displayed properly
-        this.optionsList = new OptionsList(
-                Minecraft.getInstance(), this.width, this.height,
-                OPTIONS_LIST_TOP_HEIGHT,
-                this.height - OPTIONS_LIST_BOTTOM_OFFSET,
-                OPTIONS_LIST_ITEM_HEIGHT
-        );
+
 
         //buttons
+        //TODO MAKE LOCKED BUTTONS ACTUAL TIE TO PLAYER UNLOCK
         this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,"Stage Based Weight",OverstuffedConfig.returnSetting(0));
+        this.stageBasedWeight.setLocked(false);
         this.momentum= new ToggleButton(centerW+10,70,150,20,"Weight Momentum",OverstuffedConfig.returnSetting(1), true);
         this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Effects",OverstuffedConfig.returnSetting(2));
         this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
@@ -172,7 +169,8 @@ public class ConfigScreen extends Screen {
         //So you can't go above 9999 because of this
         this.minWeight.setMaxLength(4);
 
-
+        toGraphicsConfig=new Button(screenW-120,8,100,20,
+                Component.literal("Graphics Config"),button ->this.swapScreen("graphics"));
 
         // Add the options list as this screen's child
         // If this is not done, users cannot click on items in the list
@@ -188,6 +186,10 @@ public class ConfigScreen extends Screen {
         this.addRenderableWidget(this.weightLayerEditBox);
         this.addRenderableWidget(this.stuffedLayerEditBox);
 
+
+
+
+        this.addRenderableWidget(this.toGraphicsConfig);
         // Add the "Done" button
         this.addRenderableWidget(new Button(
                 (this.width - BUTTON_WIDTH) / 2,
@@ -313,11 +315,6 @@ public class ConfigScreen extends Screen {
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
         }
 
-
-
-
-
-
         OverstuffedConfig.saveConfig();
         CPMData.checkIfUpdateCPM("weight");
         CPMData.checkIfUpdateCPM("stuffed");
@@ -326,6 +323,15 @@ public class ConfigScreen extends Screen {
         // Call last in case it interferes with the override
         super.onClose();
     }
+    public void swapScreen(String screenName)
+    {
+        this.onClose();
+        if(screenName.contentEquals("graphics"))
+        {
+            Minecraft.getInstance().setScreen(new GraphicsConfigScreen());
+        }
+    }
+
 
     @Override
     public void removed() {

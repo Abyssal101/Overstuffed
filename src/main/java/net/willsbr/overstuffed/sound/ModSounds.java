@@ -33,6 +33,11 @@ public class ModSounds {
 
     public static final ArrayList<RegistryObject<SoundEvent>> GURGLE_SOUNDS = new ArrayList<RegistryObject<SoundEvent>>();
 
+    public static final RegistryObject<SoundEvent> SCALEON= registerSoundEvent("scaleon");
+
+    public static final RegistryObject<SoundEvent> SCALEOFF= registerSoundEvent("scaleoff");
+
+
     public static void createArrays()
     {
         BURP_SOUNDS.add(BURP1);

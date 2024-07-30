@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.ClientCPMStuffedSyncS2CPacket;
 import net.willsbr.overstuffed.networking.packet.ClientCPMWeightSyncS2CPacket;
@@ -30,9 +31,9 @@ public class SetLayer {
 
     private static int setStuffed(CommandSourceStack pSource, Player player, String stuffedLayerName) throws CommandSyntaxException {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
-            if(!stuffedLayerName.contentEquals(cpmData.getStuffedLayerName()))
+            if(!stuffedLayerName.contentEquals(OverstuffedConfig.stuffedLayerConfigEntry.get()))
             {
-                cpmData.setStuffed(stuffedLayerName);
+                OverstuffedConfig.stuffedLayerConfigEntry.set(stuffedLayerName);
                 ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(stuffedLayerName),(ServerPlayer) player);
                 player.sendSystemMessage(Component.literal("Stuffed Layer successfully updated"));
             }
