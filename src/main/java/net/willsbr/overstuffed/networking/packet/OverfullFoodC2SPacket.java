@@ -43,7 +43,7 @@ public class OverfullFoodC2SPacket {
                         {
                             ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
                             stuffedBar.addStuffedLevel(1, level.getGameTime(), lastFood.getUseDuration());
-                            player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+                            player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
                                 //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
                                 if(player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
                                 {

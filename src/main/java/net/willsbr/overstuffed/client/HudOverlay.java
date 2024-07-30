@@ -18,9 +18,7 @@ public class HudOverlay {
 
     private static final ResourceLocation SUPERSTUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/superstuffedpoint.png");
 
-    //TODO MAKE AN ACTUAL WEIGHT SPRITE 0 CURRENTLY RESUSES 1
-    private static final ResourceLocation WEIGHTSPRITE0 =new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/weightsprites/belly2.png");
-
+    private static final ResourceLocation WEIGHTSPRITE0 =new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/weightsprites/belly1.png");
 
     private static final ResourceLocation WEIGHTSPRITE1 =new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/weightsprites/belly2.png");
     private static final ResourceLocation WEIGHTSPRITE2 =new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/weightsprites/belly3.png");
@@ -35,17 +33,14 @@ public class HudOverlay {
     public static final IGuiOverlay HUD_STUFFEDBAR=((gui, poseStack, partialTick, screenWidth, screenHeight) -> {
         //anything in here gets rendered
         Window curWindow= Minecraft.getInstance().getWindow();
-      //  int x=screenWidth/2+(int)((screenWidth/100));
-       // int y=(int)(screenHeight/2+screenHeight/4+(1/curWindow.getGuiScale()*screenHeight/4));
 
-        //aa fuck it
         screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         screenHeight =  Minecraft.getInstance().getWindow().getGuiScaledHeight();
         int rightHeight = 45;
         int leftHeight = 39;
 
-        int left = screenWidth / 2 + 60;
-        int top = screenHeight - rightHeight;
+        int left = screenWidth / 2 + 60+OverstuffedConfig.stuffedHudXOffset.get();
+        int top = screenHeight - rightHeight-OverstuffedConfig.stuffedHudYOffset.get();
         rightHeight += 10;
 
         WEIGHTSTAGESPRITES[0]=WEIGHTSPRITE0;
@@ -121,17 +116,17 @@ public class HudOverlay {
         poseStack.translate( 0,0,0);
 
 
-        GuiComponent.drawString(poseStack, gui.getFont(), "Weight:  "+ClientWeightBarData.getPlayerWeight()+" / "+OverstuffedConfig.maxWeight.get(), 20,20,255);
+        //GuiComponent.drawString(poseStack, gui.getFont(), "Weight:  "+ClientWeightBarData.getPlayerWeight()+" / "+OverstuffedConfig.maxWeight.get(), 20,20,255);
 
         poseStack.popPose();
-        //TODO-MAKE OVERSTUFFED POINTS AND WEIGHT STAGE SPRITE HAVE ADJUSTABLE LOCATION(HUD PANEL IN SETTINGS AND SAVE IN CONFIG)
         RenderSystem.setShaderTexture(0,WEIGHTSPRITEBACKGROUND);
-        GuiComponent.blit(poseStack,40,10,0,0,20,20,20,20);
+        GuiComponent.blit(poseStack,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,33,33,33,33);
 
         int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight())/OverstuffedConfig.maxWeight.get())*100);
-        System.out.println(outOf100/20+"/5");
-        RenderSystem.setShaderTexture(0,WEIGHTSTAGESPRITES[outOf100/20]);
-        GuiComponent.blit(poseStack,41,11,0,0,19,19,19,19);
+        //for checking which sprite is currently being displayed.
+        //System.out.println(outOf100/20-1+"/5");
+        RenderSystem.setShaderTexture(0,WEIGHTSTAGESPRITES[outOf100/20-1]);
+        GuiComponent.blit(poseStack,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,32,32,32,32);
 
 
 

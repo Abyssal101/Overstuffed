@@ -9,13 +9,14 @@ import net.minecraft.world.level.block.CakeBlock;
 import net.willsbr.overstuffed.OverStuffed;
 
 public class ModCreativeModeTab extends CreativeModeTab {
-    public static final ModCreativeModeTab instance = new ModCreativeModeTab(CreativeModeTab.TABS.length, "OverStuffed");
+    public static final ModCreativeModeTab instance = new ModCreativeModeTab(CreativeModeTab.TABS.length, "overstuffed");
 
 
 
     public ModCreativeModeTab(int place, String label) {
         super(place, label);
     }
+
 
     @Override
     public ItemStack makeIcon() {

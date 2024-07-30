@@ -52,31 +52,42 @@ public class ToggleButton extends AbstractButton {
 
     public void onPress() {
 
-        setting=!setting;
-        String statusUpdate="";
-        if(setting)
+        if(locked==false)
         {
-            statusUpdate="True";
+            setting=!setting;
+            String statusUpdate="";
+            if(setting)
+            {
+                statusUpdate="True";
+            }
+            else {
+                statusUpdate="False";
+            }
+            super.setMessage(Component.literal(settingName+": "+statusUpdate));
         }
-        else {
-            statusUpdate="False";
-        }
-        super.setMessage(Component.literal(settingName+": "+statusUpdate));
+
     }
 
     public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         super.renderButton(pPoseStack,pMouseX,pMouseY,pPartialTick);
         //this will handle drawing the locked icon next to the button
-        RenderSystem.setShaderTexture(0,lockedIcon);
-        if(rightSide)
+        if(locked)
         {
-            this.blit(pPoseStack,this.x+this.width+5,this.y,0,0,20 ,20,20,20);
+            RenderSystem.setShaderTexture(0,lockedIcon);
+            if(rightSide)
+            {
+                this.blit(pPoseStack,this.x+this.width+5,this.y,0,0,20 ,20,20,20);
 
-        }
-        else {
-            this.blit(pPoseStack,this.x-20,this.y,0,0,20,20,20,20);
+            }
+            else {
+                this.blit(pPoseStack,this.x-20,this.y,0,0,20,20,20,20);
 
+            }
         }
+    }
+    public void setLocked(boolean input)
+    {
+        this.locked=input;
     }
 
 

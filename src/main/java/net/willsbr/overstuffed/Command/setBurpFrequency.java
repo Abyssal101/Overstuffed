@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.PlayerToggleUpdateIntegerS2C;
 
@@ -24,16 +25,15 @@ public class setBurpFrequency {
     }
 
     private static int setBurpFrequency(CommandSourceStack pSource, Player player, int value) throws CommandSyntaxException {
-        player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
             if(value>=0 && value<=10)
             {
                 //playerToggles.setToggleValue(1,value);
-                ModMessages.sendToPlayer(new PlayerToggleUpdateIntegerS2C(1, value),  (ServerPlayer) player);
+                OverstuffedConfig.burpFrequency.set(value);
             }
             else {
                 player.sendSystemMessage(Component.literal("Error: Value outside of 1-10"));
             }
-        });
+
         return 0;
     }
 

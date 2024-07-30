@@ -58,6 +58,19 @@
     "sounds": [
       "overstuffed:gurgle5"
     ]
+  },
+
+  "scaleon": {
+    "subtitle": "sounds.overstuffed.scaleon",
+    "sounds": [
+      "overstuffed:scale/scaleon"
+    ]
+  },
+  "scaleoff": {
+    "subtitle": "sounds.overstuffed.scaleoff",
+    "sounds": [
+      "overstuffed:scale/scaleoff"
+    ]
   }
 
 

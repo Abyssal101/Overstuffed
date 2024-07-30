@@ -28,7 +28,7 @@ public class setWGMethod {
 
     private static int levelBasedGaining(CommandSourceStack pSource, Player player, String input) throws CommandSyntaxException {
 
-        player.getCapability(PlayerUnlocksProvider.PLAYER_TOGGLES).ifPresent(playerToggles -> {
+        player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
             if(input.toLowerCase().contentEquals("false"))
             {
                 playerToggles.setToggle(0,false);

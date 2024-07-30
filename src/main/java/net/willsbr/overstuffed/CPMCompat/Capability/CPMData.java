@@ -45,9 +45,7 @@ public class CPMData {
     {
 //        if(lastSavedStuffed!=ClientStuffedBarData.getPlayerStuffedBar())
 //        {
-        //System.out.println("FUck");
 
-           // Player.player.sendSystemMessage(Component.literal("SOMETHING"));
 
         //ALL THIS SHOULD BE EXECUTED ON THE CLIENT
             if(type.contentEquals("stuffed"))
@@ -55,7 +53,6 @@ public class CPMData {
                 ClientCPMData.playStuffed();
             }
             else if(type.contentEquals("weight")){
-                //System.out.println("playerStuffedBarO");
                 ClientCPMData.playWeight();
             }
             

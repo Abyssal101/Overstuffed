@@ -1,6 +1,9 @@
 package net.willsbr.overstuffed.AdvancementToggle;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.PlayerUnlockUpdateBooleanS2C;
 
 public class PlayerUnlocks {
     //so this is how this is ogoing to work
@@ -14,12 +17,14 @@ public class PlayerUnlocks {
     int[] settingStatus;
     public PlayerUnlocks()
     {
-        //FIXME MAKE UNLOCKS ACTUALLY BE USED
+        //TODO MAKE UNLOCKS ACTUALLY BE USED
         //should all default to false?
         //Pre-emptively do 10 for my sake
         unlocks =new int[10];
         settingStatus=new int[10];
         //Index 0- Stage Based Gain
+        unlocks[0]=1;
+        //ModMessages.sendToPlayer(new PlayerUnlockUpdateBooleanS2C(0,true));
 
     }
 

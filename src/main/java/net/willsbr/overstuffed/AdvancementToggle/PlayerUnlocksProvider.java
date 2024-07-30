@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerUnlocksProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<PlayerUnlocks> PLAYER_TOGGLES = CapabilityManager.get(
+    public static Capability<PlayerUnlocks> PLAYER_UNLOCKS = CapabilityManager.get(
             new CapabilityToken<PlayerUnlocks>() {});
     private PlayerUnlocks playerUnlocks =null;
     private final LazyOptional<PlayerUnlocks> optional=LazyOptional.of(this::createToggles);
@@ -30,7 +30,7 @@ public class PlayerUnlocksProvider implements ICapabilityProvider, INBTSerializa
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap== PLAYER_TOGGLES)
+        if(cap== PLAYER_UNLOCKS)
         {
             return optional.cast();
 
