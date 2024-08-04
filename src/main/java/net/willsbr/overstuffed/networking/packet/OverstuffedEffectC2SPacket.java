@@ -45,7 +45,7 @@ public class OverstuffedEffectC2SPacket {
 
                     //here we are on the server
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.getLevel();
+                    ServerLevel level=player.serverLevel();
                     if(!level.isClientSide)
                     {
 

@@ -3,6 +3,7 @@ package net.willsbr.overstuffed.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -37,7 +38,7 @@ public class MovementUpdatesC2S {
                     ServerPlayer player=context.getSender();
 
 
-                    ServerLevel level=player.getLevel();
+                    Level level=player.level();
                     if(!level.isClientSide)
                     {
                         player.setDeltaMovement(player.getDeltaMovement().add(velocity,velocity,velocity));

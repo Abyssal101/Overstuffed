@@ -2,6 +2,7 @@ package net.willsbr.overstuffed.Menu.Buttons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -44,7 +45,7 @@ public class ToggleButton extends AbstractButton {
             statusUpdate="True";
         }
         else {
-            statusUpdate="False";
+            statusUpdate="Falsse";
         }
         super.setMessage(Component.literal(settingName+": "+statusUpdate));
         rightSide=isRight;
@@ -68,19 +69,19 @@ public class ToggleButton extends AbstractButton {
 
     }
 
-    public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.renderButton(pPoseStack,pMouseX,pMouseY,pPartialTick);
+    public void renderButton(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.renderWidget(guiGraphics,pMouseX,pMouseY,pPartialTick);
         //this will handle drawing the locked icon next to the button
         if(locked)
         {
-            RenderSystem.setShaderTexture(0,lockedIcon);
+
             if(rightSide)
             {
-                this.blit(pPoseStack,this.x+this.width+5,this.y,0,0,20 ,20,20,20);
+                guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
 
             }
             else {
-                this.blit(pPoseStack,this.x-20,this.y,0,0,20,20,20,20);
+                guiGraphics.blit(lockedIcon,this.getX()-20,this.getY(),0,0,20,20,20,20);
 
             }
         }
@@ -92,7 +93,9 @@ public class ToggleButton extends AbstractButton {
 
 
 
-    public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
 
     }
 

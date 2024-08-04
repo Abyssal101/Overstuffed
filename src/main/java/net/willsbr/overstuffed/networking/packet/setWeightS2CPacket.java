@@ -37,7 +37,7 @@ public class setWeightS2CPacket {
                 {
                     //here we are on the client
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.getLevel();
+                    ServerLevel level=player.serverLevel();
                     if(level.isClientSide)
                     {
                         ClientWeightBarData.setCurrentWeight(this.weight);

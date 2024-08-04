@@ -3,6 +3,7 @@ package net.willsbr.overstuffed.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -40,7 +41,7 @@ public class CPMDataC2SPacket {
 
                     //here we are on the server
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.getLevel();
+                    ServerLevel level=player.serverLevel();
                     if(!level.isClientSide)
                     {
                         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(playerCPM ->
