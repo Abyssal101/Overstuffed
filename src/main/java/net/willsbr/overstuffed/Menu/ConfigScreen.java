@@ -319,7 +319,11 @@ public class ConfigScreen extends Screen {
         }
 
         OverstuffedConfig.saveConfig();
-        CPMData.checkIfUpdateCPM("weight");
+        if(CPMData.checkIfUpdateCPM("weight")==false)
+        {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: CPM is not loaded. No visual changes can occur"));
+        }
+
         CPMData.checkIfUpdateCPM("stuffed");
 
 

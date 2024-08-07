@@ -5,6 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -103,6 +105,8 @@ public class ModEvent {
         if(event.side == LogicalSide.SERVER) {
 
 
+
+
             //Making it a little more effcient
             if((event.player.tickCount&3)==0)
             {
@@ -181,6 +185,7 @@ public class ModEvent {
     {
         event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
             event.player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
+
                 //create weight updates here
                 if(OverstuffedConfig.returnSetting(0)==true)
                 {
@@ -252,6 +257,9 @@ public class ModEvent {
                 }
 
             }
+            //TODO CHECK THIS WORKS DUMMY
+            event.player.serializeNBT();
+
 
         });
     }

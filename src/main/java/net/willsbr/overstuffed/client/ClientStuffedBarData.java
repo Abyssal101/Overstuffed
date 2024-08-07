@@ -3,11 +3,11 @@ package net.willsbr.overstuffed.client;
 public class ClientStuffedBarData {
 
     //Each player HAS THIS DATA ON A SERVER
-    private static int playerStuffedBar;
-    private static int currentSoftLimit;
+    public static int playerStuffedBar;
+    public static int currentSoftLimit;
 
-    private static int currentFirmLimit;
-    private static int currentHardLimit;
+    public static int currentFirmLimit;
+    public static int currentHardLimit;
 
     private static int max=9;
 

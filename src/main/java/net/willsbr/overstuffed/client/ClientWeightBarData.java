@@ -7,10 +7,10 @@ import java.util.Queue;
 
 public class ClientWeightBarData {
 
-    private static int currentWeight= OverstuffedConfig.minWeight.get();
+    public static int currentWeight= OverstuffedConfig.minWeight.get();
 
 
-    private static boolean burstGain;
+    public static boolean burstGain;
 
     //this is the percent for burstGain
     private static int lastWeightStage=0;

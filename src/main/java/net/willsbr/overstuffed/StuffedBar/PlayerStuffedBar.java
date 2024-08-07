@@ -110,6 +110,7 @@ public class PlayerStuffedBar {
         addState=nbt.getInt("addstate");
     }
 
+
     public CompoundTag updateNBTData()
     {
         CompoundTag nbt= new CompoundTag();
