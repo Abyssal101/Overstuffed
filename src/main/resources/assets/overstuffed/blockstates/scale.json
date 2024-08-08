@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "overstuffed:block/scale"
+    },
+    "facing=south": {
+      "model": "overstuffed:block/scale",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "overstuffed:block/scale",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "overstuffed:block/scale",
+      "y": 90
+    }
+  }
+}
