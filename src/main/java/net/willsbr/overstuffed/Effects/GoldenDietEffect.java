@@ -17,7 +17,7 @@ public class GoldenDietEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
-        if (!pLivingEntity.level().isClientSide()) {
+        if (!pLivingEntity.level.isClientSide()) {
             Player effectedPlayer=(Player)pLivingEntity;
             effectedPlayer.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
             {

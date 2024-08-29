@@ -24,14 +24,14 @@ public class CPMCompat implements ICPMPlugin {
 
 
         //Is not used, but plays animations for EVERY player with the matching one. Sync Dances I guess?
-//        CPMMessageSenders.weightLevelSender=(api.registerPluginMessage(Player.class, "weightlevel",
-//                (player, message) -> {
-//                    //this plays the new animation
-//                    int temp=message.getInteger("currentweight");
-//                    api.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),temp);
-//                    //this resets the old one if any
-//                    api.playAnimation(OverstuffedConfig.lastWeightLayer,0);
-//                }, true));
+        CPMMessageSenders.weightLevelSender=(api.registerPluginMessage(Player.class, "weightlevel",
+                (player, message) -> {
+                    //this plays the new animation
+                    int temp=message.getInteger("currentweight");
+                    api.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),temp);
+                    //this resets the old one if any
+                    api.playAnimation(OverstuffedConfig.lastWeightLayer,0);
+                }, true));
     }
 
     public void initCommon(ICommonAPI api) {

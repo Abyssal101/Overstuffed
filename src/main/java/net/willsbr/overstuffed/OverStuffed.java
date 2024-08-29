@@ -1,12 +1,15 @@
 package net.willsbr.overstuffed;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +25,6 @@ import net.willsbr.overstuffed.Block.ModBlocks;
 import net.willsbr.overstuffed.CPMCompat.CPMCompat;
 import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.Entity.ModEntities;
-import net.willsbr.overstuffed.Item.ModCreativeModeTabs;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -46,23 +48,18 @@ public class OverStuffed
 
     public OverStuffed()
     {
-
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
         ModSounds.createArrays();
-
         //ModEntities.ENTITY_TYPES.register(modEventBus);
         ModPotions.register(modEventBus);
         ModEffects.register(modEventBus);
-        ModCreativeModeTabs.register(modEventBus);
-        modEventBus.addListener(this::addCreative);
         // Register the methods for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC); // CPM Compat
-
 
         // generate/read config/overstuffed.toml
         ModLoadingContext.get().registerConfig(
@@ -83,20 +80,15 @@ public class OverStuffed
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-        if(event.getTab() == ModCreativeModeTabs.OVERSTUFFED_TAB.get())
-        {
-        event.accept(ModBlocks.SCALE);
-        }
-    }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // Some common setup code
         event.enqueueWork(() ->{
             ModMessages.register();
+            // ModVillagers.registerPOIS();
         });
+        ModMessages.register();
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

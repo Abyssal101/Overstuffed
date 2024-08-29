@@ -12,7 +12,7 @@ public class ModItems {
 
 
     //personal testing
-    //public static final RegistryObject<Item> EXPLOSIVE_BOW=ITEMS.register("explosive_bow",() -> new ExplosiveBowItem(new Item.Properties().tab(ModCreativeModeTabs.TUTORIAL_TAB).defaultDurability(10).stacksTo(1)));
+    //public static final RegistryObject<Item> EXPLOSIVE_BOW=ITEMS.register("explosive_bow",() -> new ExplosiveBowItem(new Item.Properties().tab(ModCreativeModeTab.TUTORIAL_TAB).defaultDurability(10).stacksTo(1)));
 
     public static void register(IEventBus eventBus)
     {

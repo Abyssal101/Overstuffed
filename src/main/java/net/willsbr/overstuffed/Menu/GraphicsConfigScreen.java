@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -46,8 +46,6 @@ public class GraphicsConfigScreen extends Screen {
     private EditBox stuffedHudYOffset;
 
     private Button toConfigScreen;
-
-    private Button done;
 
     private int centerW;
     private int centerH;
@@ -139,19 +137,8 @@ public class GraphicsConfigScreen extends Screen {
         this.stuffedHudYOffset.setValue(OverstuffedConfig.stuffedHudYOffset.get()+"");
 
 
-
-
-        this.toConfigScreen=Button.builder(Component.literal("Gameplay Config"),button ->this.swapScreen("gameplay")).build();
-        this.toConfigScreen.setPosition(screenW-120,8);
-        this.toConfigScreen.setWidth(100);
-        this.toConfigScreen.setHeight(20);
-
-        this.done=Button.builder(Component.literal("Save"),
-                button -> this.onClose()).build();
-        done.setPosition( (this.width - BUTTON_WIDTH) / 2, this.height - DONE_BUTTON_TOP_OFFSET);
-        done.setWidth(BUTTON_WIDTH);
-        done.setHeight(BUTTON_HEIGHT);
-
+        this.toConfigScreen= new Button(screenW-120,8,100,20,
+                Component.literal("Gameplay Config"),button ->this.swapScreen("gameplay"));
 
         this.addRenderableWidget(this.weightDisplayX);
         this.addRenderableWidget(this.weightDisplayY);
@@ -163,7 +150,13 @@ public class GraphicsConfigScreen extends Screen {
 
 
         // Add the "Done" button
-        this.addRenderableWidget(done);
+        this.addRenderableWidget(new Button(
+                (this.width - BUTTON_WIDTH) / 2,
+                this.height - DONE_BUTTON_TOP_OFFSET,
+                BUTTON_WIDTH, BUTTON_HEIGHT,
+                Component.literal("Save"),
+                button -> this.onClose()
+        ));
     }
 
     @Override
@@ -180,42 +173,42 @@ public class GraphicsConfigScreen extends Screen {
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
     // on the screen
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@Nonnull PoseStack pose, int mouseX, int mouseY, float partialTick) {
         // Background is typically rendered first
-        this.renderBackground(guiGraphics);
+        this.renderBackground(pose);
         // Then the widgets if this is a direct child of the Screen
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.render(pose, mouseX, mouseY, partialTick);
         // Draw the title
-        PoseStack pose =guiGraphics.pose();
-        guiGraphics.drawCenteredString(font, this.getTitle().getString(),
+        drawCenteredString(pose, font, this.getTitle().getString(),
                 this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
         //drawing the edit box's title
 
         pose.pushPose();
         pose.scale(.8f,0.8f,1);
-        guiGraphics.drawCenteredString(font, "Weight Display X Coordinate",(int)(this.weightDisplayX.getX()*1.2+20*1.2),50,Color.WHITE.hashCode());
+        drawCenteredString(pose, font, "Weight Display X Coordinate",(int)(this.weightDisplayX.x*1.2+20*1.2),50,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(font, "Weight Display Y Coordinate",(int)(this.weightDisplayY.getX()*1.2+30*1.2),50,Color.WHITE.hashCode());
+        drawCenteredString(pose, font, "Weight Display Y Coordinate",(int)(this.weightDisplayY.x*1.2+30*1.2),50,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString( font, "Stuffed Hud X Offset",(int)(this.stuffedHudXOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
+        drawCenteredString(pose, font, "Stuffed Hud X Offset",(int)(this.stuffedHudXOffset.x*1.2+20*1.2),120,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(font, "Stuffed Hud Y Offset",(int)(this.stuffedHudYOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
+        drawCenteredString(pose, font, "Stuffed Hud Y Offset",(int)(this.stuffedHudYOffset.x*1.2+20*1.2),120,Color.WHITE.hashCode());
 
 
         pose.popPose();
 
         if(weightDisplayY.isFocused() || weightDisplayX.isFocused())
         {
+            RenderSystem.setShaderTexture(0,WEIGHTPLACEHOLDER);
 
-
-            guiGraphics.blit(WEIGHTPLACEHOLDER,this.getEditBoxInt("weight",true),
+            GuiComponent.blit(pose,this.getEditBoxInt("weight",true),
                     this.getEditBoxInt("weight",false),0,0,34,34,20,20);
         }
 
         if(stuffedHudYOffset.isFocused() || stuffedHudXOffset.isFocused())
         {
+            RenderSystem.setShaderTexture(0,WEIGHTPLACEHOLDER);
 
-            guiGraphics.blit(WEIGHTPLACEHOLDER,screenW/2+10+this.getEditBoxInt("stuffed",true),
+            GuiComponent.blit(pose,screenW/2+10+this.getEditBoxInt("stuffed",true),
                     screenH-45-this.getEditBoxInt("stuffed",false),0,0,70,6,34,34);
         }
 

@@ -1,7 +1,6 @@
 package net.willsbr.overstuffed.CPMCompat.Capability;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.fml.ModList;
 import net.willsbr.overstuffed.client.ClientCPMData;
 
 public class CPMData {
@@ -42,14 +41,13 @@ public class CPMData {
     {
         return stuffedLayerName;
     }
-    public static boolean checkIfUpdateCPM(String type)
+    public static void checkIfUpdateCPM(String type)
     {
 //        if(lastSavedStuffed!=ClientStuffedBarData.getPlayerStuffedBar())
 //        {
 
-        if(ModList.get().isLoaded("cpm"))
-        {
-            //ALL THIS SHOULD BE EXECUTED ON THE CLIENT
+
+        //ALL THIS SHOULD BE EXECUTED ON THE CLIENT
             if(type.contentEquals("stuffed"))
             {
                 ClientCPMData.playStuffed();
@@ -57,9 +55,9 @@ public class CPMData {
             else if(type.contentEquals("weight")){
                 ClientCPMData.playWeight();
             }
-            return true;
-        }
-        return false;
+            
+
+
     }
 
 

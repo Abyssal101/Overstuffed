@@ -42,7 +42,7 @@ public class WeightMomentumSyncS2CPacket {
 
                     //here we are on the server
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.serverLevel();
+                    ServerLevel level=player.getLevel();
                     if(level.isClientSide)
                     {
                         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->

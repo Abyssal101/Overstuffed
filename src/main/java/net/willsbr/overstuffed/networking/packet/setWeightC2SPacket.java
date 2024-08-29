@@ -35,7 +35,7 @@ public class setWeightC2SPacket {
 
                     //here we are on the server
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.serverLevel();
+                    ServerLevel level=player.getLevel();
                     if(!level.isClientSide)
                     {
 

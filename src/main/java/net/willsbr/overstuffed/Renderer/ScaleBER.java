@@ -3,7 +3,7 @@ package net.willsbr.overstuffed.Renderer;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
@@ -58,48 +58,46 @@ public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
                 if(FACING.equals(Direction.NORTH))
                 {
                     poseStack.translate(52f,-122,8f);
-
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-45));
+                    poseStack.mulPose(Vector3f.XN.rotationDegrees(-45));
                 }
                 else if((FACING.equals(Direction.SOUTH)))
                 {
 
                     poseStack.translate(75,-122,95);
-                    poseStack.mulPose(Axis.XN.rotationDegrees(45));
-                    poseStack.mulPose(Axis.YN.rotationDegrees(180));
+                    poseStack.mulPose(Vector3f.XN.rotationDegrees(45));
+                    poseStack.mulPose(Vector3f.YN.rotationDegrees(180));
                 }
                 else if(FACING.equals(Direction.EAST))
                 {
 
                     poseStack.translate(118,-122,40);
-                    poseStack.mulPose(Axis.YN.rotationDegrees(90));
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-47));
+                    poseStack.mulPose(Vector3f.YN.rotationDegrees(90));
+                    poseStack.mulPose(Vector3f.XN.rotationDegrees(-47));
                 }
                 else {
                     poseStack.translate(8,-122,60);
-                    poseStack.mulPose(Axis.YN.rotationDegrees(270));
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-47));
+                    poseStack.mulPose(Vector3f.YN.rotationDegrees(270));
+                    poseStack.mulPose(Vector3f.XN.rotationDegrees(-47));
                 }
             }
 
 
         if(displayWeight==0)
         {
-            font.drawInBatch("0",0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,Font.DisplayMode.NORMAL,
-                    0,packedLight);
-
+            font.drawInBatch("0",0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,
+                    false,0,packedLight);
         }
         else if(displayWeight>0 && displayWeight<1000)
         {
-            font.drawInBatch(""+displayWeight,0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource
-                    ,Font.DisplayMode.NORMAL, 0,packedLight);
+            font.drawInBatch(""+displayWeight,0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,
+                    false,0,packedLight);
         }
         else
         {
             poseStack.translate(-4f,0,0);
 
             font.drawInBatch("ERROR",0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,
-                    Font.DisplayMode.NORMAL, 0,packedLight);
+                    false,0,packedLight);
         }
 
 
