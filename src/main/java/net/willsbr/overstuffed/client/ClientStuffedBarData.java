@@ -17,6 +17,7 @@ public class ClientStuffedBarData {
         ClientStuffedBarData.currentSoftLimit=soft;
         ClientStuffedBarData.currentFirmLimit=firm;
         ClientStuffedBarData.currentHardLimit=hard;
+
     }
 
     public static int getPlayerStuffedBar()
