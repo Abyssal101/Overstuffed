@@ -4,58 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="AAAA 5">
-      <change afterPath="$PROJECT_DIR$/target/classes/META-INF/mods.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/blockstates/scale.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/lang/en_us.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/models/block/scale.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/models/item/scale.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/belch2.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/belch3.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/belch4.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/belch5.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/burp1.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/gurgle1.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/gurgle2.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/gurgle3.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/gurgle4.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/gurgle5.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/scale/scaleoff.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/sounds/scale/scaleon.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/block/peg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/block/pole.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/block/scalebot.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/block/scaleface.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/config/lockedicon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/mob_effect/goldendiet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/mob_effect/goldendietshowotherst.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/overstuffedpoint.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/placeholder.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/stuffedpoint.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/superstuffedpoint.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightbackground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightsprites/belly1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightsprites/belly2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightsprites/belly3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightsprites/belly4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/textures/stuffedbar/weightsprites/belly5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/mineable/axe.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/mineable/hoe.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/mineable/pickaxe.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/mineable/shovel.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/needs_diamond_tool.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/needs_iron_tool.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/minecraft/tags/blocks/needs_stone_tool.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/overstuffed/loot_tables/blocks/scale.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/data/overstuffed/recipes/scale.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/mixinconfig.overstuffed.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/pack.mcmeta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="AAAA6">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +80,9 @@
     &quot;accountId&quot;: &quot;56b36aa7-d796-4e74-963f-e200f8e1c438&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
@@ -148,6 +106,8 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlbra/OneDrive/Documents/GitHub/Overstuffed/src/main/java/net/willsbr/overstuffed/build&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
@@ -229,7 +189,9 @@
       <option name="presentableId" value="Default" />
       <updated>1723857281005</updated>
       <workItem from="1723857282362" duration="242000" />
-      <workItem from="1725045833619" duration="188000" />
+      <workItem from="1725045833619" duration="385000" />
+      <workItem from="1725048166863" duration="364000" />
+      <workItem from="1725125703465" duration="530000" />
     </task>
     <task id="LOCAL-00001" summary="AAAAA">
       <option name="closed" value="true" />
@@ -271,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724983406234</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="AAAA6">
+      <option name="closed" value="true" />
+      <created>1725046116466</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1725046116466</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,6 +253,7 @@
     <MESSAGE value="AAAA 3" />
     <MESSAGE value="AAAA 4" />
     <MESSAGE value="AAAA 5" />
-    <option name="LAST_COMMIT_MESSAGE" value="AAAA 5" />
+    <MESSAGE value="AAAA6" />
+    <option name="LAST_COMMIT_MESSAGE" value="AAAA6" />
   </component>
 </project>

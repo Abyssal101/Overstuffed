@@ -211,7 +211,7 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'Abyssal101'
+            groupId = 'com.github.Abyssal101.Overstuffed'
             artifactId = 'overstuffed'
             version = '1.0'
 
