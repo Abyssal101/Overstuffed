@@ -1,0 +1,85 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.github.Abyssal101",
+    "module": "Overstuffed",
+    "version": "1.0-1.20.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "Overstuffed-1.0-1.20.1.jar",
+          "url": "Overstuffed-1.0-1.20.1.jar",
+          "size": 700335,
+          "sha512": "79bf65bc00cd8b6974cdc75ee034ffef619b24416b2550407eda07ce99055b04aa5e3045b10c5aa467dbf8f62455978005abaedac70689a407bc6b10045544d3",
+          "sha256": "51d0b046d5a161dfb942a4712c2cd29184e204992205cc5fec58aac7d69e976e",
+          "sha1": "be866ad4069d93232dc50e280bfecd7bddd669b1",
+          "md5": "7d1f39793a6a95a5503cdaf0cf441fa3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.figuramc",
+          "module": "figura-forge",
+          "version": {
+            "strictly": "0.1.4+1.20.1_mapped_official_1.20.1",
+            "requires": "0.1.4+1.20.1_mapped_official_1.20.1"
+          }
+        },
+        {
+          "group": "net.minecraftforge",
+          "module": "forge",
+          "version": {
+            "requires": "1.20.1-47.3.0_mapped_official_1.20.1"
+          }
+        },
+        {
+          "group": "com.tom5454.cpm",
+          "module": "CustomPlayerModels-1.20",
+          "version": {
+            "strictly": "0.6.17b_mapped_official_1.20.1",
+            "requires": "0.6.17b_mapped_official_1.20.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "Overstuffed-1.0-1.20.1.jar",
+          "url": "Overstuffed-1.0-1.20.1.jar",
+          "size": 700335,
+          "sha512": "79bf65bc00cd8b6974cdc75ee034ffef619b24416b2550407eda07ce99055b04aa5e3045b10c5aa467dbf8f62455978005abaedac70689a407bc6b10045544d3",
+          "sha256": "51d0b046d5a161dfb942a4712c2cd29184e204992205cc5fec58aac7d69e976e",
+          "sha1": "be866ad4069d93232dc50e280bfecd7bddd669b1",
+          "md5": "7d1f39793a6a95a5503cdaf0cf441fa3"
+        }
+      ]
+    }
+  ]
+}
