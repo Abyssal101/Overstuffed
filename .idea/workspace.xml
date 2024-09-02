@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="AAAA7">
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.jar.md5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.jar.sha1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.jar.sha256" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.jar.sha512" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.module" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.module.md5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.module.sha1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.module.sha256" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.module.sha512" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.pom" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.pom.md5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.pom.sha1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.pom.sha256" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/1.0-1.20.1/Overstuffed-1.0-1.20.1.pom.sha512" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/maven-metadata.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/maven-metadata.xml.md5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/maven-metadata.xml.sha1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/maven-metadata.xml.sha256" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/overstuffedrepo/com/github/Abyssal101/Overstuffed/maven-metadata.xml.sha512" afterDir="false" />
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="AAAA8">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
@@ -251,7 +231,7 @@
       <workItem from="1725048166863" duration="364000" />
       <workItem from="1725125703465" duration="764000" />
       <workItem from="1725126998697" duration="167000" />
-      <workItem from="1725290519726" duration="787000" />
+      <workItem from="1725290519726" duration="2703000" />
     </task>
     <task id="LOCAL-00001" summary="AAAAA">
       <option name="closed" value="true" />
@@ -309,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725126254186</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="AAAA8">
+      <option name="closed" value="true" />
+      <created>1725291379846</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1725291379846</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,6 +311,7 @@
     <MESSAGE value="AAAA 5" />
     <MESSAGE value="AAAA6" />
     <MESSAGE value="AAAA7" />
-    <option name="LAST_COMMIT_MESSAGE" value="AAAA7" />
+    <MESSAGE value="AAAA8" />
+    <option name="LAST_COMMIT_MESSAGE" value="AAAA8" />
   </component>
 </project>
