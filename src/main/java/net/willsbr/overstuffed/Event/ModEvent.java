@@ -1,10 +1,15 @@
 package net.willsbr.overstuffed.Event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -103,6 +108,11 @@ public class ModEvent {
         if(event.side == LogicalSide.SERVER) {
 
 
+            //BlockRendererDispatcher#getModelForState(IBlockState)#getQuads#get#getSprite
+
+
+
+
             //Making it a little more effcient
             if((event.player.tickCount&3)==0)
             {
@@ -181,6 +191,7 @@ public class ModEvent {
     {
         event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
             event.player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
+
                 //create weight updates here
                 if(OverstuffedConfig.returnSetting(0)==true)
                 {
@@ -189,7 +200,7 @@ public class ModEvent {
 
                 if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
                 {
-                    event.player.getLevel().playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
+                    event.player.level().playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
                                     event.player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size())-1).get(),
                             event.player.getSoundSource(), 0.5f, 1f);
                 }
@@ -252,6 +263,9 @@ public class ModEvent {
                 }
 
             }
+            //TODO CHECK THIS WORKS DUMMY
+            event.player.serializeNBT();
+
 
         });
     }
@@ -273,7 +287,7 @@ public class ModEvent {
                 //Playing sound logic
                     //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
                     if(event.player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get()) {
-                        event.player.getLevel().playSound(null, event.player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                        event.player.level().playSound(null, event.player.blockPosition(), ModSounds.BURP_SOUNDS.get(
                                         event.player.getRandom().nextIntBetweenInclusive(1, ModSounds.BURP_SOUNDS.size()) - 1).get(),
                                 event.player.getSoundSource(), 1f, 1f);
                     }

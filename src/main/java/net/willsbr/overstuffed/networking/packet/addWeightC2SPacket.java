@@ -42,7 +42,7 @@ public class addWeightC2SPacket {
                         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
                         {
                             //this adds the eaten food to the weight queue to get updated
-                            weightBar.addWeightChanges(this.queuedWeight);
+                            weightBar.addWeightChanges(queuedWeight);
 
                         });
                     }

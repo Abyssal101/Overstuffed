@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -12,9 +13,7 @@ public class PlayerWeightBar {
     //
 
     private int minWeight= OverstuffedConfig.minWeight.get();
-    private int currentWeight=minWeight;
-
-
+    private int currentWeight;
 
     //this is what options will determine for display
     private int curMaxWeight;
@@ -23,7 +22,7 @@ public class PlayerWeightBar {
     //food queue situation so you slowly gain weight
     private int queuedWeight;
 
-    private Queue<Integer> weightChanges=new LinkedList<Integer>();;
+    private ArrayList<Integer> weightChanges= new ArrayList<Integer>();
 
     private boolean readyToUpdateWeight=true;
     private long savedTickForWeight;
@@ -37,7 +36,6 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
-
 
 
 
@@ -60,7 +58,6 @@ public class PlayerWeightBar {
         {
             queuedWeight--;
         }
-
     }
     public void loseWeight()
     {
@@ -88,14 +85,14 @@ public class PlayerWeightBar {
     public int getWeightChanges()
     {
         int change;
-        if(weightChanges.peek()==null)
+        if(weightChanges.isEmpty())
         {
             change=0;
         }
         else {
-            change = weightChanges.poll();
-        }
-        return change;
+            change = weightChanges.remove(0);
+
+        }return change;
     }
 
     public boolean weightUpdateStatus()
@@ -153,7 +150,7 @@ public class PlayerWeightBar {
         int[] savingArray= new int[weightChanges.size()];
         for(int i=0;i<savingArray.length;i++)
         {
-            savingArray[i]=this.weightChanges.poll();
+            savingArray[i]=this.weightChanges.get(i);
         }
         nbt.putIntArray("changestack", savingArray);
 
