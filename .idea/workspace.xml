@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight">
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,35 +99,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Gradle.Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [generatePomFileForMavenJavaPublication].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [publishAllPublicationsToMavenRepository].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [publishToMavenLocal].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [runClient].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/wlbra/OneDrive/Documents/GitHub/Overstuffed/src/main/java/net/willsbr/overstuffed/build&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Gradle.Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor": "Run",
+    "Gradle.Overstuffed [build].executor": "Run",
+    "Gradle.Overstuffed [generatePomFileForMavenJavaPublication].executor": "Run",
+    "Gradle.Overstuffed [publishAllPublicationsToMavenRepository].executor": "Run",
+    "Gradle.Overstuffed [publishToMavenLocal].executor": "Run",
+    "Gradle.Overstuffed [runClient].executor": "Run",
+    "Gradle.Overstuffed.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "1.19.2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/wlbra/OneDrive/Documents/GitHub/Overstuffed/src/main/java/net/willsbr/overstuffed/build",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed\src\main\java\net\willsbr\overstuffed\build" />
       <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Overstuffed [runClient]">
+  <component name="RunManager" selected="Gradle.Overstuffed [build]">
     <configuration name="Overstuffed [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -244,8 +247,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Overstuffed [runClient]" />
         <item itemvalue="Gradle.Overstuffed [build]" />
+        <item itemvalue="Gradle.Overstuffed [runClient]" />
         <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
         <item itemvalue="Gradle.Overstuffed [publishAllPublicationsToMavenRepository]" />
         <item itemvalue="Gradle.Overstuffed [generatePomFileForMavenJavaPublication]" />

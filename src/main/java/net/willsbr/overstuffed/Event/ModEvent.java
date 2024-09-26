@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -200,7 +199,8 @@ public class ModEvent {
 
                 if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
                 {
-                    event.player.level().playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
+
+                    event.player.level.playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
                                     event.player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size())-1).get(),
                             event.player.getSoundSource(), 0.5f, 1f);
                 }
@@ -287,7 +287,7 @@ public class ModEvent {
                 //Playing sound logic
                     //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
                     if(event.player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get()) {
-                        event.player.level().playSound(null, event.player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                        event.player.level.playSound(null, event.player.blockPosition(), ModSounds.BURP_SOUNDS.get(
                                         event.player.getRandom().nextIntBetweenInclusive(1, ModSounds.BURP_SOUNDS.size()) - 1).get(),
                                 event.player.getSoundSource(), 1f, 1f);
                     }
