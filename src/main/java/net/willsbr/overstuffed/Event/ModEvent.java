@@ -209,7 +209,6 @@ public class ModEvent {
                 if (weightBar.weightUpdateStatus()) {
                     if (weightBar.getQueuedWeight() <= 0) {
                         int foodCals = weightBar.getWeightChanges();
-                        System.out.println("Food Cals"+ foodCals);
                         //this makes it so the weight chance from a single food item gets added to the total amount
                         if (foodCals != 0) {
                             weightBar.addChangetoQueue(foodCals * 2);

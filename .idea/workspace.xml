@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="AAAA9">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight">
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBarProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBarProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/addWeightC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/addWeightC2SPacket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,7 +282,7 @@
       <workItem from="1726842934435" duration="5264000" />
       <workItem from="1726884161675" duration="8623000" />
       <workItem from="1727300621676" duration="214000" />
-      <workItem from="1727315909319" duration="29000" />
+      <workItem from="1727315909319" duration="212000" />
     </task>
     <task id="LOCAL-00001" summary="AAAAA">
       <option name="closed" value="true" />
@@ -363,7 +356,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725293989319</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight">
+      <option name="closed" value="true" />
+      <created>1727315986788</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1727315986788</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -390,7 +391,8 @@
     <MESSAGE value="AAAA7" />
     <MESSAGE value="AAAA8" />
     <MESSAGE value="AAAA9" />
-    <option name="LAST_COMMIT_MESSAGE" value="AAAA9" />
+    <MESSAGE value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

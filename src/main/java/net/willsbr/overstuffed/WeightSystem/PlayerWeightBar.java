@@ -92,9 +92,7 @@ public class PlayerWeightBar {
         else {
             change = weightChanges.remove(0);
 
-        }
-        System.out.println(weightChanges);
-        return change;
+        }return change;
     }
 
     public boolean weightUpdateStatus()
