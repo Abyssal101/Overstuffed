@@ -130,7 +130,6 @@ repositories {
         name "figuramcReleases"
         url "https://maven.figuramc.org/releases"
     }
-    maven { url "https://github.com/abyssal101/Overstuffed/raw/maven" }
 
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
@@ -148,9 +147,9 @@ dependencies {
 
 
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-   runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
+    runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
 
-    //implementation fg.deobf("org.figuramc:figura-forge:0.1.4+1.20.1")
+    implementation fg.deobf("org.figuramc:figura-forge:0.1.4+1.20.1")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

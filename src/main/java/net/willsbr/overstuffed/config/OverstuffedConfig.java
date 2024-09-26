@@ -157,6 +157,17 @@ public class OverstuffedConfig {
             toggleList.save();
         }
     }
+    //Created because the figura plugin can't recognize ForgeConfigSpec.ConfigValue<String>
+    //At least in common. This is easier than creating a whole seperate section in the forge
+    //area of the plugin
+    public static int getMaxWeight()
+    {
+        return maxWeight.get();
+    }
+    public static int getMinWeight()
+    {
+        return minWeight.get();
+    }
 
 
 

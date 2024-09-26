@@ -8,6 +8,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +24,7 @@ public class PlayerWeightBarProvider implements ICapabilityProvider, INBTSeriali
         {
             this.weightBar =new PlayerWeightBar();
             weightBar.setMaxWeight(0);
+            weightBar.setCurrentWeight(OverstuffedConfig.getMinWeight());
         }
         return this.weightBar;
     }

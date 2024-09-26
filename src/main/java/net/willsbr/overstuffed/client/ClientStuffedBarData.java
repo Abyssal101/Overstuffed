@@ -11,7 +11,7 @@ public class ClientStuffedBarData {
 
     private static int max=9;
 
-    public static void  set(int input, int soft,int firm, int hard)
+    public static void set(int input, int soft,int firm, int hard)
     {
         ClientStuffedBarData.playerStuffedBar=input;
         ClientStuffedBarData.currentSoftLimit=soft;
