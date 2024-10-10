@@ -4,12 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.willsbr.overstuffed.OverStuffed;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class ToggleButton extends AbstractButton {
@@ -45,7 +47,7 @@ public class ToggleButton extends AbstractButton {
             statusUpdate="True";
         }
         else {
-            statusUpdate="Falsse";
+            statusUpdate="False";
         }
         super.setMessage(Component.literal(settingName+": "+statusUpdate));
         rightSide=isRight;
@@ -69,23 +71,41 @@ public class ToggleButton extends AbstractButton {
 
     }
 
-    public void renderButton(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        super.renderWidget(guiGraphics,pMouseX,pMouseY,pPartialTick);
-        //this will handle drawing the locked icon next to the button
-        if(locked)
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
+        super.render(guiGraphics, mouseX, mouseY, pPartialTick);
         {
-
-            if(rightSide)
+            if(locked)
             {
-                guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
+                if(rightSide)
+                {
+                    guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
 
+                }
+                else {
+                    guiGraphics.blit(lockedIcon,this.getX()-25,this.getY(),0,0,20,20,20,20);
+                }
             }
-            else {
-                guiGraphics.blit(lockedIcon,this.getX()-20,this.getY(),0,0,20,20,20,20);
 
-            }
         }
     }
+
+    //    public void renderButton(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+//        super.renderWidget(guiGraphics,pMouseX,pMouseY,pPartialTick);
+//        //this will handle drawing the locked icon next to the button
+//        if(locked)
+//        {
+//            if(rightSide)
+//            {
+//                guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
+//
+//            }
+//            else {
+//                guiGraphics.blit(lockedIcon,this.getX()-20,this.getY(),0,0,20,20,20,20);
+//
+//            }
+//        }
+//    }
     public void setLocked(boolean input)
     {
         this.locked=input;
