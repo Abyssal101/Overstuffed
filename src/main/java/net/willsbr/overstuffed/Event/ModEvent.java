@@ -324,7 +324,7 @@ public class ModEvent {
                             stuffedBar.getOverstuffedPoints()), player);
                 });
                 player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
-                    ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(cpmData.getStuffedLayerName()),player);
+                    //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(cpmData.getStuffedLayerName()),player);
                 });
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                         ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
