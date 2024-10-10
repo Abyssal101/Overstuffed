@@ -2,16 +2,18 @@ package net.willsbr.overstuffed.Menu.Buttons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.willsbr.overstuffed.OverStuffed;
 import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class ToggleButton extends AbstractButton {
@@ -71,19 +73,22 @@ public class ToggleButton extends AbstractButton {
 
     }
 
+
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
-        super.render(guiGraphics, mouseX, mouseY, pPartialTick);
+    public void render(@Nonnull PoseStack pose, int mouseX, int mouseY, float pPartialTick) {
+        super.render(pose, mouseX, mouseY, pPartialTick);
         {
             if(locked)
             {
+                RenderSystem.setShaderTexture(0,lockedIcon);
                 if(rightSide)
                 {
-                    guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
+
+                    GuiComponent.blit(pose,this.x+this.width+5,this.y,0,0,20 ,20,20,20);
 
                 }
                 else {
-                    guiGraphics.blit(lockedIcon,this.getX()-25,this.getY(),0,0,20,20,20,20);
+                    GuiComponent.blit(pose,this.x-25,this.y,0,0,20,20,20,20);
                 }
             }
 
@@ -112,18 +117,16 @@ public class ToggleButton extends AbstractButton {
     }
 
 
-
-
-    @Override
-    protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
-
-    }
-
     public boolean getSetting() {
         return setting;
     }
 
     public void setSetting(boolean setting) {
         this.setting = setting;
+    }
+
+    @Override
+    public void updateNarration(NarrationElementOutput narrationElementOutput) {
+
     }
 }
