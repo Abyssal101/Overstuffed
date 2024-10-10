@@ -15,7 +15,7 @@ public class ClientCPMData {
         {
             OverstuffedConfig.lastStuffedLayer=OverstuffedConfig.stuffedLayerConfigEntry.get();
         }
-        OverstuffedConfig.stuffedLayerConfigEntry.set(inputStuffed);
+        OverstuffedConfig.setStuffedLayer(inputStuffed);
     }
 
     public static void setWeight(String inputWeight)

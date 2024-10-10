@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
@@ -126,7 +127,11 @@ public class ConfigScreen extends Screen {
         this.weightEffect= new ToggleButton(centerW+-160,100,150,20,"Weight Effects",OverstuffedConfig.returnSetting(2));
         this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
         this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
-
+        this.momentum.setLocked(true);
+        this.weightEffect.setLocked(true);
+        this.stageBasedWeight.setTooltip(Tooltip.create(Component.literal("False: Weight visually udates with every tick. \nTrue: Weight visually updates once you reach every 20% weight interval.")));
+        this.momentum.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
+        this.weightEffect.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
 
         //ALL editbox sizes are based off this first editbox.
         this.weightLayerEditBox = new EditBox(

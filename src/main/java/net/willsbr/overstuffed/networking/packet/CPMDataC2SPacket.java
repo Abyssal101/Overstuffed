@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 
 import java.util.function.Supplier;
@@ -38,6 +39,7 @@ public class CPMDataC2SPacket {
         context.enqueueWork(() ->
                 {
 
+
                     //here we are on the server
                     ServerPlayer player=context.getSender();
                     ServerLevel level=player.getLevel();
@@ -46,7 +48,7 @@ public class CPMDataC2SPacket {
                         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(playerCPM ->
                         {
                             playerCPM.setStuffed(this.stuffedLayer);
-                            ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(this.stuffedLayer),player);
+                            ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(OverstuffedConfig.stuffedLayerConfigEntry.get()),player);
                         });
                     }
                         //output current thirst level
