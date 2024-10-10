@@ -16,7 +16,7 @@ public class PlayerWeightBar {
     private int currentWeight;
 
     //this is what options will determine for display
-    private int curMaxWeight;
+    private int curMaxWeight=OverstuffedConfig.getMaxWeight();
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
     //food queue situation so you slowly gain weight
