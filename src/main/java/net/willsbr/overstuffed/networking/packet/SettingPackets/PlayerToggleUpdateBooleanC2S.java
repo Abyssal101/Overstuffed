@@ -1,14 +1,12 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.SettingPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.client.ClientUnlockData;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 
 import java.util.function.Supplier;
 
-public class PlayerUnlockUpdateBooleanS2C {
+public class PlayerToggleUpdateBooleanC2S {
 
    private boolean settingStatus;
 
@@ -16,12 +14,12 @@ public class PlayerUnlockUpdateBooleanS2C {
    //sending data from server to client here
 
 
-    public PlayerUnlockUpdateBooleanS2C(int index, boolean inputBoolean){
+    public PlayerToggleUpdateBooleanC2S(int index, boolean inputBoolean){
         this.settingStatus = inputBoolean;
         this.settingIndex=index;
     }
 
-    public PlayerUnlockUpdateBooleanS2C(FriendlyByteBuf buf){
+    public PlayerToggleUpdateBooleanC2S(FriendlyByteBuf buf){
         this.settingStatus =buf.readBoolean();
         this.settingIndex=buf.readInt();
     }
@@ -35,8 +33,11 @@ public class PlayerUnlockUpdateBooleanS2C {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
         {
-         //on client
-            ClientUnlockData.setAdvancementStatus(this.settingIndex,this.settingIndex);
+         //on Server
+            context.getSender().getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(settings ->
+                    {
+                        settings.setToggle(this.settingIndex,this.settingStatus);
+                    });
 
 
 

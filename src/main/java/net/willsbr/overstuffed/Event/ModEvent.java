@@ -1,15 +1,9 @@
 package net.willsbr.overstuffed.Event;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -30,7 +24,10 @@ import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanS2C;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
 import net.willsbr.overstuffed.sound.ModSounds;
 
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
@@ -73,7 +70,7 @@ public class ModEvent {
                     newStore.copyFrom(oldStore);
 
                     //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(oldStore.getStuffedLayerName()),(ServerPlayer) event.getEntity());
-                    ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(oldStore.getWeightLayerName()),(ServerPlayer) event.getEntity());
+                    //ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(oldStore.getWeightLayerName()),(ServerPlayer) event.getEntity());
 
                 });
             });
@@ -106,13 +103,7 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.SERVER) {
-
-
             //BlockRendererDispatcher#getModelForState(IBlockState)#getQuads#get#getSprite
-
-
-
-
             //Making it a little more effcient
             if((event.player.tickCount&3)==0)
             {
@@ -122,12 +113,7 @@ public class ModEvent {
             {
                 weightSystem(event);
             }
-
-
-
-
         }
-        //this is for ice movement logics
     }
     public static void burstGain(PlayerWeightBar weightBar,TickEvent.PlayerTickEvent event)
     {
@@ -136,8 +122,6 @@ public class ModEvent {
 
         if(xOf5!=weightBar.getLastWeightStage())
         {
-
-
             //Come back to if really jarring
             if((event.player.tickCount&5)==0)
             {
@@ -160,16 +144,12 @@ public class ModEvent {
                 else if(xOf5==(weightBar.getLastWeightStage()-1)){
                     if(((weightBar.getLastWeightStage()*20+((int)((((double)weightBar.getAmountThroughStage())/255)*100))))==(xOf5*20))
                     {
-
-                        //System.out.println("AT THE RESETTING OF THE VALUE"+((weightBar.getLastWeightStage()*20+((int)((((double)weightBar.getAmountThroughStage())/255)*100)))/20));
                         weightBar.setLastWeightStage(xOf5);
                         weightBar.setAmountThroughStage(0);
                         ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
-
                     }
                     else
                     {
-
                         weightBar.setAmountThroughStage(weightBar.getAmountThroughStage()-1);
                         ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
                     }
@@ -205,8 +185,8 @@ public class ModEvent {
                             event.player.getSoundSource(), 0.5f, 1f);
                 }
 
-
-                if (weightBar.weightUpdateStatus()) {
+                if (weightBar.weightUpdateStatus())
+                {
                     if (weightBar.getQueuedWeight() <= 0) {
                         int foodCals = weightBar.getWeightChanges();
                         //this makes it so the weight chance from a single food item gets added to the total amount
@@ -216,14 +196,15 @@ public class ModEvent {
                             if (checkDelay > 1000) {
                                 weightBar.setWeightUpdateDelay(1000);
                             } else {
-                                weightBar.setWeightUpdateDelay(foodCals * 10);
+                                weightBar.setWeightUpdateDelay((int)(foodCals * 10 * weightBar.getWeightUpdateDelayModifier()));
+                                weightBar.setWeightUpdateDelay(foodCals);
                             }
 
 
                         }
-                    } else {
+                    } else
+                    {
                         weightBar.addWeight();
-
                     }
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()), (ServerPlayer) event.player);
                     weightBar.setWeightUpdateStatus(false);
@@ -317,6 +298,15 @@ public class ModEvent {
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
 
         //stuffedbar
+
+
+
+
+
+
+
+
+
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {

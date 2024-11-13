@@ -1,11 +1,9 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
-import net.willsbr.overstuffed.sound.ModSounds;
 
 import java.util.function.Supplier;
 

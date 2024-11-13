@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -7,25 +7,25 @@ import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;
 
-public class BurstGainDataSyncPacketS2C {
+public class WeightBarDataSyncPacketS2C {
 
-   private int stage;
-   private int amountThrough;
+   private int weight;
    //sending data from server to client here
 
-    public BurstGainDataSyncPacketS2C(int incomingStage, int amountThrough){
-        this.stage =incomingStage;
-        this.amountThrough=amountThrough;
+
+    public WeightBarDataSyncPacketS2C(int incomingWeight){
+        this.weight =incomingWeight;
+
     }
 
-    public BurstGainDataSyncPacketS2C(FriendlyByteBuf buf){
-        this.stage =buf.readInt();
-        this.amountThrough=buf.readInt();
+    public WeightBarDataSyncPacketS2C(FriendlyByteBuf buf){
+        this.weight =buf.readInt();
+
+
     }
 
     public void toBytes(FriendlyByteBuf buf){
-        buf.writeInt(stage);
-        buf.writeInt(amountThrough);
+        buf.writeInt(weight);
 
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -34,9 +34,11 @@ public class BurstGainDataSyncPacketS2C {
         context.enqueueWork(() ->
         {
             //here we are on the client!
-            ClientWeightBarData.setLastWeightStage(stage);
-            ClientWeightBarData.setAmountThroughStage(amountThrough);
+            ClientWeightBarData.setCurrentWeight(weight);
             CPMData.checkIfUpdateCPM("weight");
+
+
+            //CPMData.checkIfUpdateCPM();
         });
         return true;
     }

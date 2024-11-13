@@ -29,8 +29,7 @@ public class HudOverlay {
 
 
 
-    private static  ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
-
+    private static final ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
     private static final ResourceLocation WEIGHTSPRITEBACKGROUND= new ResourceLocation(OverStuffed.MODID,"textures/stuffedbar/weightbackground.png");
     public static final IGuiOverlay HUD_STUFFEDBAR=((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         //anything in here gets rendered
@@ -50,13 +49,8 @@ public class HudOverlay {
         WEIGHTSTAGESPRITES[2]=WEIGHTSPRITE2;
         WEIGHTSTAGESPRITES[3]=WEIGHTSPRITE3;
         WEIGHTSTAGESPRITES[4]=WEIGHTSPRITE4;
-
+        //TODO Figure out how to make it draw ONTOP of chat
         PoseStack poseStack=guiGraphics.pose();
-
-
-
-
-
 
         //need this to actually render
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -66,21 +60,13 @@ public class HudOverlay {
             int idx = i * 2 + 1;
             int x = left - 9 - (9-i)*8 + 32;
             int y = top;
-
-
-
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
-               // GuiComponent.blit(guiGraphics,x - 94 + (i * 9), y - 54,0,0,12,
-                      //  12,6,6);
-
                 guiGraphics.blit(STUFFED_POINT,x, y,0,0,0,5,5,5,5);
-                        //  12,6,6);
             }
             else {
                 break;
             }
-
         }
 
         for(int i = ClientStuffedBarData.getSoftLimit(); i < (ClientStuffedBarData.getCurrentFirmLimit()+ ClientStuffedBarData.getSoftLimit());
@@ -107,7 +93,6 @@ public class HudOverlay {
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
                 guiGraphics.blit(SUPERSTUFFED_POINT,x, y,0,0,0,5,5,5,5);
-                //  12,6,6);
             }
             else {
                 break;
@@ -115,9 +100,6 @@ public class HudOverlay {
         }
         poseStack.pushPose();
         poseStack.scale(2,2,2);
-
-        //GuiComponent.drawString(guiGraphics, gui.getFont(), "Weight:  "+ClientWeightBarData.getPlayerWeight()+" / "+OverstuffedConfig.maxWeight.get(), 20,20,255);
-
         poseStack.popPose();
 
         guiGraphics.blit(WEIGHTSPRITEBACKGROUND,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,33,33,33,33);

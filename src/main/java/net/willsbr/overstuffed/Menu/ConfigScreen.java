@@ -1,27 +1,28 @@
 package net.willsbr.overstuffed.Menu;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
+import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightC2SPacket;
 
 import java.awt.Color;
-import javax.annotation.Nonnull;
 
 public class ConfigScreen extends Screen {
     /** Distance from top of the screen to this GUI's title */
@@ -232,6 +233,12 @@ public class ConfigScreen extends Screen {
         guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
         guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/ 2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
+        if(ClientCPMData.getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
+        {
+            guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
+
+        }
+
         guiGraphics.drawCenteredString(font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.getY(),Color.white.hashCode());
         guiGraphics.drawCenteredString(font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
@@ -247,7 +254,7 @@ public class ConfigScreen extends Screen {
 
         if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
         {
-            guiGraphics.drawCenteredString(font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.getY()-15,Color.RED.hashCode());
+            guiGraphics.drawCenteredString(font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.getY()-20,Color.RED.hashCode());
         }
 
         // pose.popPose();

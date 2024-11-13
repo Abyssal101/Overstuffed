@@ -7,36 +7,20 @@ import java.util.Queue;
 
 public class ClientWeightBarData {
 
-    public static int currentWeight= OverstuffedConfig.minWeight.get();
-
-
-    public static boolean burstGain;
-
+    public static int currentWeight = OverstuffedConfig.minWeight.get();
     //this is the percent for burstGain
-    private static int lastWeightStage=0;
-
+    private static int lastWeightStage = 0;
     private static int amountThroughStage;
 
+    public static void setCurrentWeight(int newWeight) {
 
-
-    public static void  setCurrentWeight(int newWeight)
-    {
-       ClientWeightBarData.currentWeight=newWeight;
+        ClientWeightBarData.currentWeight = newWeight;
     }
 
-    public static int getPlayerWeight()
-    {
+    public static int getPlayerWeight() {
         return currentWeight;
     }
 
-
-    public static boolean isBurstGain() {
-        return burstGain;
-    }
-
-    public static void setBurstGain(boolean burstGain) {
-        ClientWeightBarData.burstGain = burstGain;
-    }
 
     public static int getLastWeightStage() {
         return lastWeightStage;
@@ -45,6 +29,7 @@ public class ClientWeightBarData {
     public static void setLastWeightStage(int lastWeightStage) {
         ClientWeightBarData.lastWeightStage = lastWeightStage;
     }
+
 
     public static int getAmountThroughStage() {
         return amountThroughStage;

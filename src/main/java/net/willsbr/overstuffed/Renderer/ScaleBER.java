@@ -57,7 +57,7 @@ public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
                 poseStack.scale(0.008f,-0.01f,0.01f);
                 if(FACING.equals(Direction.NORTH))
                 {
-                    poseStack.translate(52f,-122,8f);
+                    poseStack.translate(52f,-122,4);
 
                     poseStack.mulPose(Axis.XN.rotationDegrees(-45));
                 }
@@ -70,7 +70,6 @@ public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
                 }
                 else if(FACING.equals(Direction.EAST))
                 {
-
                     poseStack.translate(118,-122,40);
                     poseStack.mulPose(Axis.YN.rotationDegrees(90));
                     poseStack.mulPose(Axis.XN.rotationDegrees(-47));

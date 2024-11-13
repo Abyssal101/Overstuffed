@@ -16,7 +16,20 @@
   "advancement.overstuffed.fattytitle": "Fatty",
   "advancement.overstuffed.fattydescription": "You managed to reach your max weight!",
 
-  "block.overstuffed.scale": "Scale"
+  "block.overstuffed.scale": "Scale",
 
+  "commands.overstuffed.stuffedupdatesuccess": "Stuffed layer successfully updated",
+  "commands.overstuffed.weightupdatesuccess": "Weight layer successfully updated",
+  "commands.overstuffed.maxweightupdatesuccess": "Max Weight successfully updated",
+  "commands.overstuffed.minweightupdatesuccess": "Minimum Weight successfully updated",
+  "commands.overstuffed.setweightsuccess": "Succesfully set the weight of %1$s to %2$s",
+
+
+
+
+  "commands.overstuffed.errorsamename": "ERROR: Your layer already has that name",
+  "commands.overstuffed.setbelowzero": "ERROR: Set below zero",
+  "commands.overstuffed.maxbelowmin": "ERROR: Set max below min",
+  "commands.overstuffed.minabovemax": "ERROR: Set min above max"
 
 }

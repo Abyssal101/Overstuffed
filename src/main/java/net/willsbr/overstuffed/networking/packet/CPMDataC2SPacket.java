@@ -3,11 +3,11 @@ package net.willsbr.overstuffed.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.ClientCPMStuffedSyncS2CPacket;
 
 import java.util.function.Supplier;
 
@@ -26,9 +26,7 @@ public class CPMDataC2SPacket {
 
     public CPMDataC2SPacket(FriendlyByteBuf buf){
         this.stuffedLayer=buf.readUtf();
-
     }
-
     public void toBytes(FriendlyByteBuf buf){
        buf.writeUtf(this.stuffedLayer);
 

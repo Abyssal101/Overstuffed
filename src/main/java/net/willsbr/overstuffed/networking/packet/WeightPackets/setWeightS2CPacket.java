@@ -1,24 +1,25 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
+import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
+import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;
 
-public class setWeightC2SPacket {
+public class setWeightS2CPacket {
     private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.WeightBar";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
     private static  int weight;
-    public setWeightC2SPacket(int inputWeight){
+    public setWeightS2CPacket(int inputWeight){
         weight =inputWeight;
 
     }
 
-    public setWeightC2SPacket(FriendlyByteBuf buf){
+    public setWeightS2CPacket(FriendlyByteBuf buf){
         weight =buf.readInt();
 
     }
@@ -32,19 +33,14 @@ public class setWeightC2SPacket {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
                 {
-
-                    //here we are on the server
+                    //here we are on the client
                     ServerPlayer player=context.getSender();
                     ServerLevel level=player.serverLevel();
-                    if(!level.isClientSide)
+                    if(level.isClientSide)
                     {
+                        ClientWeightBarData.setCurrentWeight(this.weight);
+                        CPMData.checkIfUpdateCPM("weight");
 
-                        player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
-                        {
-                            //this adds the eaten food to the weight queue to get updated
-                            weightBar.setCurrentWeight(this.weight);
-
-                        });
                     }
 
                 }
