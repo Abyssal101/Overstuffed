@@ -8,6 +8,11 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.ClientCPMStuffedSyncS2CPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.*;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -81,13 +86,6 @@ public class ModMessages {
                 .encoder(OverstuffedEffectC2SPacket::toBytes)
                 .consumerMainThread(OverstuffedEffectC2SPacket::handle)
                 .add();
-
-
-        net.messageBuilder(WeightBarGainSettingS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(WeightBarGainSettingS2C::new)
-                .encoder(WeightBarGainSettingS2C::toBytes)
-                .consumerMainThread(WeightBarGainSettingS2C::handle)
-                .add();
         net.messageBuilder(WeightBarDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(WeightBarDataSyncPacketS2C::new)
                 .encoder(WeightBarDataSyncPacketS2C::toBytes)
@@ -115,10 +113,20 @@ public class ModMessages {
                 .encoder(setMinWeightDataSyncPacketC2S::toBytes)
                 .consumerMainThread(setMinWeightDataSyncPacketC2S::handle)
                 .add();
+        net.messageBuilder(setMinWeightDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(setMinWeightDataSyncPacketS2C::new)
+                .encoder(setMinWeightDataSyncPacketS2C::toBytes)
+                .consumerMainThread(setMinWeightDataSyncPacketS2C::handle)
+                .add();
         net.messageBuilder(setMaxWeightDataSyncPacketC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(setMaxWeightDataSyncPacketC2S::new)
                 .encoder(setMaxWeightDataSyncPacketC2S::toBytes)
                 .consumerMainThread(setMaxWeightDataSyncPacketC2S::handle)
+                .add();
+        net.messageBuilder(maxWeightDataSyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(maxWeightDataSyncPacketS2C::new)
+                .encoder(maxWeightDataSyncPacketS2C::toBytes)
+                .consumerMainThread(maxWeightDataSyncPacketS2C::handle)
                 .add();
         net.messageBuilder(PlayerToggleUpdateBooleanS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PlayerToggleUpdateBooleanS2C::new)

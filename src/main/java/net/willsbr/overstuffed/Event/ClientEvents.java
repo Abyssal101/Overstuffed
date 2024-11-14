@@ -1,11 +1,7 @@
 package net.willsbr.overstuffed.Event;
 
-import com.google.common.eventbus.Subscribe;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,15 +21,12 @@ import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.Renderer.ScaleBER;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.OverfullFoodC2SPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
-import net.willsbr.overstuffed.networking.packet.addWeightC2SPacket;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
-
-import java.util.HashMap;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
@@ -50,8 +43,6 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onFoodUse(LivingEntityUseItemEvent.Finish useItemEvent)
         {
-
-
             if(useItemEvent.getEntity() instanceof  Player)
             {
                 Player currentPlayer=(Player)useItemEvent.getEntity();
@@ -100,17 +91,16 @@ public class ClientEvents {
         @SubscribeEvent
         public static void commandRegister(RegisterCommandsEvent event)
         {
-            //TODO Fix all commands to be compatible with Overstuffed Config
             CommandDispatcher commands=event.getDispatcher();
-            //SetLayer.register(commands, event.getBuildContext());
-            //setMaxWeight.register(commands, event.getBuildContext());
-            //setMinWeight.register(commands,event.getBuildContext());
+            SetLayer.register(commands, event.getBuildContext());
+            setMaxWeightCommand.register(commands, event.getBuildContext());
+            setMinWeightCommand.register(commands,event.getBuildContext());
             setCurrentWeight.register(commands,event.getBuildContext());
             //clearLayers.register(commands, event.getBuildContext());
-            debugView.register(commands, event.getBuildContext());
+            debugViewCommand.register(commands, event.getBuildContext());
             //setWGMethod.register(commands,event.getBuildContext());
-            setBurpFrequency.register(commands, event.getBuildContext());
-            setGurgleFrequency.register(commands, event.getBuildContext());
+            //setBurpFrequency.register(commands, event.getBuildContext());
+            //setGurgleFrequency.register(commands, event.getBuildContext());
 
         }
     }
@@ -125,8 +115,6 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-           // event.registerAboveAll("thirst", ThirstHudOverlay.HUD_THIRST);
-
             event.registerAboveAll("stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 

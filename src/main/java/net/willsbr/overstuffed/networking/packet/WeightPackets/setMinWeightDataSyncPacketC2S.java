@@ -1,9 +1,8 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
 
 import java.util.function.Supplier;
 
@@ -33,7 +32,7 @@ public class setMinWeightDataSyncPacketC2S {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
         {
-            //here we are on the client!
+            //here we are on the server!
            // ClientThirstData.set(stuffed_bar);
 
             context.getSender().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
@@ -41,7 +40,7 @@ public class setMinWeightDataSyncPacketC2S {
                 weightBar.setMinWeight(this.minWeight);
 
             });
-            //CPMData.checkIfUpdateCPM();
+            //CPMData.checkIfUpdateCPM();setMinWeightDataSyncPacketC2S
         });
         return true;
     }

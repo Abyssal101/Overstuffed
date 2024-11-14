@@ -1,37 +1,30 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.networking.ModMessages;
 
 import java.util.function.Supplier;
 
-public class WeightMomentumSyncS2CPacket {
-
-    private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.CPMData";
+public class setWeightC2SPacket {
+    private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.WeightBar";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
-    private int momentumValue;
+    private static  int weight;
+    public setWeightC2SPacket(int inputWeight){
+        weight =inputWeight;
 
-
-    public WeightMomentumSyncS2CPacket(int movement){
-
-        this.momentumValue = movement;
     }
 
-    public WeightMomentumSyncS2CPacket(FriendlyByteBuf buf){
-        this.momentumValue =buf.readInt();
+    public setWeightC2SPacket(FriendlyByteBuf buf){
+        weight =buf.readInt();
 
     }
 
     public void toBytes(FriendlyByteBuf buf){
-       buf.writeInt(this.momentumValue);
-
+        buf.writeInt(weight);
 
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -43,20 +36,19 @@ public class WeightMomentumSyncS2CPacket {
                     //here we are on the server
                     ServerPlayer player=context.getSender();
                     ServerLevel level=player.getLevel();
-                    if(level.isClientSide)
+                    if(!level.isClientSide)
                     {
+
                         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
                         {
-                            //player.setDeltaMovement(player.get);
+                            //this adds the eaten food to the weight queue to get updated
+                            weightBar.setCurrentWeight(this.weight);
+
                         });
                     }
-                        //output current thirst level
-                        //player.getFoodData().getFoodLevel();
 
                 }
         );
         return true;
     }
-
-
 }

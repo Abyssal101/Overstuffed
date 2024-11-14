@@ -2,8 +2,10 @@ package net.willsbr.overstuffed.client;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -27,10 +29,9 @@ public class HudOverlay {
 
 
 
-    private static  ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
-
+    private static final ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
     private static final ResourceLocation WEIGHTSPRITEBACKGROUND= new ResourceLocation(OverStuffed.MODID,"textures/stuffedbar/weightbackground.png");
-    public static final IGuiOverlay HUD_STUFFEDBAR=((gui, poseStack, partialTick, screenWidth, screenHeight) -> {
+    public static final IGuiOverlay HUD_STUFFEDBAR=((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         //anything in here gets rendered
         Window curWindow= Minecraft.getInstance().getWindow();
 
@@ -48,12 +49,8 @@ public class HudOverlay {
         WEIGHTSTAGESPRITES[2]=WEIGHTSPRITE2;
         WEIGHTSTAGESPRITES[3]=WEIGHTSPRITE3;
         WEIGHTSTAGESPRITES[4]=WEIGHTSPRITE4;
-
-
-
-
-
-
+        //TODO Figure out how to make it draw ONTOP of chat
+        PoseStack poseStack=guiGraphics.pose();
 
         //need this to actually render
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -63,23 +60,15 @@ public class HudOverlay {
             int idx = i * 2 + 1;
             int x = left - 9 - (9-i)*8 + 32;
             int y = top;
-
-
-
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
-               // GuiComponent.blit(poseStack,x - 94 + (i * 9), y - 54,0,0,12,
-                      //  12,6,6);
-                GuiComponent.blit(poseStack,x, y,0,0,0,5,5,5,5);
-                        //  12,6,6);
+                guiGraphics.blit(STUFFED_POINT,x, y,0,0,0,5,5,5,5);
             }
             else {
                 break;
             }
-
         }
 
-        RenderSystem.setShaderTexture(0, OVERSTUFFED_POINT);
         for(int i = ClientStuffedBarData.getSoftLimit(); i < (ClientStuffedBarData.getCurrentFirmLimit()+ ClientStuffedBarData.getSoftLimit());
             i++) {
             int idx = i * 2 + 1;
@@ -87,7 +76,7 @@ public class HudOverlay {
             int y = top;
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
-                GuiComponent.blit(poseStack,x, y,0,0,0,5,5,5,5);
+                guiGraphics.blit(OVERSTUFFED_POINT,x, y,0,0,0,5,5,5,5);
                 //  12,6,6);
             }
             else {
@@ -95,7 +84,6 @@ public class HudOverlay {
             }
         }
         //hard limit swap
-        RenderSystem.setShaderTexture(0, SUPERSTUFFED_POINT);
         for(int i = (ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getCurrentFirmLimit()); i < (ClientStuffedBarData.getHardLimit()+
                 ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getCurrentFirmLimit());
             i++) {
@@ -104,8 +92,7 @@ public class HudOverlay {
             int y = top;
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
-                GuiComponent.blit(poseStack,x, y,0,0,0,5,5,5,5);
-                //  12,6,6);
+                guiGraphics.blit(SUPERSTUFFED_POINT,x, y,0,0,0,5,5,5,5);
             }
             else {
                 break;
@@ -113,20 +100,14 @@ public class HudOverlay {
         }
         poseStack.pushPose();
         poseStack.scale(2,2,2);
-        poseStack.translate( 0,0,0);
-
-
-        //GuiComponent.drawString(poseStack, gui.getFont(), "Weight:  "+ClientWeightBarData.getPlayerWeight()+" / "+OverstuffedConfig.maxWeight.get(), 20,20,255);
-
         poseStack.popPose();
-        RenderSystem.setShaderTexture(0,WEIGHTSPRITEBACKGROUND);
-        GuiComponent.blit(poseStack,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,33,33,33,33);
+
+        guiGraphics.blit(WEIGHTSPRITEBACKGROUND,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,33,33,33,33);
 
         int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight())/OverstuffedConfig.maxWeight.get())*100);
         //for checking which sprite is currently being displayed.
         //System.out.println(outOf100/20-1+"/5");
-        RenderSystem.setShaderTexture(0,WEIGHTSTAGESPRITES[outOf100/20-1]);
-        GuiComponent.blit(poseStack,OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,32,32,32,32);
+        guiGraphics.blit(WEIGHTSTAGESPRITES[outOf100/20-1],OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),0,0,32,32,32,32);
 
 
 

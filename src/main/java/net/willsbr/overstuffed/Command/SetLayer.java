@@ -1,5 +1,6 @@
 package net.willsbr.overstuffed.Command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -11,10 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.ClientCPMStuffedSyncS2CPacket;
-import net.willsbr.overstuffed.networking.packet.ClientCPMWeightSyncS2CPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.ClientCPMStuffedSyncS2CPacket;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.ClientCPMWeightSyncS2CPacket;
 
 public class SetLayer {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
@@ -31,31 +31,30 @@ public class SetLayer {
 
     private static int setStuffed(CommandSourceStack pSource, Player player, String stuffedLayerName) throws CommandSyntaxException {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
-            if(!stuffedLayerName.contentEquals(OverstuffedConfig.stuffedLayerConfigEntry.get()))
+            if(!stuffedLayerName.contentEquals(cpmData.getStuffedLayerName()))
             {
-                OverstuffedConfig.stuffedLayerConfigEntry.set(stuffedLayerName);
+                cpmData.setStuffed(stuffedLayerName);
                 ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(stuffedLayerName),(ServerPlayer) player);
-                player.sendSystemMessage(Component.literal("Stuffed Layer successfully updated"));
             }
             else {
-                player.sendSystemMessage(Component.literal("Your stuffed layer already has that name"));
+                player.sendSystemMessage(Component.translatable("commands.overstuffed.stuffedupdatesamename"));
             }
-
-
-            //CPMData.checkIfUpdateCPM("stuffed");
         });
-        //why does it need to be int???
-        return 0;
+        return Command.SINGLE_SUCCESS;
     }
     private static int setWeight(CommandSourceStack pSource, Player player, String weightLayerName) throws CommandSyntaxException {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
-            cpmData.setWeightLayerName(weightLayerName);
-            ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(weightLayerName),(ServerPlayer) player);
-            player.sendSystemMessage(Component.literal("Weight Layer successfully updated"));
-
+            if(!weightLayerName.contentEquals(cpmData.getWeightLayerName()))
+            {
+                cpmData.setWeightLayerName(weightLayerName);
+                ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(weightLayerName),(ServerPlayer) player);
+            }
+            else {
+                player.sendSystemMessage(Component.translatable("commands.overstuffed.errorsamename"));
+            }
         });
         //why does it need to be int???
-        return 0;
+        return Command.SINGLE_SUCCESS;
     }
 
 }

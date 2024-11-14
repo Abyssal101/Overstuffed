@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.SettingPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;

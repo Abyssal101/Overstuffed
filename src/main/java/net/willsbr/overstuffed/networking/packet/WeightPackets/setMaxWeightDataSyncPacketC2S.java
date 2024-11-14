@@ -1,24 +1,23 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 
 import java.util.function.Supplier;
 
-public class WeightSettingsDataSyncPacketS2C {
+public class setMaxWeightDataSyncPacketC2S {
 
    private int maxWeight;
-   //sending data from server to client here
+   //sending data from Client to Server here
 
 
-    public WeightSettingsDataSyncPacketS2C(int maxWeight){
-        this.maxWeight =maxWeight;
+    public setMaxWeightDataSyncPacketC2S(int weight){
+        this.maxWeight =weight;
 
     }
 
-    public WeightSettingsDataSyncPacketS2C(FriendlyByteBuf buf){
+    public setMaxWeightDataSyncPacketC2S(FriendlyByteBuf buf){
         this.maxWeight =buf.readInt();
 
 
@@ -35,7 +34,12 @@ public class WeightSettingsDataSyncPacketS2C {
         {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
-            OverstuffedConfig.maxWeight.set(this.maxWeight);
+
+            context.getSender().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
+            {
+                weightBar.setMaxWeight(this.maxWeight);
+
+            });
             //CPMData.checkIfUpdateCPM();
         });
         return true;

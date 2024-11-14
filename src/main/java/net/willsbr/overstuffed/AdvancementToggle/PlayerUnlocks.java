@@ -1,9 +1,6 @@
 package net.willsbr.overstuffed.AdvancementToggle;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.PlayerUnlockUpdateBooleanS2C;
 
 public class PlayerUnlocks {
     //so this is how this is ogoing to work

@@ -1,25 +1,28 @@
 package net.willsbr.overstuffed.Menu;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
+import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightC2SPacket;
 
 import java.awt.Color;
-import javax.annotation.Nonnull;
 
 public class ConfigScreen extends Screen {
     /** Distance from top of the screen to this GUI's title */
@@ -72,6 +75,7 @@ public class ConfigScreen extends Screen {
     private EditBox stuffedLayerEditBox;
 
     private Button toGraphicsConfig;
+    private Button done;
 
 
     private int centerW;
@@ -128,15 +132,15 @@ public class ConfigScreen extends Screen {
         this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
         this.momentum.setLocked(true);
         this.weightEffect.setLocked(true);
-//        this.stageBasedWeight.setTooltip(Tooltip.create(Component.literal("False: Weight visually udates with every tick. \nTrue: Weight visually updates once you reach every 20% weight interval.")));
-//        this.momentum.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
-//        this.weightEffect.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
+        this.stageBasedWeight.setTooltip(Tooltip.create(Component.literal("False: Weight visually udates with every tick. \nTrue: Weight visually updates once you reach every 20% weight interval.")));
+        this.momentum.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
+        this.weightEffect.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
 
         //ALL editbox sizes are based off this first editbox.
         this.weightLayerEditBox = new EditBox(
                 font,
                 centerW - (width / 60)-150,
-                centerH,
+                160,
                 130,
                 25,
                 Component.literal("Weight Layer"));
@@ -144,8 +148,8 @@ public class ConfigScreen extends Screen {
 
         this.stuffedLayerEditBox = new EditBox(
                 font,
-                weightLayerEditBox.x,
-                weightLayerEditBox.y+weightLayerEditBox.getHeight()+15*1,
+                weightLayerEditBox.getX(),
+                weightLayerEditBox.getY()+weightLayerEditBox.getHeight()+15*2,
                 weightLayerEditBox.getWidth(),
                 weightLayerEditBox.getHeight(),
                 Component.literal("Stuffed Layer"));
@@ -154,7 +158,7 @@ public class ConfigScreen extends Screen {
         this.maxWeight= new EditBox(
                 font,
                 this.centerW+105-50,
-                stuffedLayerEditBox.y+65,
+                stuffedLayerEditBox.getY()+65,
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Max Weight"));
@@ -165,7 +169,7 @@ public class ConfigScreen extends Screen {
         this.minWeight= new EditBox(
                 font,
                 this.centerW-105,
-                stuffedLayerEditBox.y+65,
+                stuffedLayerEditBox.getY()+65,
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Min Weight"));
@@ -173,8 +177,10 @@ public class ConfigScreen extends Screen {
         //So you can't go above 9999 because of this
         this.minWeight.setMaxLength(4);
 
-        toGraphicsConfig=new Button(screenW-120,8,100,20,
-                Component.literal("Graphics Config"),button ->this.swapScreen("graphics"));
+        toGraphicsConfig=Button.builder( Component.literal("Graphics Config"),button ->this.swapScreen("graphics")).build();
+        toGraphicsConfig.setPosition(screenW-120,8);
+        toGraphicsConfig.setWidth(100);
+        toGraphicsConfig.setHeight(20);
 
         // Add the options list as this screen's child
         // If this is not done, users cannot click on items in the list
@@ -195,13 +201,12 @@ public class ConfigScreen extends Screen {
 
         this.addRenderableWidget(this.toGraphicsConfig);
         // Add the "Done" button
-        this.addRenderableWidget(new Button(
-                (this.width - BUTTON_WIDTH) / 2,
-                this.height - DONE_BUTTON_TOP_OFFSET,
-                BUTTON_WIDTH, BUTTON_HEIGHT,
-                Component.literal("Save"),
-                button -> this.onClose()
-        ));
+        this.done=Button.builder(Component.literal("Save"),
+                button -> this.onClose()).build();
+        done.setPosition( (this.width - BUTTON_WIDTH) / 2, this.height - DONE_BUTTON_TOP_OFFSET);
+        done.setWidth(BUTTON_WIDTH);
+        done.setHeight(BUTTON_HEIGHT);
+        this.addRenderableWidget(done);
     }
 
     @Override
@@ -215,27 +220,33 @@ public class ConfigScreen extends Screen {
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
     // on the screen
     @Override
-    public void render(@Nonnull PoseStack pose, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         // Background is typically rendered first
-        this.renderBackground(pose);
+        this.renderBackground(guiGraphics);
         // Then the widgets if this is a direct child of the Screen
-        super.render(pose, mouseX, mouseY, partialTick);
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
         // Draw the title
-        drawCenteredString(pose, font, this.getTitle().getString(),
+        guiGraphics.drawCenteredString(font, this.getTitle().getString(),
                 this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
         //drawing the edit box's title
 
-        drawCenteredString(pose,font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.y,Color.white.hashCode());
-        drawCenteredString(pose,font, "Name of value layer for weight animations", this.width/ 2+100,weightLayerEditBox.y+10,Color.GRAY.hashCode());
+        guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
+        guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/ 2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
-        drawCenteredString(pose,font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.y,Color.white.hashCode());
-        drawCenteredString(pose,font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.y+10,Color.GRAY.hashCode());
+        if(ClientCPMData.getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
+        {
+            guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
 
-        drawCenteredString(pose,font, "Max Weight", centerW+80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
-        drawCenteredString(pose,font, "Range:0-9999", centerW+80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+        }
 
-        drawCenteredString(pose,font, "Min Weight", centerW-80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
-        drawCenteredString(pose,font, "Range:0-9999", centerW-80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+        guiGraphics.drawCenteredString(font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.getY(),Color.white.hashCode());
+        guiGraphics.drawCenteredString(font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.getY()+10,Color.GRAY.hashCode());
+
+        guiGraphics.drawCenteredString(font, "Max Weight", centerW+80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(font, "Range:0-9999", centerW+80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
+
+        guiGraphics.drawCenteredString(font, "Min Weight", centerW-80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(font, "Range:0-9999", centerW-80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
 
         //FIXME ERROR CODES FOR THE RANGE OF WEIGHT BEING OPPOSITE,NO DIFFERENCE AND ETC
 
@@ -243,7 +254,7 @@ public class ConfigScreen extends Screen {
 
         if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
         {
-            drawCenteredString(pose,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y,Color.RED.hashCode());
+            guiGraphics.drawCenteredString(font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.getY()-20,Color.RED.hashCode());
         }
 
         // pose.popPose();
@@ -320,7 +331,11 @@ public class ConfigScreen extends Screen {
         }
 
         OverstuffedConfig.saveConfig();
-        CPMData.checkIfUpdateCPM("weight");
+        if(CPMData.checkIfUpdateCPM("weight")==false)
+        {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: CPM is not loaded. No visual changes can occur"));
+        }
+
         CPMData.checkIfUpdateCPM("stuffed");
 
 

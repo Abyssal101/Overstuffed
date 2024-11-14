@@ -4,38 +4,45 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.setWeightS2CPacket;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightS2CPacket;
 
 public class setCurrentWeight {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setWeight.failed"));
 
-    //TODO Make this command able to be used on other players
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed").then(Commands.literal("setWeight").then(Commands.argument("newWeight", IntegerArgumentType.integer()).executes((p_138618_) -> {
-            return setWeight(p_138618_.getSource(),p_138618_.getSource().getPlayer(), IntegerArgumentType.getInteger(p_138618_,"newWeight"));
-        }))));
+        pDispatcher.register(Commands.literal("overstuffed")
+                .then(Commands.literal("setCurrentWeight")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("target", EntityArgument.players())
+                        .then(Commands.argument("newWeight", IntegerArgumentType.integer())
+                        .executes(context ->
+                                setWeight(context.getSource(), EntityArgument.getPlayer(context, "target"),IntegerArgumentType.getInteger(context,"newWeight")))).
+                executes(context -> setWeight(context.getSource(), context.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(context,"newWeight"))))));
     }
 
-    private static int setWeight(CommandSourceStack pSource, Player player, int index) throws CommandSyntaxException {
+    private static int setWeight(CommandSourceStack pSource, ServerPlayer player, int index) throws CommandSyntaxException {
         if(player.hasPermissions(2))
         {
             player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 weightBar.setCurrentWeight(index);
                 ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
+                player.sendSystemMessage(Component.translatable("commands.overstuffed.setweightsuccess",Component.literal(player.getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),Component.literal(index+"").withStyle(ChatFormatting.DARK_GRAY)));
+
             });
         }
         else
         {
-            player.sendSystemMessage(Component.literal("Error: Your need admin permission to use this command"));
+            player.sendSystemMessage(Component.literal("Error: You need admin permission to use this command"));
         }
 
         return 0;

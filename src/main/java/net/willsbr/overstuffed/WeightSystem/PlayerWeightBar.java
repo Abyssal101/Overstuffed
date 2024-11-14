@@ -28,6 +28,8 @@ public class PlayerWeightBar {
     private long savedTickForWeight;
 
     private int weightUpdateDelay=40;
+    private double weightUpdateDelayModifier=1;
+
 
     private int weightLossDelay;
     private long savedTickforWeightLoss;
@@ -36,6 +38,8 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
+
+
 
 
 
@@ -137,7 +141,7 @@ public class PlayerWeightBar {
        this.savedTickForWeight=source.savedTickForWeight;
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
-
+       this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
 
     }
 
@@ -156,6 +160,8 @@ public class PlayerWeightBar {
         nbt.putIntArray("changestack", savingArray);
 
         nbt.putInt("weightstage", this.lastWeightStage);
+
+        nbt.putDouble("weightupdatedelaymodifier", this.weightUpdateDelayModifier);
         //Probably not important because it'll just reset, max a few extra seconds for someone to change.
         //nbt.putBoolean("updateweight", this.readyToUpdateWeight);
 
@@ -174,6 +180,7 @@ public class PlayerWeightBar {
         }
 
         this.lastWeightStage=nbt.getInt("weightstage");
+        this.weightUpdateDelayModifier=nbt.getDouble("weightupdatedelaymodifier");
     }
 
     public int getWeightUpdateDelay() {
@@ -224,5 +231,12 @@ public class PlayerWeightBar {
 
     public void setMinWeight(int minWeight) {
         this.minWeight = minWeight;
+    }
+
+    public double getWeightUpdateDelayModifier() {
+        return weightUpdateDelayModifier;
+    }
+    public void setWeightUpdateDelayModifier(double weightUpdateDelayModifier) {
+        this.weightUpdateDelayModifier = weightUpdateDelayModifier;
     }
 }

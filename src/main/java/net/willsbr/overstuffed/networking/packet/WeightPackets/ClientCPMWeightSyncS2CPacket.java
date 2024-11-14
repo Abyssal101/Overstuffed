@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.networking.packet;
+package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -42,16 +42,13 @@ public class ClientCPMWeightSyncS2CPacket {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
         {
-
             //here we are on the client!
-            // ClientThirstData.set(stuffed_bar);
             OverstuffedConfig.setWeightLayer(this.weightLayer);
             CPMData.checkIfUpdateCPM("weight");
             if(OverstuffedConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayer))
             {
-                context.getSender().sendSystemMessage(Component.literal("Weight Layer sucessfully updated"));
+                context.getSender().sendSystemMessage(Component.translatable("commands.overstuffed.weightupdatesuccess"));
             }
-
         });
         return true;
     }
