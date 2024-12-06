@@ -28,6 +28,7 @@ import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpda
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.weightIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
 
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
@@ -221,9 +222,11 @@ public class ModEvent {
 
 
             });
+
+            //TODO MAKE IT SO IF YOUR IN CREATIVE MODE YOU BASE LOSE STUFFED BAR ONCE EVERY MINUTE OR SOMETHING
             //THE DREADED LOSE WEIGHT FUNCTIONALITY!
             //this sees if the player has less than 5 food bars
-            if(event.player.getFoodData().getFoodLevel()<18 || event.player.hasEffect(ModEffects.GOLDEN_DIET.get()) )
+            if(event.player.getFoodData().getFoodLevel()<18 || event.player.hasEffect(ModEffects.GOLDEN_DIET.get()))
             {
                 if(weightBar.getSavedTickforWeightLoss()==-1)
                 {
@@ -234,8 +237,10 @@ public class ModEvent {
                         weightBar.setWeightLossDelay(20);
                     }
                     else {
-                        weightBar.setWeightLossDelay((int)(200-event.player.getFoodData().getExhaustionLevel()*5));
-
+                        int calculated=(int)((event.player.getFoodData().getExhaustionLevel()*5)*weightBar.getWeightUpdateDelayModifier());
+                        calculated=200-calculated;
+                        calculated=Math.max(0, calculated);
+                        weightBar.setWeightLossDelay(calculated);
                     }
                 }  else if ((event.player.tickCount-weightBar.getSavedTickforWeightLoss()>weightBar.getWeightLossDelay())){
                     //
@@ -264,7 +269,8 @@ public class ModEvent {
                 {
                     stuffedBar.addStuffedPoint();
                 }
-                stuffedBar.addStuffedLossed();
+                ModMessages.sendToPlayer(new weightIntervalUpdateS2CPacket(stuffedBar.getStuffedLossed(),stuffedBar.getInterval()),(ServerPlayer)event.player);
+
 
                 //Playing sound logic
                     //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
@@ -274,6 +280,9 @@ public class ModEvent {
                                 event.player.getSoundSource(), 1f, 1f);
                     }
                 //sound logic end
+
+
+
 
                 ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(), stuffedBar.getStuffedPoints(),
                         stuffedBar.getOverstuffedPoints()),(ServerPlayer) event.player);
@@ -299,14 +308,6 @@ public class ModEvent {
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
 
         //stuffedbar
-
-
-
-
-
-
-
-
 
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {

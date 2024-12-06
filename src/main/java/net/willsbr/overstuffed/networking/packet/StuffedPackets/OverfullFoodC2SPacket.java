@@ -1,6 +1,7 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;

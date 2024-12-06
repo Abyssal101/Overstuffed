@@ -8,6 +8,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.willsbr.overstuffed.OverStuffed;
@@ -51,8 +52,43 @@ public class ToggleButton extends AbstractButton {
         else {
             statusUpdate="False";
         }
-        super.setMessage(Component.literal(settingName+": "+statusUpdate));
+        super.setMessage(Component.literal(settingName+" "+statusUpdate));
         rightSide=isRight;
+    }
+    //Component Version of INits
+    public ToggleButton(int pX, int pY, int pWidth, int pHeight, Component pMessage,boolean startVal) {
+        super(pX, pY, pWidth, pHeight, pMessage);
+        settingName=pMessage.getString();
+        setting=startVal;
+        Component statusUpdate;
+        if(setting)
+        {
+            statusUpdate=Component.translatable("debug.overstuffed.true");
+        }
+        else
+        {
+            statusUpdate=Component.translatable("debug.overstuffed.false");
+        }
+
+        super.setMessage(Component.literal(settingName+": "+statusUpdate.getString()));
+
+    }
+    public ToggleButton(int pX, int pY, int pWidth, int pHeight, Component pMessage,boolean startVal, boolean isRight) {
+        super(pX, pY, pWidth, pHeight, pMessage);
+        settingName=pMessage.getString();
+        setting=startVal;
+        Component statusUpdate;
+        if(setting)
+        {
+            statusUpdate=Component.translatable("debug.overstuffed.true");
+        }
+        else
+        {
+            statusUpdate=Component.translatable("debug.overstuffed.false");
+        }
+        rightSide=isRight;
+        super.setMessage(Component.literal(settingName+": "+statusUpdate.getString()));
+
     }
 
     public void onPress() {
@@ -60,15 +96,19 @@ public class ToggleButton extends AbstractButton {
         if(locked==false)
         {
             setting=!setting;
-            String statusUpdate="";
+            Component statusUpdate;
             if(setting)
             {
-                statusUpdate="True";
+                statusUpdate=Component.translatable("debug.overstuffed.true");
             }
             else {
-                statusUpdate="False";
+                statusUpdate=Component.translatable("debug.overstuffed.false");
+
             }
-            super.setMessage(Component.literal(settingName+": "+statusUpdate));
+
+            super.setMessage(Component.literal(settingName+" "+ statusUpdate.getString()));
+
+
         }
 
     }
@@ -90,6 +130,7 @@ public class ToggleButton extends AbstractButton {
                 else {
                     GuiComponent.blit(pose,this.x-25,this.y,0,0,20,20,20,20);
                 }
+
             }
 
         }
@@ -102,11 +143,11 @@ public class ToggleButton extends AbstractButton {
 //        {
 //            if(rightSide)
 //            {
-//                guiGraphics.blit(lockedIcon,this.getX()+this.width+5,this.getY(),0,0,20 ,20,20,20);
+//                guiGraphics.blit(lockedIcon,this.x+this.width+5,this.y,0,0,20 ,20,20,20);
 //
 //            }
 //            else {
-//                guiGraphics.blit(lockedIcon,this.getX()-20,this.getY(),0,0,20,20,20,20);
+//                guiGraphics.blit(lockedIcon,this.getX()-20,this.y,0,0,20,20,20,20);
 //
 //            }
 //        }

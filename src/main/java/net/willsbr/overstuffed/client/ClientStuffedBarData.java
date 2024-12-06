@@ -11,6 +11,9 @@ public class ClientStuffedBarData {
 
     private static int max=9;
 
+    private static int currentLost;
+    private static int interval;
+
     public static void set(int input, int soft,int firm, int hard)
     {
         ClientStuffedBarData.playerStuffedBar=input;
@@ -37,5 +40,21 @@ public class ClientStuffedBarData {
 
     public static int getMax() {
         return max;
+    }
+
+    public static int getCurrentLost() {
+        return currentLost;
+    }
+
+    public static void setCurrentLost(int currentLost) {
+        ClientStuffedBarData.currentLost = currentLost;
+    }
+
+    public static int getInterval() {
+        return interval;
+    }
+
+    public static void setInterval(int interval) {
+        ClientStuffedBarData.interval = interval;
     }
 }

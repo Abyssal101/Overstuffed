@@ -41,22 +41,20 @@ public class CPMData {
     {
         return stuffedLayerName;
     }
-    public static void checkIfUpdateCPM(String type)
+    public static boolean checkIfUpdateCPM(String type)
     {
 //        if(lastSavedStuffed!=ClientStuffedBarData.getPlayerStuffedBar())
 //        {
 
-
         //ALL THIS SHOULD BE EXECUTED ON THE CLIENT
             if(type.contentEquals("stuffed"))
             {
-                ClientCPMData.playStuffed();
+                return ClientCPMData.playStuffed();
             }
             else if(type.contentEquals("weight")){
-                ClientCPMData.playWeight();
+                return ClientCPMData.playWeight();
             }
-            
-
+            return false;
 
     }
 

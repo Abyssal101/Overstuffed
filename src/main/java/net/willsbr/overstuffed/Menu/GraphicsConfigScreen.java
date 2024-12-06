@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
@@ -44,6 +45,8 @@ public class GraphicsConfigScreen extends Screen {
 
     private EditBox stuffedHudXOffset;
     private EditBox stuffedHudYOffset;
+
+    private ToggleButton debugView;
 
     private Button toConfigScreen;
 
@@ -136,6 +139,10 @@ public class GraphicsConfigScreen extends Screen {
                 Component.literal("Stuffed Hud Y Offset"));
         this.stuffedHudYOffset.setValue(OverstuffedConfig.stuffedHudYOffset.get()+"");
 
+        //TODO FINISH DEBUG VIEW AND TEST IF THE NEW COMPONENT CONSTRUCTOR ACTUALLY WORKS
+        this.debugView= new ToggleButton(screenW/2-50,150,100,20,
+                Component.translatable("message.overstuffed.debugbutton"),OverstuffedConfig.debugView.get());
+        this.debugView.setLocked(false);
 
         this.toConfigScreen= new Button(screenW-120,8,100,20,
                 Component.literal("Gameplay Config"),button ->this.swapScreen("gameplay"));
@@ -145,6 +152,8 @@ public class GraphicsConfigScreen extends Screen {
 
         this.addRenderableWidget(this.stuffedHudXOffset);
         this.addRenderableWidget(this.stuffedHudYOffset);
+
+        this.addRenderableWidget(debugView);
 
         this.addRenderableWidget(toConfigScreen);
 
@@ -225,11 +234,7 @@ public class GraphicsConfigScreen extends Screen {
     public void onClose() {
         // Save mod configuration
         nonNumFlag=false;
-       OverstuffedConfig.weightDisplayX.set(this.getEditBoxInt("weight", true));
-        OverstuffedConfig.weightDisplayY.set(this.getEditBoxInt("weight", false));
 
-        OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
-        OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
 
         if(nonNumFlag==true)
         {
@@ -237,6 +242,16 @@ public class GraphicsConfigScreen extends Screen {
                     "failed to save"));
             nonNumFlag=false;
         }
+        else{
+            OverstuffedConfig.weightDisplayX.set(this.getEditBoxInt("weight", true));
+            OverstuffedConfig.weightDisplayY.set(this.getEditBoxInt("weight", false));
+
+            OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
+            OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
+        }
+
+
+        OverstuffedConfig.debugView.set(debugView.getSetting());
 
 
 

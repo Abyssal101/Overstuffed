@@ -25,11 +25,29 @@
   "commands.overstuffed.setweightsuccess": "Succesfully set the weight of %1$s to %2$s",
 
 
-
-
   "commands.overstuffed.errorsamename": "ERROR: Your layer already has that name",
   "commands.overstuffed.setbelowzero": "ERROR: Set below zero",
   "commands.overstuffed.maxbelowmin": "ERROR: Set max below min",
-  "commands.overstuffed.minabovemax": "ERROR: Set min above max"
+  "commands.overstuffed.minabovemax": "ERROR: Set min above max",
+
+
+  "debug.overstuffed.true": "True",
+  "debug.overstuffed.false": "False",
+
+  "message.overstuffed.debugbutton": "Debug View: %1$s",
+
+  "message.overstuffed.debugcurrentweight": "Current Weight: %1$s",
+  "message.overstuffed.debugmaxweight": "Max Weight: %1$s",
+  "message.overstuffed.debugminweight": "Min Weight: %1$s",
+
+  "message.overstuffed.debugcurrentstuffed": "Current Stuffed: %1$s",
+  "message.overstuffed.debugmaxstuffed": "Max Stuffed: %1$s",
+  "message.overstuffed.debugnextmax": "# of stuffed points to next max: %1$s",
+
+  "menu.overstuffed.stagebasedweightbutton":"Stage Based Weight:",
+  "menu.overstuffed.weightmomentumbutton":"Weight Momentum:",
+  "menu.overstuffed.weighteffectsbutton":"Weight Effects:"
+
+
 
 }

@@ -80,7 +80,6 @@ public class ModMessages {
                 .consumerMainThread(setWeightC2SPacket::handle)
                 .add();
 
-
         net.messageBuilder(OverstuffedEffectC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(OverstuffedEffectC2SPacket::new)
                 .encoder(OverstuffedEffectC2SPacket::toBytes)
@@ -153,6 +152,15 @@ public class ModMessages {
                 .decoder(WeightMomentumSyncS2CPacket::new)
                 .encoder(WeightMomentumSyncS2CPacket::toBytes)
                 .consumerMainThread(WeightMomentumSyncS2CPacket::handle)
+                .add();
+
+
+
+
+        net.messageBuilder(weightIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(weightIntervalUpdateS2CPacket::new)
+                .encoder(weightIntervalUpdateS2CPacket::toBytes)
+                .consumerMainThread(weightIntervalUpdateS2CPacket::handle)
                 .add();
 
     }

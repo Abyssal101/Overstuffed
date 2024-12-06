@@ -4,9 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Syncing 1.20.1 to 1.19.2">
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Lots of Structure changes&#10;Creation of AbstractClientMethods and AbstrRendererMethods to make porting between versions easier. Code that replaced between versions is commented and marked.&#10;Also added translateable components to a lot of elements&#10;Created the Debug View setting in the graphics menu">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/PortProofButton.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/AbstractRendererMethods.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/AbstractClientMethods.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/weightIntervalUpdateS2CPacket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Block/custom/Scale.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Block/custom/Scale.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/CPMCompat/Capability/CPMData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/CPMCompat/Capability/CPMData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/OptionSlider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/OptionSlider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/ToggleButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/ToggleButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/ScaleBER.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/ScaleBER.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/MovementUpdatesC2S.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/MovementUpdatesC2S.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +84,13 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -68,7 +98,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -111,7 +140,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "1.19.2",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/wlbra/OneDrive/Documents/GitHub/Overstuffed/src/main/java/net/willsbr/overstuffed/build",
+    "last_opened_file_path": "C:/Users/wlbra/Local Documents/GitHub/Overstuffed-Figura-Plugin",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -124,6 +153,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed\src\main\java\net\willsbr\overstuffed\build" />
       <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.willsbr.overstuffed.networking.packet.WeightPackets" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Overstuffed [runClient]">
@@ -287,6 +319,20 @@
       <workItem from="1727315909319" duration="212000" />
       <workItem from="1728519306611" duration="3894000" />
       <workItem from="1728525707490" duration="4000" />
+      <workItem from="1731547294778" duration="5293000" />
+      <workItem from="1731610398138" duration="2745000" />
+      <workItem from="1731641887079" duration="1490000" />
+      <workItem from="1731718660628" duration="9507000" />
+      <workItem from="1731896409575" duration="304000" />
+      <workItem from="1731897930748" duration="1180000" />
+      <workItem from="1731980187519" duration="31000" />
+      <workItem from="1731980822129" duration="600000" />
+      <workItem from="1732118202243" duration="241000" />
+      <workItem from="1732800435841" duration="1000" />
+      <workItem from="1733020214109" duration="1993000" />
+      <workItem from="1733083581209" duration="9749000" />
+      <workItem from="1733415984610" duration="6600000" />
+      <workItem from="1733506782428" duration="1666000" />
     </task>
     <task id="LOCAL-00001" summary="AAAAA">
       <option name="closed" value="true" />
@@ -396,6 +442,7 @@
     <MESSAGE value="AAAA8" />
     <MESSAGE value="AAAA9" />
     <MESSAGE value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
+    <MESSAGE value="Lots of Structure changes&#10;Creation of AbstractClientMethods and AbstrRendererMethods to make porting between versions easier. Code that replaced between versions is commented and marked.&#10;Also added translateable components to a lot of elements&#10;Created the Debug View setting in the graphics menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lots of Structure changes&#10;Creation of AbstractClientMethods and AbstrRendererMethods to make porting between versions easier. Code that replaced between versions is commented and marked.&#10;Also added translateable components to a lot of elements&#10;Created the Debug View setting in the graphics menu" />
   </component>
 </project>

@@ -49,7 +49,10 @@ public class Scale extends BaseEntityBlock {
 
     private static final DirectionProperty FACING= BlockStateProperties.HORIZONTAL_FACING;
 
-    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+   private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
+
+   //IF you get a missing texture file when you change version from the block model, ITS BECAUSE a properrty that should be axis is vector2f
 
 
     public Scale(Properties pProperties) {
@@ -65,7 +68,7 @@ public class Scale extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        this.defaultBlockState().setValue(POWERED,false);
+        //this.defaultBlockState().setValue(POWERED,false);
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
     }
 

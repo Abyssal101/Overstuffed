@@ -3,7 +3,8 @@ package net.willsbr.overstuffed.Renderer;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
@@ -22,6 +23,7 @@ import net.willsbr.overstuffed.Block.ModBlocks;
 import net.willsbr.overstuffed.Entity.BlockEntity.ScaleBlockEntity;
 
 import java.awt.*;
+
 
 public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
 
@@ -59,46 +61,45 @@ public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
                 {
                     poseStack.translate(52f,-122,4);
 
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-45));
+                    //poseStack.mulPose(Vector3f.XN.rotationDegrees(-45));
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(-45,"X"));
+
                 }
                 else if((FACING.equals(Direction.SOUTH)))
                 {
-
                     poseStack.translate(75,-122,95);
-                    poseStack.mulPose(Axis.XN.rotationDegrees(45));
-                    poseStack.mulPose(Axis.YN.rotationDegrees(180));
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(45,"X"));
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(180,"Y"));
                 }
                 else if(FACING.equals(Direction.EAST))
                 {
+
                     poseStack.translate(118,-122,40);
-                    poseStack.mulPose(Axis.YN.rotationDegrees(90));
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-47));
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(90,"Y"));
+
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(-47,"X"));
                 }
                 else {
                     poseStack.translate(8,-122,60);
-                    poseStack.mulPose(Axis.YN.rotationDegrees(270));
-                    poseStack.mulPose(Axis.XN.rotationDegrees(-47));
+
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(270,"Y"));
+                    poseStack.mulPose(AbstractRendererMethods.abstractRotation(-47,"X"));
                 }
             }
 
 
         if(displayWeight==0)
         {
-            font.drawInBatch("0",0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,Font.DisplayMode.NORMAL,
-                    0,packedLight);
-
+            AbstractRendererMethods.drawInBatch(font,"0",0f,0f,Color.RED,poseStack,pBufferSource,packedLight);
         }
         else if(displayWeight>0 && displayWeight<1000)
         {
-            font.drawInBatch(""+displayWeight,0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource
-                    ,Font.DisplayMode.NORMAL, 0,packedLight);
+            AbstractRendererMethods.drawInBatch(font,""+displayWeight,0f,0f,Color.RED,poseStack,pBufferSource,packedLight);
         }
         else
         {
             poseStack.translate(-4f,0,0);
-
-            font.drawInBatch("ERROR",0f,0f, Color.RED.hashCode(),false,poseStack.last().pose(),pBufferSource,
-                    Font.DisplayMode.NORMAL, 0,packedLight);
+            AbstractRendererMethods.drawInBatch(font,"ERROR",0f,0f,Color.RED,poseStack,pBufferSource,packedLight);
         }
 
 
@@ -124,6 +125,7 @@ public class ScaleBER implements BlockEntityRenderer<ScaleBlockEntity> {
     {
         displayWeight =i;
     }
+
 
 
 

@@ -32,6 +32,8 @@ public class OverstuffedConfig {
 
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudXOffset;
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudYOffset;
+    public static ForgeConfigSpec.ConfigValue<Boolean> debugView;
+
 
 
 
@@ -78,7 +80,8 @@ public class OverstuffedConfig {
         stuffedHudYOffset =builder.comment("The stuffed hud's Y offset from it's default position")
                 .define("stuffedhudy,",0);
 
-
+        debugView =builder.comment("Boolean to determine if the debug view should be on ")
+                .define("debugview,",false);
 
     }
 
@@ -88,6 +91,17 @@ public class OverstuffedConfig {
         toggleList.save();
         burpFrequency.save();
         gurgleFrequency.save();
+
+        maxWeight.save();
+        minWeight.save();
+
+        weightDisplayX.save();
+        weightDisplayY.save();
+
+        stuffedHudYOffset.save();
+        stuffedHudXOffset.save();
+
+        debugView.save();
     }
 
     public static boolean returnSetting(int index)

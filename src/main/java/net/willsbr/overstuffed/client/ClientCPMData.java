@@ -48,7 +48,6 @@ public class ClientCPMData {
             {
                 Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
                 int outOf255=(int)(percentFull*255);
-
                 playersAPI.playAnimation(OverstuffedConfig.stuffedLayerConfigEntry.get(),outOf255);
                 playersAPI.playAnimation(OverstuffedConfig.lastStuffedLayer,0);
             }

@@ -142,7 +142,6 @@ public class PlayerWeightBar {
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
        this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
-
     }
 
     public void saveNBTData(CompoundTag nbt)
