@@ -223,7 +223,6 @@ public class ModEvent {
 
             });
 
-            //TODO MAKE IT SO IF YOUR IN CREATIVE MODE YOU BASE LOSE STUFFED BAR ONCE EVERY MINUTE OR SOMETHING
             //THE DREADED LOSE WEIGHT FUNCTIONALITY!
             //this sees if the player has less than 5 food bars
             if(event.player.getFoodData().getFoodLevel()<18 || event.player.hasEffect(ModEffects.GOLDEN_DIET.get()))

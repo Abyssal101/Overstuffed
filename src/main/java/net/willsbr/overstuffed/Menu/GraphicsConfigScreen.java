@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
@@ -48,7 +49,7 @@ public class GraphicsConfigScreen extends Screen {
 
     private ToggleButton debugView;
 
-    private Button toConfigScreen;
+    private PortProofButton toConfigScreen;
 
     private int centerW;
     private int centerH;
@@ -139,13 +140,17 @@ public class GraphicsConfigScreen extends Screen {
                 Component.literal("Stuffed Hud Y Offset"));
         this.stuffedHudYOffset.setValue(OverstuffedConfig.stuffedHudYOffset.get()+"");
 
-        //TODO FINISH DEBUG VIEW AND TEST IF THE NEW COMPONENT CONSTRUCTOR ACTUALLY WORKS
         this.debugView= new ToggleButton(screenW/2-50,150,100,20,
                 Component.translatable("message.overstuffed.debugbutton"),OverstuffedConfig.debugView.get());
         this.debugView.setLocked(false);
 
-        this.toConfigScreen= new Button(screenW-120,8,100,20,
-                Component.literal("Gameplay Config"),button ->this.swapScreen("gameplay"));
+        this.toConfigScreen= new PortProofButton(screenW - 120, 8, 100, 20,
+                Component.literal("Gameplay Config"), new Runnable() {
+            @Override
+            public void run() {
+                swapScreen("gameplay");
+            }
+        });
 
         this.addRenderableWidget(this.weightDisplayX);
         this.addRenderableWidget(this.weightDisplayY);
@@ -159,12 +164,17 @@ public class GraphicsConfigScreen extends Screen {
 
 
         // Add the "Done" button
-        this.addRenderableWidget(new Button(
+        this.addRenderableWidget(new PortProofButton(
                 (this.width - BUTTON_WIDTH) / 2,
                 this.height - DONE_BUTTON_TOP_OFFSET,
                 BUTTON_WIDTH, BUTTON_HEIGHT,
                 Component.literal("Save"),
-                button -> this.onClose()
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onClose();
+                    }
+                }
         ));
     }
 

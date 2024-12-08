@@ -67,7 +67,7 @@ public class ClientEvents {
                         // currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,0));
                         ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
                     }
-                    else if(heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
+                    else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
 
 

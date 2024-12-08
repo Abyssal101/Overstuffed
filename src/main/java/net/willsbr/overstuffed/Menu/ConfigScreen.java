@@ -4,13 +4,16 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.TooltipAccessor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
+import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
@@ -73,8 +76,8 @@ public class ConfigScreen extends Screen {
     private EditBox weightLayerEditBox;
     private EditBox stuffedLayerEditBox;
 
-    private Button toGraphicsConfig;
-    private Button done;
+    private PortProofButton toGraphicsConfig;
+    private PortProofButton done;
 
 
     private int centerW;
@@ -124,8 +127,14 @@ public class ConfigScreen extends Screen {
         //TODO MAKE LOCKED BUTTONS ACTUAL TIE TO PLAYER UNLOCK
         this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,Component.translatable("menu.overstuffed.stagebasedweightbutton"),OverstuffedConfig.returnSetting(0));
         this.stageBasedWeight.setLocked(false);
+        this.stageBasedWeight.setTooltipText("False: Weight visually udates with every tick. \n True: Weight visually updates once you reach every 20% weight interval.");
+
+
         this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
+
+        this.momentum.setTooltipText("Locked: Planned Feature");
         this.weightEffect= new ToggleButton(centerW+-160,100,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"),OverstuffedConfig.returnSetting(2));
+        this.weightEffect.setTooltipText("Locked: Planned Feature");
 
         //TODO MAKE the Sliders have translateable components
 
@@ -133,10 +142,7 @@ public class ConfigScreen extends Screen {
         this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
         this.momentum.setLocked(true);
         this.weightEffect.setLocked(true);
-        //TODO REMAKE Tooltip from 1.20.1 by trying to copy the previous code
-//        this.stageBasedWeight.setTooltip(Tooltip.create(Component.literal("False: Weight visually udates with every tick. \nTrue: Weight visually updates once you reach every 20% weight interval.")));
-//        this.momentum.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
-//        this.weightEffect.setTooltip(Tooltip.create(Component.literal("Locked: Planned Feature")));
+
 
         //ALL editbox sizes are based off this first editbox.
         this.weightLayerEditBox = new EditBox(
@@ -180,12 +186,14 @@ public class ConfigScreen extends Screen {
         this.minWeight.setMaxLength(4);
 
 
-        //TODO FINISH PORTPROOFBUTTON (AND FIND AN EASIER NAME) AND APPLY IT TO SAVE AND TOGRAPHICS
-        toGraphicsConfig=new Button(screenW-120,8,BUTTON_WIDTH/2,BUTTON_HEIGHT,
-                Component.literal("Graphics Config")
-                , button ->{
-            this.swapScreen("graphics");
-        });
+        toGraphicsConfig=new PortProofButton(screenW - 120, 8, BUTTON_WIDTH / 2, BUTTON_HEIGHT,
+                Component.literal("Graphics Config"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        swapScreen("graphics");
+                    }
+                });
 //        PortProofButton test= new PortProofButton(0,600,
 //                BUTTON_WIDTH-20,BUTTON_HEIGHT,Component.literal("Test"), this::onClose);
 
@@ -208,12 +216,17 @@ public class ConfigScreen extends Screen {
         //TODO ERROR FOR AN BAD ANIMATION DOESN'T WORK(Might be because you had no animation loaded)
 
         // Add the "Done" button
-        this.done= new Button(
+        this.done= new PortProofButton(
                 (this.width - BUTTON_WIDTH) / 2,
                 this.height - DONE_BUTTON_TOP_OFFSET,
                 BUTTON_WIDTH, BUTTON_HEIGHT,
                 Component.literal("Save"),
-                button -> this.onClose()
+                new Runnable() {
+                    @Override
+                    public void run() {
+                         onClose();
+                    }
+                }
         );
 
         this.addRenderableWidget(done);
@@ -258,10 +271,30 @@ public class ConfigScreen extends Screen {
         drawCenteredString(poseStack,font, "Min Weight", centerW-80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
         drawCenteredString(poseStack,font, "Range:0-9999", centerW-80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
 
-        //TODO FIX ERROR CODES FOR THE RANGE OF WEIGHT BEING OPPOSITE,NO DIFFERENCE AND ETC
         if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
         {
             drawCenteredString(poseStack,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y-20,Color.RED.hashCode());
+        }
+
+        if(minWeight.getValue().contentEquals(maxWeight.getValue()))
+        {
+            drawCenteredString(poseStack,font, "Error: Min and Max weight are the same", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+        }
+        int max=1;
+        int min=0;
+        try{
+             max=Integer.parseInt(maxWeight.getValue());
+             min=Integer.parseInt(minWeight.getValue());
+        }
+        catch (NumberFormatException e){
+            drawCenteredString(poseStack,font, "Error: Non-number character in the min/max box", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+
+        }
+
+        if(max<min)
+        {
+            drawCenteredString(poseStack,font, "Error: Min weight is greater than max weight", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+
         }
 
         // pose.popPose();
@@ -322,19 +355,16 @@ public class ConfigScreen extends Screen {
                 }
                 else {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +
-                            "eight is too low. Must be at least 100"));
+                            "weight is too low. Must be at least 100"));
                 }
 
 
             }
-            else
-            {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Values are the same or min is greater than max"));
-            }
+
         }
         catch (Exception e)
         {
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
+            //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
         }
 
         OverstuffedConfig.saveConfig();
