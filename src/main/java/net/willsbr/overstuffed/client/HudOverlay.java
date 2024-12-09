@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +19,6 @@ import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.awt.*;
 
-import static net.minecraft.client.gui.GuiComponent.blit;
-import static net.minecraft.client.gui.GuiComponent.drawCenteredString;
 import static net.willsbr.overstuffed.client.AbstractClientMethods.AbstractDraw;
 
 
@@ -44,7 +41,7 @@ public class HudOverlay {
 
     private static final ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
     private static final ResourceLocation WEIGHTSPRITEBACKGROUND= new ResourceLocation(OverStuffed.MODID,"textures/stuffedbar/weightbackground.png");
-    public static final IGuiOverlay HUD_STUFFEDBAR=((gui, poseStack, partialTick, screenWidth, screenHeight) -> {
+    public static final IGuiOverlay HUD_STUFFEDBAR=((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         //anything in here gets rendered
         Window curWindow= Minecraft.getInstance().getWindow();
 
@@ -65,7 +62,7 @@ public class HudOverlay {
         //TODO Figure out how to make it draw ONTOP of chat
 
         font = Minecraft.getInstance().font;
-
+        PoseStack poseStack=guiGraphics.pose();
 
 
 
@@ -81,7 +78,7 @@ public class HudOverlay {
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
                 //Changes to guiGraphics
-                AbstractDraw(gui,poseStack,STUFFED_POINT, x, y,5,5);
+                AbstractDraw(gui,guiGraphics,STUFFED_POINT, x, y,5,5);
             }
             else {
                 break;
@@ -96,7 +93,7 @@ public class HudOverlay {
             int y = top;
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
-                AbstractDraw(gui,poseStack,OVERSTUFFED_POINT, x, y,5,5);
+                AbstractDraw(gui,guiGraphics,OVERSTUFFED_POINT, x, y,5,5);
                 //  12,6,6);
             }
             else {
@@ -116,7 +113,7 @@ public class HudOverlay {
             if(ClientStuffedBarData.getPlayerStuffedBar()>i)
             {
 
-                AbstractDraw(gui,poseStack,SUPERSTUFFED_POINT, x, y,5,5);
+                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_POINT, x, y,5,5);
             }
             else {
                 break;
@@ -128,7 +125,7 @@ public class HudOverlay {
 
         //1.19.2
 
-        AbstractDraw(gui,poseStack,WEIGHTSPRITEBACKGROUND, OverstuffedConfig.weightDisplayX.get(), OverstuffedConfig.weightDisplayY.get(),33,33);
+        AbstractDraw(gui,guiGraphics,WEIGHTSPRITEBACKGROUND, OverstuffedConfig.weightDisplayX.get(), OverstuffedConfig.weightDisplayY.get(),33,33);
 
 
         int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight())/OverstuffedConfig.maxWeight.get())*100);
@@ -136,7 +133,7 @@ public class HudOverlay {
         //System.out.println(outOf100/20-1+"/5");
         //1.19.2
 
-        AbstractDraw(gui,poseStack,WEIGHTSTAGESPRITES[outOf100/20-1], OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),32,32);
+        AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20-1], OverstuffedConfig.weightDisplayX.get(),OverstuffedConfig.weightDisplayY.get(),32,32);
 
 
 
@@ -149,21 +146,21 @@ public class HudOverlay {
             //Stuffed current valaue
             //# of food to get to next stuffed
 
-           drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight())
+           guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight())
                    ,screenWidth/2,20, Color.RED.hashCode());
 
-            drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugmaxweight",""+OverstuffedConfig.getMaxWeight())
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugmaxweight",""+OverstuffedConfig.getMaxWeight())
                     ,screenWidth/2,30, Color.RED.hashCode());
-            drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugminweight",""+OverstuffedConfig.getMinWeight())
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugminweight",""+OverstuffedConfig.getMinWeight())
                     ,screenWidth/2,40, Color.RED.hashCode());
 
 
-            drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar())
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar())
                     ,screenWidth/2,50, Color.RED.hashCode());
-            drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugmaxstuffed",""+
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugmaxstuffed",""+
                             (ClientStuffedBarData.getSoftLimit()+ ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getCurrentFirmLimit()))
                     ,screenWidth/2,60, Color.RED.hashCode());
-            drawCenteredString(poseStack, font, Component.translatable("message.overstuffed.debugnextmax",""+
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugnextmax",""+
                             ClientStuffedBarData.getCurrentLost()+"/"+ClientStuffedBarData.getInterval())
                     ,screenWidth/2,70, Color.RED.hashCode());
 

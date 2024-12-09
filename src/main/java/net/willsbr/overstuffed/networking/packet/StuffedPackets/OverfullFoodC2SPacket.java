@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
@@ -36,7 +37,7 @@ public class OverfullFoodC2SPacket {
 
                     //here we are on the server
                     ServerPlayer player=context.getSender();
-                    ServerLevel level=player.getLevel();
+                    Level level=player.level();
                     if(!level.isClientSide)
                     {
                         player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
@@ -47,7 +48,7 @@ public class OverfullFoodC2SPacket {
                                 //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
                                 if(player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
                                 {
-                                    player.getLevel().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                                    player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
                                                     player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
                                             player.getSoundSource(), 1f, 1f);
                                 }

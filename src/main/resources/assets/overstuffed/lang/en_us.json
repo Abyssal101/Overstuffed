@@ -34,7 +34,7 @@
   "debug.overstuffed.true": "True",
   "debug.overstuffed.false": "False",
 
-  "message.overstuffed.debugbutton": "Debug View: %1$s",
+  "message.overstuffed.debugbutton": "Debug View:",
 
   "message.overstuffed.debugcurrentweight": "Current Weight: %1$s",
   "message.overstuffed.debugmaxweight": "Max Weight: %1$s",

@@ -1,14 +1,11 @@
 {
   "required": true,
   "package": "net.willsbr.overstuffed.Mixin",
-
+  "minVersion": "0.8",
   "mixins":
   [
     "MixinCanEat"
   ],
   "refmap":"mixinconfig.overstuffed.refmap.json"
-
-
-
 
 }

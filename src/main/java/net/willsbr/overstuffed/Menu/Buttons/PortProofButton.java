@@ -3,7 +3,7 @@ package net.willsbr.overstuffed.Menu.Buttons;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.types.Func;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -31,13 +31,14 @@ public class PortProofButton extends AbstractButton {
 
 
     @Override
-    public void render(@Nonnull PoseStack pose, int mouseX, int mouseY, float pPartialTick) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
 
-        super.render(pose, mouseX, mouseY, pPartialTick);
+        super.render(guiGraphics, mouseX, mouseY, pPartialTick);
     }
 
+
     @Override
-    public void updateNarration(NarrationElementOutput narrationElementOutput) {
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
     }
 }

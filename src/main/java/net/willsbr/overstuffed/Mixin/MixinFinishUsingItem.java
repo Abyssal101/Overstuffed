@@ -30,7 +30,7 @@ public abstract class MixinFinishUsingItem {
             Player player= (Player)pLivingEntity;
             if(((Player)pLivingEntity).getFoodData().getFoodLevel()>=20)
             {
-                Level level=player.getLevel();
+                Level level=player.level();
                 if(level.isClientSide)
                 {
                     ModMessages.sendToServer(new OverfullFoodC2SPacket());

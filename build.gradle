@@ -5,9 +5,10 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
 
+
 }
 
-version = '1.0-1.20.1'
+version = '1.1-1.20.1'
 group = 'com.github.Abyssal101' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'overstuffed'
 
@@ -156,6 +157,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    apply plugin: 'org.spongepowered.mixin'
 
 
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
@@ -163,7 +165,7 @@ dependencies {
 
     runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
 
-    //implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
+    implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -187,8 +189,11 @@ mixin {
     add sourceSets.main, 'mixinconfig.overstuffed.refmap.json'
     config 'mixinconfig.overstuffed.json'
 
-    debug.verbose = true
-    debug.export = true
+
+    debug.verbose = false
+    debug.export = false
+    dumpTargetOnFailure = true
+2
 
     // AP Settings
     disableTargetValidator = true

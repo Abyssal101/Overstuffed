@@ -4,8 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -34,7 +35,7 @@ public class ToggleButton extends AbstractButton {
         settingName = pMessage;
         setting = startVal;
 
-        tooltipText = pMessage;
+        tooltipText ="";
 
         String statusUpdate = "";
         if (setting) {
@@ -51,7 +52,7 @@ public class ToggleButton extends AbstractButton {
         settingName = pMessage;
         setting = startVal;
 
-        tooltipText = pMessage;
+        tooltipText = "";
 
 
         String statusUpdate = "";
@@ -69,7 +70,7 @@ public class ToggleButton extends AbstractButton {
         super(pX, pY, pWidth, pHeight, pMessage);
         settingName = pMessage.getString();
 
-        tooltipText = settingName;
+        tooltipText = "";
 
         setting = startVal;
         Component statusUpdate;
@@ -88,7 +89,7 @@ public class ToggleButton extends AbstractButton {
         settingName = pMessage.getString();
         setting = startVal;
 
-        tooltipText = settingName;
+        tooltipText = "";
 
 
         Component statusUpdate;
@@ -105,6 +106,7 @@ public class ToggleButton extends AbstractButton {
     public void onPress() {
 
         if (locked == false) {
+
             setting = !setting;
             Component statusUpdate;
             if (setting) {
@@ -123,27 +125,29 @@ public class ToggleButton extends AbstractButton {
 
 
     @Override
-    public void render(@Nonnull PoseStack pose, int mouseX, int mouseY, float pPartialTick) {
-        super.render(pose, mouseX, mouseY, pPartialTick);
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
+        super.render(guiGraphics, mouseX, mouseY, pPartialTick);
         {
             if (locked) {
-                RenderSystem.setShaderTexture(0, lockedIcon);
+                //RenderSystem.setShaderTexture(0, lockedIcon);
                 if (rightSide) {
 
-                    GuiComponent.blit(pose, this.x + this.width + 5, this.y, 0, 0, 20, 20, 20, 20);
+                    guiGraphics.blit(lockedIcon, this.getX() + this.width + 5, this.getY(), 0, 0, 20, 20, 20, 20);
 
                 } else {
-                    GuiComponent.blit(pose, this.x - 25, this.y, 0, 0, 20, 20, 20, 20);
+                    guiGraphics.blit(lockedIcon, this.getX() - 25, this.getY(), 0, 0, 20, 20, 20, 20);
                 }
 
             }
-            boolean flag = this.isHovered && !tooltipText.contentEquals("");
-
-            if (flag) {
-                Minecraft.getInstance().screen.renderTooltip(pose, Component.literal(this.tooltipText), mouseX, mouseY);
-
-
-            }
+            //1.19.2 Tooltip Logic
+//            boolean flag = this.isHovered && !tooltipText.contentEquals("");
+//
+//            if (flag) {
+//                Minecraft.getInstance().screen.renderWithTooltip();
+//                Minecraft.getInstance().screen.renderTooltip(pose, Component.literal(this.tooltipText), mouseX, mouseY);
+//
+//
+//            }
         }
 
     }
@@ -153,11 +157,14 @@ public class ToggleButton extends AbstractButton {
     }
 
     public void setTooltipText(String tooltipText) {
-        this.tooltipText = tooltipText;
+        //1.19.2 version is this.tooltip
+        //this.tooltipText = tooltipText;
+        //Remove this in the
+        this.setTooltip(Tooltip.create(Component.literal(tooltipText)));
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput narrationElementOutput) {
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
     }
 

@@ -6,9 +6,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.TooltipAccessor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
@@ -156,8 +156,8 @@ public class ConfigScreen extends Screen {
 
         this.stuffedLayerEditBox = new EditBox(
                 font,
-                weightLayerEditBox.x,
-                weightLayerEditBox.y+weightLayerEditBox.getHeight()+15*2,
+                weightLayerEditBox.getX(),
+                weightLayerEditBox.getY()+weightLayerEditBox.getHeight()+15*2,
                 weightLayerEditBox.getWidth(),
                 weightLayerEditBox.getHeight(),
                 Component.literal("Stuffed Layer"));
@@ -166,7 +166,7 @@ public class ConfigScreen extends Screen {
         this.maxWeight= new EditBox(
                 font,
                 this.centerW+105-50,
-                stuffedLayerEditBox.y+65,
+                stuffedLayerEditBox.getY()+65,
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Max Weight"));
@@ -177,7 +177,7 @@ public class ConfigScreen extends Screen {
         this.minWeight= new EditBox(
                 font,
                 this.centerW-105,
-                stuffedLayerEditBox.y+65,
+                stuffedLayerEditBox.getY()+65,
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Min Weight"));
@@ -244,41 +244,41 @@ public class ConfigScreen extends Screen {
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
     // on the screen
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         // Background is typically rendered first
-        this.renderBackground(poseStack);
+        this.renderBackground(guiGraphics);
         // Then the widgets if this is a direct child of the Screen
-        super.render(poseStack, mouseX, mouseY, partialTick);
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
         // Draw the title
-        drawCenteredString(poseStack, font, this.getTitle().getString(), this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
+       guiGraphics.drawCenteredString(font, this.getTitle().getString(), this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
         //drawing the edit box's title
 
-        drawCenteredString(poseStack,font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.y,Color.white.hashCode());
-        drawCenteredString(poseStack,font, "Name of value layer for weight animations", this.width/2+100,weightLayerEditBox.y+10,Color.GRAY.hashCode());
+       guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
+       guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
         if(ClientCPMData.getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
         {
-            drawCenteredString(poseStack,font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.y+20,Color.RED.hashCode());
+           guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
 
         }
 
-        drawCenteredString(poseStack,font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.y,Color.white.hashCode());
-        drawCenteredString(poseStack,font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.y+10,Color.GRAY.hashCode());
+       guiGraphics.drawCenteredString(font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.getY(),Color.white.hashCode());
+       guiGraphics.drawCenteredString(font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
-        drawCenteredString(poseStack,font, "Max Weight", centerW+80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
-        drawCenteredString(poseStack,font, "Range:0-9999", centerW+80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+       guiGraphics.drawCenteredString(font, "Max Weight", centerW+80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
+       guiGraphics.drawCenteredString(font, "Range:0-9999", centerW+80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
 
-        drawCenteredString(poseStack,font, "Min Weight", centerW-80,stuffedLayerEditBox.y+40,Color.WHITE.hashCode());
-        drawCenteredString(poseStack,font, "Range:0-9999", centerW-80,stuffedLayerEditBox.y+50,Color.GRAY.hashCode());
+       guiGraphics.drawCenteredString(font, "Min Weight", centerW-80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
+       guiGraphics.drawCenteredString(font, "Range:0-9999", centerW-80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
 
         if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
         {
-            drawCenteredString(poseStack,font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.y-20,Color.RED.hashCode());
+           guiGraphics.drawCenteredString(font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.getY()-20,Color.RED.hashCode());
         }
 
         if(minWeight.getValue().contentEquals(maxWeight.getValue()))
         {
-            drawCenteredString(poseStack,font, "Error: Min and Max weight are the same", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+           guiGraphics.drawCenteredString(font, "Error: Min and Max weight are the same", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
         }
         int max=1;
         int min=0;
@@ -287,13 +287,13 @@ public class ConfigScreen extends Screen {
              min=Integer.parseInt(minWeight.getValue());
         }
         catch (NumberFormatException e){
-            drawCenteredString(poseStack,font, "Error: Non-number character in the min/max box", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+           guiGraphics.drawCenteredString(font, "Error: Non-number character in the min/max box", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
 
         }
 
         if(max<min)
         {
-            drawCenteredString(poseStack,font, "Error: Min weight is greater than max weight", this.width/ 2,minWeight.y+40,Color.RED.hashCode());
+           guiGraphics.drawCenteredString(font, "Error: Min weight is greater than max weight", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
 
         }
 

@@ -88,7 +88,7 @@ public class OverStuffed
             ModMessages.register();
             // ModVillagers.registerPOIS();
         });
-        ModMessages.register();
+        //ModMessages.register();
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

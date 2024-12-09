@@ -46,7 +46,7 @@ public class ClientEvents {
             if(useItemEvent.getEntity() instanceof  Player)
             {
                 Player currentPlayer=(Player)useItemEvent.getEntity();
-                Level currentLevel=currentPlayer.getLevel();
+                Level currentLevel=currentPlayer.level();
                 if(currentLevel.isClientSide())
                 {
                     ItemStack heldItem=useItemEvent.getItem();

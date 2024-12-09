@@ -7,11 +7,37 @@
     <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Finished updating config screen with nice error messages and portproofbutton&#10;Made it so you can't gain stuffed in creative mod and it remains static.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/AdvancementToggle/Advancements/CustomTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/AdvancementToggle/Advancements/CustomTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Block/ModBlocks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Block/ModBlocks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Effects/GoldenDietEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Effects/GoldenDietEffect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Item/ModCreativeModeTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Item/ModCreativeModeTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/PortProofButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/PortProofButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/ToggleButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/Buttons/ToggleButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinFinishUsingItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinFinishUsingItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/AbstractRendererMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/AbstractRendererMethods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/ScaleBER.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Renderer/ScaleBER.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/AbstractClientMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/AbstractClientMethods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/CPMDataC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/CPMDataC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/OverstuffedEffectC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/OverstuffedEffectC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/MovementUpdatesC2S.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/MovementUpdatesC2S.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/WeightMomentumSyncS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/WeightMomentumSyncS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/addWeightC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/addWeightC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/sound/ModSounds.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/sound/ModSounds.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/mods.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/mods.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/assets/overstuffed/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/assets/overstuffed/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,13 +92,6 @@
       </state>
     </system>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -80,6 +99,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -111,22 +131,29 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Gradle.Build Overstuffed.executor": "Run",
+    "Gradle.C:/Users/wlbra/Local Documents/GitHub/Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor": "Run",
     "Gradle.Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor": "Run",
     "Gradle.Overstuffed [build].executor": "Run",
+    "Gradle.Overstuffed [clean].executor": "Run",
+    "Gradle.Overstuffed [genIntellijRuns].executor": "Run",
     "Gradle.Overstuffed [generatePomFileForMavenJavaPublication].executor": "Run",
     "Gradle.Overstuffed [publishAllPublicationsToMavenRepository].executor": "Run",
     "Gradle.Overstuffed [publishToMavenLocal].executor": "Run",
-    "Gradle.Overstuffed [runClient].executor": "Debug",
+    "Gradle.Overstuffed [runClient].executor": "Run",
     "Gradle.Overstuffed.executor": "Run",
     "JavaMethodFindUsagesOptions.isSearchForTextOccurrences": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "1.19.2",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/wlbra/Local Documents/GitHub/Overstuffed-Figura-Plugin",
+    "last_opened_file_path": "C:/Users/wlbra/Local Documents/GitHub/Overstuffed",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
     "vue.rearranger.settings.migration": "true"
   }
@@ -163,7 +190,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Overstuffed [generatePomFileForMavenJavaPublication]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Overstuffed [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -174,7 +201,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="generatePomFileForMavenJavaPublication" />
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -185,18 +212,18 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Overstuffed [publishAllPublicationsToMavenRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Overstuffed [genIntellijRuns]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="publishAllPublicationsToMavenRepository" />
+            <option value="genIntellijRuns" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -252,19 +279,23 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.runClient" />
+      <item itemvalue="Application.runData" />
+      <item itemvalue="Application.runGameTestServer" />
+      <item itemvalue="Application.runServer" />
+      <item itemvalue="Gradle.Overstuffed [clean]" />
+      <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
       <item itemvalue="Gradle.Overstuffed [build]" />
-      <item itemvalue="Gradle.Overstuffed [generatePomFileForMavenJavaPublication]" />
-      <item itemvalue="Gradle.Overstuffed [publishAllPublicationsToMavenRepository]" />
       <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
       <item itemvalue="Gradle.Overstuffed [runClient]" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Overstuffed [runClient]" />
-        <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
-        <item itemvalue="Gradle.Overstuffed [publishAllPublicationsToMavenRepository]" />
-        <item itemvalue="Gradle.Overstuffed [generatePomFileForMavenJavaPublication]" />
         <item itemvalue="Gradle.Overstuffed [build]" />
+        <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
+        <item itemvalue="Gradle.Overstuffed [clean]" />
+        <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
       </list>
     </recent_temporary>
   </component>
@@ -301,21 +332,24 @@
       <workItem from="1727315909319" duration="212000" />
       <workItem from="1728519306611" duration="3894000" />
       <workItem from="1728525707490" duration="4000" />
-      <workItem from="1731547294778" duration="5293000" />
-      <workItem from="1731610398138" duration="2745000" />
-      <workItem from="1731641887079" duration="1490000" />
-      <workItem from="1731718660628" duration="9507000" />
-      <workItem from="1731896409575" duration="304000" />
-      <workItem from="1731897930748" duration="1180000" />
-      <workItem from="1731980187519" duration="31000" />
-      <workItem from="1731980822129" duration="600000" />
-      <workItem from="1732118202243" duration="241000" />
-      <workItem from="1732800435841" duration="1000" />
-      <workItem from="1733020214109" duration="1993000" />
-      <workItem from="1733083581209" duration="9749000" />
-      <workItem from="1733415984610" duration="6600000" />
-      <workItem from="1733506782428" duration="1666000" />
-      <workItem from="1733625217220" duration="4156000" />
+      <workItem from="1728581111860" duration="35000" />
+      <workItem from="1728652535765" duration="631000" />
+      <workItem from="1728837824981" duration="2539000" />
+      <workItem from="1729356066155" duration="608000" />
+      <workItem from="1729473601581" duration="500000" />
+      <workItem from="1730390260068" duration="221000" />
+      <workItem from="1730935223035" duration="1544000" />
+      <workItem from="1731038584661" duration="936000" />
+      <workItem from="1731089914462" duration="9000" />
+      <workItem from="1731258932576" duration="170000" />
+      <workItem from="1731259252157" duration="11366000" />
+      <workItem from="1731270744796" duration="396000" />
+      <workItem from="1731271153109" duration="62000" />
+      <workItem from="1731462764494" duration="1008000" />
+      <workItem from="1731541317471" duration="309000" />
+      <workItem from="1733673920023" duration="5219000" />
+      <workItem from="1733703162735" duration="55000" />
+      <workItem from="1733756737467" duration="1831000" />
     </task>
     <task id="LOCAL-00001" summary="AAAAA">
       <option name="closed" value="true" />
@@ -397,11 +431,31 @@
       <option name="project" value="LOCAL" />
       <updated>1727315986788</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Fixed curMaxWeight being 0 on game world load">
+      <option name="closed" value="true" />
+      <created>1728575566695</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728575566695</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Fixed curMaxWeight being 0 on game world load">
+      <option name="closed" value="true" />
+      <created>1728575604642</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728575604642</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:org.spongepowered:mixin" />
+    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:forge" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -425,8 +479,18 @@
     <MESSAGE value="AAAA8" />
     <MESSAGE value="AAAA9" />
     <MESSAGE value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
-    <MESSAGE value="Lots of Structure changes&#10;Creation of AbstractClientMethods and AbstrRendererMethods to make porting between versions easier. Code that replaced between versions is commented and marked.&#10;Also added translateable components to a lot of elements&#10;Created the Debug View setting in the graphics menu" />
-    <MESSAGE value="Finished updating config screen with nice error messages and portproofbutton&#10;Made it so you can't gain stuffed in creative mod and it remains static." />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished updating config screen with nice error messages and portproofbutton&#10;Made it so you can't gain stuffed in creative mod and it remains static." />
+    <MESSAGE value="Fixed curMaxWeight being 0 on game world load" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed curMaxWeight being 0 on game world load" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java</url>
+          <line>142</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
