@@ -33,7 +33,12 @@ public class ClientCPMData {
 
 
     public static IClientAPI getPlayersAPI() {
-        return playersAPI;
+        if(ModList.get().isLoaded("cpm"))
+        {
+            return playersAPI;
+
+        }
+        return null;
     }
 
     public static void setPlayersAPI(IClientAPI playersAPI) {

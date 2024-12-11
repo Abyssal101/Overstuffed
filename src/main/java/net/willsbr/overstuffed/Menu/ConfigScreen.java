@@ -26,6 +26,8 @@ import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightC2SPacke
 
 import java.awt.Color;
 
+import static net.willsbr.overstuffed.client.ClientCPMData.getPlayersAPI;
+
 public class ConfigScreen extends Screen {
     /** Distance from top of the screen to this GUI's title */
     private static final int TITLE_HEIGHT = 8;
