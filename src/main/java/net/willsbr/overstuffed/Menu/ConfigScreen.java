@@ -258,7 +258,7 @@ public class ConfigScreen extends Screen {
        guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
        guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
-        if(ClientCPMData.getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
+        if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
         {
            guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
 
