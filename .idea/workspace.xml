@@ -4,21 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()">
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work.">
       <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixincanStartSprinting.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/WeightMaxMinPollS2C.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Item/ModCreativeModeTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Item/ModCreativeModeTab.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinFinishUsingItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinFinishUsingItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinFinishUsingItem.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -415,7 +405,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733758783027</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work.">
+      <created>1735052591518</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1735052591518</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -449,7 +446,8 @@
     <MESSAGE value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
     <MESSAGE value="Fixed curMaxWeight being 0 on game world load" />
     <MESSAGE value="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()" />
+    <MESSAGE value="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

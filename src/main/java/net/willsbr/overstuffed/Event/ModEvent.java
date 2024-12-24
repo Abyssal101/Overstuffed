@@ -354,6 +354,10 @@ public class ModEvent {
                         }
                     }
                 }
+                if(event.player.getHealth()>event.player.getMaxHealth())
+                {
+                    event.player.setHealth(event.player.getMaxHealth());
+                }
 
             //}
             //This else is for the proper linear changes in weight where they are one apart
