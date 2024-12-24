@@ -44,7 +44,6 @@ public class setWeightC2SPacket {
                         {
                             //this adds the eaten food to the weight queue to get updated
                             weightBar.setCurrentWeight(this.weight);
-
                         });
                     }
 

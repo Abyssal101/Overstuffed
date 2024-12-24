@@ -320,8 +320,11 @@ public class ConfigScreen extends Screen {
         }
 
         OverstuffedConfig.setSetting(0, stageBasedWeight.getSetting());
-        ModMessages.sendToServer(new PlayerToggleUpdateBooleanC2S(0,stageBasedWeight.getSetting()));
+        if(Minecraft.getInstance().player != null)
+        {
 
+            ModMessages.sendToServer(new PlayerToggleUpdateBooleanC2S(0, stageBasedWeight.getSetting()));
+        }
         OverstuffedConfig.setSetting(1, momentum.getSetting());
         OverstuffedConfig.setSetting(2, weightEffect.getSetting());
         System.out.println(burpFrequency.getValue()+"Burp");
@@ -337,23 +340,29 @@ public class ConfigScreen extends Screen {
             {
                 if(max-min>100)
                 {
+                    if(Minecraft.getInstance().player != null)
+                    {
+                        //Normalizing old weight to new min and max
+                        double weightRatio=((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get());
+                        weightRatio=weightRatio/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get());
+                        //System.out.println("Ratio"+weightRatio);
+                        int newRange=max-min;
+
+                        int relativeWeight=(int)Math.round(weightRatio*newRange)+min;
+                        ClientWeightBarData.setCurrentWeight(relativeWeight);
+                        //System.out.println(ClientWeightBarData.getPlayerWeight());
+                        ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
+
+                        OverstuffedConfig.maxWeight.set(max);
+                        OverstuffedConfig.minWeight.set(min);
+                        ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
+                        ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
+                    }
+
                     //System.out.println("CLient Weight:"+ClientWeightBarData.getPlayerWeight());
                     //System.out.println("CLient Min Weight:"+min);
 
-                    double weightRatio=((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get());
-                    weightRatio=weightRatio/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get());
-                    //System.out.println("Ratio"+weightRatio);
-                    int newRange=max-min;
 
-                    int relativeWeight=(int)Math.round(weightRatio*newRange)+min;
-                    ClientWeightBarData.setCurrentWeight(relativeWeight);
-                    //System.out.println(ClientWeightBarData.getPlayerWeight());
-                    ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
-
-                    OverstuffedConfig.maxWeight.set(max);
-                    OverstuffedConfig.minWeight.set(min);
-                    ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
-                    ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
                 }
                 else {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +

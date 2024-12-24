@@ -34,9 +34,16 @@ public class setCurrentWeight {
         if(player.hasPermissions(2))
         {
             player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                weightBar.setCurrentWeight(index);
-                ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
-                player.sendSystemMessage(Component.translatable("commands.overstuffed.setweightsuccess",Component.literal(player.getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),Component.literal(index+"").withStyle(ChatFormatting.DARK_GRAY)));
+                if(index>weightBar.getCurMaxWeight() || index<weightBar.getMinWeight())
+                {
+                    player.sendSystemMessage(Component.literal("Error: Set weight out of range of their max/min values"));
+
+                }
+                else{
+                    weightBar.setCurrentWeight(index);
+                    ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
+                    player.sendSystemMessage(Component.translatable("commands.overstuffed.setweightsuccess",Component.literal(player.getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),Component.literal(index+"").withStyle(ChatFormatting.DARK_GRAY)));
+                }
 
             });
         }

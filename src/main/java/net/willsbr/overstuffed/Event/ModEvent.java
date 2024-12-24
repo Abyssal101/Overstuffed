@@ -2,10 +2,18 @@ package net.willsbr.overstuffed.Event;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -28,11 +36,13 @@ import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpda
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.weightIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
 
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
 public class ModEvent {
+
 
     //START OF STUFF NEEDED FOR A CAPABILITY
     @SubscribeEvent
@@ -104,8 +114,8 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.SERVER) {
-            //BlockRendererDispatcher#getModelForState(IBlockState)#getQuads#get#getSprite
             //Making it a little more effcient
+           //TODO FIGURE OUT A WAY TO NICE DISABLE SPRINTING PROBABLY MIXIN TO SETSPRINTING CLASS
             if((event.player.tickCount&3)==0)
             {
                 stuffedSystem(event);
@@ -116,10 +126,8 @@ public class ModEvent {
             }
         }
     }
-    public static void burstGain(PlayerWeightBar weightBar,TickEvent.PlayerTickEvent event)
+    public static void burstGain(PlayerWeightBar weightBar,TickEvent.PlayerTickEvent event,int xOf5)
     {
-        int calculatedPercentage=(int)((((double)(weightBar.getCurrentWeight()-weightBar.getMinWeight()))/(weightBar.getCurMaxWeight()- weightBar.getMinWeight()))*100);
-        int xOf5=calculatedPercentage/20;
 
         if(xOf5!=weightBar.getLastWeightStage())
         {
@@ -173,11 +181,20 @@ public class ModEvent {
         event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
             event.player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
 
+                int calculatedPercentage=(int)((((double)(weightBar.getCurrentWeight()-weightBar.getMinWeight()))/(weightBar.getCurMaxWeight()- weightBar.getMinWeight()))*100);
+                int xOf5=calculatedPercentage/20;
+                int lastWeightStage=weightBar.getLastWeightStage();
                 //create weight updates here
                 if(OverstuffedConfig.returnSetting(0)==true)
                 {
-                    burstGain(weightBar,event);
+                    burstGain(weightBar,event,xOf5);
                 }
+
+                
+                //Adding and removing health modifiers
+                weightBarEffects(event,weightBar,xOf5,lastWeightStage);
+
+
 
                 if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
                 {
@@ -189,6 +206,7 @@ public class ModEvent {
 
                 if (weightBar.weightUpdateStatus())
                 {
+
                     if (weightBar.getQueuedWeight() <= 0) {
                         int foodCals = weightBar.getWeightChanges();
                         //this makes it so the weight chance from a single food item gets added to the total amount
@@ -198,13 +216,14 @@ public class ModEvent {
                             if (checkDelay > 1000) {
                                 weightBar.setWeightUpdateDelay(1000);
                             } else {
-                                weightBar.setWeightUpdateDelay((int)(foodCals * 10 * weightBar.getWeightUpdateDelayModifier()));
-                                weightBar.setWeightUpdateDelay(foodCals);
+                                weightBar.setWeightUpdateDelay((int)(checkDelay * weightBar.getWeightUpdateDelayModifier()));
+                                //weightBar.setWeightUpdateDelay(foodCals);
                             }
 
 
                         }
-                    } else
+                    }
+                    else
                     {
                         weightBar.addWeight();
                     }
@@ -212,15 +231,12 @@ public class ModEvent {
                     weightBar.setWeightUpdateStatus(false);
                     weightBar.setWeightTick(event.player.tickCount);
 
-                } else {
+                }
+                else {
                     if ((event.player.tickCount - weightBar.getWeightTick()) >= weightBar.getWeightUpdateDelay()) {
                         weightBar.setWeightUpdateStatus(true);
                     }
                 }
-
-
-
-
             });
 
             //THE DREADED LOSE WEIGHT FUNCTIONALITY!
@@ -302,7 +318,87 @@ public class ModEvent {
     }
 
 
+    public static void weightBarEffects(TickEvent.PlayerTickEvent event, PlayerWeightBar weightBar, int xOf5, int lastWeightStage)
+    {
+        if(xOf5!=lastWeightStage)
+        {
 
+            //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
+            //Maybe could make it just this, but slightly more effcient I think?
+//            if(Math.abs(xOf5-lastWeightStage)>1)
+//            {
+                PlayerWeightBar.clearModifiers(event.player);
+                if(xOf5!=0)
+                {
+                    if(xOf5==5)
+                    {
+                        if(!event.player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]))
+                        {
+                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
+                        }
+                        if(!event.player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]))
+                        {
+                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[3]);
+                        }
+                    }
+                    else
+                    {
+                        if(!event.player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]))
+                        {
+                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]);
+                        }
+
+                        if(!event.player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]))
+                        {
+                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]);
+                        }
+                    }
+                }
+
+            //}
+            //This else is for the proper linear changes in weight where they are one apart
+//            else
+//            {
+//                if(xOf5==1 && lastWeightStage==0)
+//                {
+//                    event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[0]);
+//                    event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[0]);
+//                }
+//                else if(xOf5==0 && lastWeightStage==1)
+//                {
+//                    event.player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[0]);
+//                    event.player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[0]);
+//
+//                }
+//                else
+//                {
+//                    if(xOf5<5 && xOf5>0)
+//                    {
+//                        //reason Im doing this is currently you can be at max weight, which is 5, and it'll attempt to remove an effect which wasn't there
+//                        //When you lose that max level.
+//                        if(lastWeightStage!=5)
+//                        {
+//                            event.player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
+//                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]);
+//
+//                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[lastWeightStage-1]);
+//                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]);
+//                        }
+//
+//                    }
+//
+//                }
+//
+//            }
+            if(event.player.getHealth()>event.player.getMaxHealth())
+            {
+                event.player.setHealth(event.player.getMaxHealth());
+            }
+            weightBar.setLastWeightStage(xOf5);
+        }
+    }
+
+    //TODO SYNC DIMENSION CHANGING
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
 
@@ -319,6 +415,28 @@ public class ModEvent {
                 });
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                         ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
+                        OverstuffedConfig.saveConfig();
+                        PlayerWeightBar.clearModifiers(player);
+                        int lastWeightStage=weightBar.getLastWeightStage();
+
+                        ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
+
+                    //This clears the weight modifiers and sets it correctly when you join
+                        if(lastWeightStage!=0)
+                        {
+                            if(lastWeightStage==5)
+                            {
+                            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
+                            }
+                            else
+                            {
+                            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
+                            }
+                            if(player.getHealth()>player.getMaxHealth())
+                            {
+                                player.setHealth(player.getMaxHealth());
+                            }
+                        }
                 });
                 player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
                     for(int i = 0; i< playerUnlocks.getLength(); i++)
@@ -336,6 +454,8 @@ public class ModEvent {
 
 
     }
+    //
+
 
 
 

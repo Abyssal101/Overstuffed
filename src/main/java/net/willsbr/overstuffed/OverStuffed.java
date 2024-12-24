@@ -25,6 +25,7 @@ import net.willsbr.overstuffed.Block.ModBlocks;
 import net.willsbr.overstuffed.CPMCompat.CPMCompat;
 import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.Entity.ModEntities;
+import net.willsbr.overstuffed.Item.ModCreativeModeTab;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -51,6 +52,7 @@ public class OverStuffed
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModCreativeModeTab.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
         ModSounds.createArrays();

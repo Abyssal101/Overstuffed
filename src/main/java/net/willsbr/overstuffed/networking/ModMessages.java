@@ -154,6 +154,13 @@ public class ModMessages {
                 .consumerMainThread(WeightMomentumSyncS2CPacket::handle)
                 .add();
 
+        net.messageBuilder(WeightMaxMinPollS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(WeightMaxMinPollS2C::new)
+                .encoder(WeightMaxMinPollS2C::toBytes)
+                .consumerMainThread(WeightMaxMinPollS2C::handle)
+                .add();
+
+
 
 
 

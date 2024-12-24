@@ -38,4 +38,5 @@ public class ClientWeightBarData {
     public static void setAmountThroughStage(int amountThroughStage) {
         ClientWeightBarData.amountThroughStage = amountThroughStage;
     }
+    
 }

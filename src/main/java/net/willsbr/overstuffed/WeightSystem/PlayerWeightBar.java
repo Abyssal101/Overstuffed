@@ -2,12 +2,17 @@ package net.willsbr.overstuffed.WeightSystem;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.UUID;
 
 public class PlayerWeightBar {
     //
@@ -40,7 +45,20 @@ public class PlayerWeightBar {
     private int amountThroughStage;
 
 
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_1 = new AttributeModifier(UUID.randomUUID(), "health from stage 1 weight", 2, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_2 = new AttributeModifier(UUID.randomUUID(), "health from stage 2 weight", 4, AttributeModifier.Operation.ADDITION);
 
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_3 = new AttributeModifier(UUID.randomUUID(), "health from stage 3 weight", 6, AttributeModifier.Operation.ADDITION);
+
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_4 = new AttributeModifier(UUID.randomUUID(), "health from stage 4 weight", 10, AttributeModifier.Operation.ADDITION);
+
+    public static AttributeModifier[] WEIGHT_HEALTH_MODIFIERS= {WEIGHT_HEALTH_MODIFIER_1,WEIGHT_HEALTH_MODIFIER_2,WEIGHT_HEALTH_MODIFIER_3,WEIGHT_HEALTH_MODIFIER_4};
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_1 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 1 weight", -0.05, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_2 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 2 weight", -0.15, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_3 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 3 weight", -0.20, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_4 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 4 weight", -0.30, AttributeModifier.Operation.MULTIPLY_BASE);
+
+    public static AttributeModifier[] WEIGHT_SPEED_MODIFIERS= {WEIGHT_SPEED_MODIFIER_1,WEIGHT_SPEED_MODIFIER_2,WEIGHT_SPEED_MODIFIER_3,WEIGHT_SPEED_MODIFIER_4};
 
 
     public int getCurrentWeight()
@@ -237,5 +255,20 @@ public class PlayerWeightBar {
     }
     public void setWeightUpdateDelayModifier(double weightUpdateDelayModifier) {
         this.weightUpdateDelayModifier = weightUpdateDelayModifier;
+    }
+
+    public static void clearModifiers(Player player)
+    {
+        for(int i=0;i<PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS.length;i++)
+        {
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[i]))
+            {
+                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[i]);
+            }
+            if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[i]))
+            {
+                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[i]);
+            }
+        }
     }
 }
