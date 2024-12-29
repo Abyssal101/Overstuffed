@@ -1,6 +1,6 @@
 # Overstuffed
 A forge mod that creates a more interesting system for utilizing food, such as a bonus hunger bar called the stuffed bar, and a players weight that can increase your HP at the cost of movement speed.
-Currently Has compatibility with CPM and a seperate plugin to work with Figura for those who wish to be able to see visually the changes in weight.
+CurrentlyhHas compatibility with CPM and a seperate plugin to work with Figura for those who wish to be able to see visually the changes in weight.
 # Features
 - Dynamic systems with visual bars:
   - Stuffed.
