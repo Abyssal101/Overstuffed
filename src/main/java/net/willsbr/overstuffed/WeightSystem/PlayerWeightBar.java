@@ -2,12 +2,15 @@ package net.willsbr.overstuffed.WeightSystem;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,10 +56,10 @@ public class PlayerWeightBar {
     private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_4 = new AttributeModifier(UUID.randomUUID(), "health from stage 4 weight", 10, AttributeModifier.Operation.ADDITION);
 
     public static AttributeModifier[] WEIGHT_HEALTH_MODIFIERS= {WEIGHT_HEALTH_MODIFIER_1,WEIGHT_HEALTH_MODIFIER_2,WEIGHT_HEALTH_MODIFIER_3,WEIGHT_HEALTH_MODIFIER_4};
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_1 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 1 weight", -0.05, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_2 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 2 weight", -0.15, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_3 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 3 weight", -0.20, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_4 = new AttributeModifier(UUID.randomUUID(), "speed decrease from stage 4 weight", -0.30, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_1 = new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "speed decrease from stage 1 weight", -0.05, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_2 = new AttributeModifier(UUID.fromString("9d8bf167-b018-4600-ad9e-4f66fcfdb8b2"), "speed decrease from stage 2 weight", -0.15, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_3 = new AttributeModifier(UUID.fromString("8372c521-ee15-4ae3-af15-32ba797272d1"), "speed decrease from stage 3 weight", -0.20, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_4 = new AttributeModifier(UUID.fromString("0f7a44e8-340b-4285-b25b-25493524eff2"), "speed decrease from stage 4 weight", -0.30, AttributeModifier.Operation.MULTIPLY_BASE);
 
     public static AttributeModifier[] WEIGHT_SPEED_MODIFIERS= {WEIGHT_SPEED_MODIFIER_1,WEIGHT_SPEED_MODIFIER_2,WEIGHT_SPEED_MODIFIER_3,WEIGHT_SPEED_MODIFIER_4};
 
@@ -271,4 +274,36 @@ public class PlayerWeightBar {
             }
         }
     }
+
+    public static void addCorrectModifier(ServerPlayer player)
+    {
+        player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+
+            PlayerWeightBar.clearModifiers(player);
+        int lastWeightStage=weightBar.getLastWeightStage();
+        ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
+
+        //This clears the weight modifiers and sets it correctly when you join
+        if(lastWeightStage!=0)
+        {
+            if(lastWeightStage==5)
+            {
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
+                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[3]);
+
+            }
+            else
+            {
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
+                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[lastWeightStage-1]);
+
+            }
+            if(player.getHealth()>player.getMaxHealth())
+            {
+                player.setHealth(player.getMaxHealth());
+            }
+        }
+        });
+    }
+
 }

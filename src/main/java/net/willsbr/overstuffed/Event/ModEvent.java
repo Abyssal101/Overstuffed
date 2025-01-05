@@ -16,6 +16,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -39,6 +40,8 @@ import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSync
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.weightIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
+
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
 public class ModEvent {
@@ -100,7 +103,40 @@ public class ModEvent {
             event.getOriginal().invalidateCaps();
 
         }
+        //For end portal logic
+        if (event.getEntity() instanceof ServerPlayer && event.getOriginal() instanceof ServerPlayer) {
+            if (!event.isWasDeath()) {
+                event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(oldStore -> {
+                    event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
+                        newStore.copyFrom(oldStore);
+                    });
+                });
+                event.getOriginal().reviveCaps();
+                event.getOriginal().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(oldStore -> {
+                    event.getEntity().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(newStore -> {
+                        newStore.copyFrom(oldStore);
 
+                        //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(oldStore.getStuffedLayerName()),(ServerPlayer) event.getEntity());
+                        //ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(oldStore.getWeightLayerName()),(ServerPlayer) event.getEntity());
+
+                    });
+                });
+
+                event.getOriginal().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(oldStore -> {
+                    event.getEntity().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(newStore -> {
+                        newStore.copyFrom(oldStore);
+                    });
+                });
+
+                event.getOriginal().getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(oldStore -> {
+                    event.getEntity().getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(newStore -> {
+                        newStore.copyFrom(oldStore);
+                    });
+                });
+                event.getOriginal().invalidateCaps();
+
+            }
+        }
     }
 
     @SubscribeEvent
@@ -403,6 +439,7 @@ public class ModEvent {
     }
 
     //TODO SYNC DIMENSION CHANGING
+
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
 
@@ -418,29 +455,10 @@ public class ModEvent {
                     //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(cpmData.getStuffedLayerName()),player);
                 });
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                        ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
-                        OverstuffedConfig.saveConfig();
-                        PlayerWeightBar.clearModifiers(player);
-                        int lastWeightStage=weightBar.getLastWeightStage();
+                    ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
+                    OverstuffedConfig.saveConfig();
+                   PlayerWeightBar.addCorrectModifier(player);
 
-                        ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
-
-                    //This clears the weight modifiers and sets it correctly when you join
-                        if(lastWeightStage!=0)
-                        {
-                            if(lastWeightStage==5)
-                            {
-                            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
-                            }
-                            else
-                            {
-                            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
-                            }
-                            if(player.getHealth()>player.getMaxHealth())
-                            {
-                                player.setHealth(player.getMaxHealth());
-                            }
-                        }
                 });
                 player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
                     for(int i = 0; i< playerUnlocks.getLength(); i++)
@@ -460,7 +478,20 @@ public class ModEvent {
     }
     //
 
-
+    //Hopefully this fixes the player  constantly stacking buffs when you leave and rejoin
+    @SubscribeEvent
+    public static void onPlayerLeaveWorld(EntityLeaveLevelEvent event)
+    {
+        if (!event.getLevel().isClientSide())
+        {
+            if (event.getEntity() instanceof ServerPlayer player)
+            {
+                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                    PlayerWeightBar.clearModifiers(player);
+                });
+            }
+        }
+    }
 
 
 }

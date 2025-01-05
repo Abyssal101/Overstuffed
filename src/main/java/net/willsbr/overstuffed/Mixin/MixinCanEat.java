@@ -20,7 +20,7 @@ public abstract class MixinCanEat {
     {
         //this.abilities.invulnerable ||
 
-         if(ClientStuffedBarData.getPlayerStuffedBar()<(ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getCurrentFirmLimit()+ClientStuffedBarData.getHardLimit()))
+         if(ClientStuffedBarData.getPlayerStuffedBar()<(ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getHardLimit()))
          {
 
 //             if(this.getFoodData().getFoodLevel()>=20)

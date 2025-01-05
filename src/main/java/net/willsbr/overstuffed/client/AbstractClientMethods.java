@@ -14,5 +14,9 @@ public class AbstractClientMethods {
     public static void AbstractDraw(ForgeGui gui, GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int textureWidth, int textureHeight){
         guiGraphics.blit(texture,x, y,0,0,0,textureWidth,textureHeight,textureWidth,textureHeight);
     }
+    public static void AbstractDraw(ForgeGui gui, GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int textureWidth
+            , int textureHeight,int uvWidth, int uvHeight){
+        guiGraphics.blit(texture,x, y,0,0,0,textureWidth,textureHeight,uvWidth,uvHeight);
+    }
 
 }

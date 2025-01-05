@@ -36,7 +36,7 @@ public class ClientStuffedBarData {
         return currentHardLimit;
     }
 
-    public static int getCurrentFirmLimit(){return currentFirmLimit;}
+    public static int getFirmLimit(){return currentFirmLimit;}
 
     public static int getMax() {
         return max;
