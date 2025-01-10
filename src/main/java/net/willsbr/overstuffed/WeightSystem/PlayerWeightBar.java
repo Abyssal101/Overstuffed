@@ -48,12 +48,12 @@ public class PlayerWeightBar {
     private int amountThroughStage;
 
 
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_1 = new AttributeModifier(UUID.randomUUID(), "health from stage 1 weight", 2, AttributeModifier.Operation.ADDITION);
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_2 = new AttributeModifier(UUID.randomUUID(), "health from stage 2 weight", 4, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_1 = new AttributeModifier(UUID.fromString("31580520-a812-447f-89d6-8bd82cf790ed"), "health from stage 1 weight", 2, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_2 = new AttributeModifier(UUID.fromString("28571767-3553-459f-82bd-4ac9dc94378a"), "health from stage 2 weight", 4, AttributeModifier.Operation.ADDITION);
 
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_3 = new AttributeModifier(UUID.randomUUID(), "health from stage 3 weight", 6, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_3 = new AttributeModifier(UUID.fromString("fc0e7b27-2e4f-4add-a0a8-e87b4efcfbbf"), "health from stage 3 weight", 6, AttributeModifier.Operation.ADDITION);
 
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_4 = new AttributeModifier(UUID.randomUUID(), "health from stage 4 weight", 10, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_4 = new AttributeModifier(UUID.fromString("3c6abd60-0939-4fac-9d84-c280edc5c409"), "health from stage 4 weight", 10, AttributeModifier.Operation.ADDITION);
 
     public static AttributeModifier[] WEIGHT_HEALTH_MODIFIERS= {WEIGHT_HEALTH_MODIFIER_1,WEIGHT_HEALTH_MODIFIER_2,WEIGHT_HEALTH_MODIFIER_3,WEIGHT_HEALTH_MODIFIER_4};
     private static final AttributeModifier WEIGHT_SPEED_MODIFIER_1 = new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "speed decrease from stage 1 weight", -0.05, AttributeModifier.Operation.MULTIPLY_BASE);
