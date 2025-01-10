@@ -4,38 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Made it so you don't sprint(really just gain the speed from sprinting) at stages above weight 4">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/overstuffed_end.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/overstuffed_part.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_bar_beg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_bar_empty.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_bar_end.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_bar_mid.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_end.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffed_part.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffedbariconbackground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/superstuffed_end.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/superstuffed_part.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/bellyicon1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/bellyicon2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/bellyicon3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/bellyicon4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/bellyicon5.png" afterDir="false" />
+    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinCanEat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinCanEat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/AbstractClientMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/AbstractClientMethods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/overstuffedpoint.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/stuffedpoint.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/superstuffedpoint.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/belly1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/belly2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/belly3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/belly4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/textures/stuffedbar/weightsprites/belly5.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +51,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -441,7 +412,14 @@
       <option name="project" value="LOCAL" />
       <updated>1735052591518</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed.">
+      <created>1736113898703</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1736113898703</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -477,9 +455,24 @@
     <MESSAGE value="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()" />
     <MESSAGE value="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work." />
     <MESSAGE value="Made it so you don't sprint(really just gain the speed from sprinting) at stages above weight 4" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made it so you don't sprint(really just gain the speed from sprinting) at stages above weight 4" />
+    <MESSAGE value="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed." />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java</url>
+          <line>384</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java</url>
+          <line>382</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="GradleRunConfiguration">
         <watch expression="xOf5" />

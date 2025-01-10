@@ -1,5 +1,6 @@
 package net.willsbr.overstuffed.Event;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -11,6 +12,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -231,7 +234,6 @@ public class ModEvent {
                 weightBarEffects(event,weightBar,xOf5,lastWeightStage);
 
 
-
                 if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
                 {
 
@@ -356,86 +358,36 @@ public class ModEvent {
 
     public static void weightBarEffects(TickEvent.PlayerTickEvent event, PlayerWeightBar weightBar, int xOf5, int lastWeightStage)
     {
+
         if(xOf5!=lastWeightStage)
         {
-
             //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
             //Maybe could make it just this, but slightly more effcient I think?
-//            if(Math.abs(xOf5-lastWeightStage)>1)
-//            {
-                PlayerWeightBar.clearModifiers(event.player);
-                if(xOf5!=0)
-                {
-                    if(xOf5==5)
-                    {
-                        if(!event.player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]))
-                        {
-                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
-                        }
-                        if(!event.player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]))
-                        {
-                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[3]);
-                        }
-                    }
-                    else
-                    {
-                        if(!event.player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]))
-                        {
-                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]);
-                        }
-
-                        if(!event.player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]))
-                        {
-                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]);
-                        }
-                    }
-                }
-                if(event.player.getHealth()>event.player.getMaxHealth())
-                {
-                    event.player.setHealth(event.player.getMaxHealth());
-                }
-
-            //}
-            //This else is for the proper linear changes in weight where they are one apart
-//            else
-//            {
-//                if(xOf5==1 && lastWeightStage==0)
-//                {
-//                    event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[0]);
-//                    event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[0]);
-//                }
-//                else if(xOf5==0 && lastWeightStage==1)
-//                {
-//                    event.player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[0]);
-//                    event.player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[0]);
-//
-//                }
-//                else
-//                {
-//                    if(xOf5<5 && xOf5>0)
-//                    {
-//                        //reason Im doing this is currently you can be at max weight, which is 5, and it'll attempt to remove an effect which wasn't there
-//                        //When you lose that max level.
-//                        if(lastWeightStage!=5)
-//                        {
-//                            event.player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
-//                            event.player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[xOf5-1]);
-//
-//                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[lastWeightStage-1]);
-//                            event.player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[xOf5-1]);
-//                        }
-//
-//                    }
-//
-//                }
-//
-//            }
-            if(event.player.getHealth()>event.player.getMaxHealth())
-            {
-                event.player.setHealth(event.player.getMaxHealth());
-            }
+            PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
             weightBar.setLastWeightStage(xOf5);
         }
+        Player player=event.player;
+        double playerWidth=player.getBoundingBox().getXsize();
+        double playerDepth=player.getBoundingBox().getZsize();
+        Level playerLevel=player.level();
+        BlockPos block1=player.blockPosition().offset(1,0,0);
+        BlockPos block2=player.blockPosition().offset(-1,0,0);
+
+
+        VoxelShape playerShape1=playerLevel.getBlockState(block1).getCollisionShape(playerLevel,block1).
+        VoxelShape playerShape2=playerLevel.getBlockState(block2).getCollisionShape(playerLevel,block2);
+
+
+        if(!playerShape1.isEmpty() && !playerShape2.isEmpty())
+        {
+            if(player.getBoundingBox().inflate(2.0).intersects(playerShape1.bounds()))
+            {
+                System.out.println("E");
+            }
+        }
+
+
+
     }
 
     //TODO SYNC DIMENSION CHANGING
