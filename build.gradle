@@ -123,6 +123,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
+    maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
+
     maven {
         name = "tom5454 maven"
         url = "https://raw.githubusercontent.com/tom5454/maven/main"
@@ -130,6 +132,9 @@ repositories {
     maven {
         name "figuramcReleases"
         url "https://maven.figuramc.org/releases"
+    }
+    maven {
+        url = "https://jitpack.io"
     }
     exclusiveContent {
         forRepository {
@@ -160,12 +165,18 @@ dependencies {
     apply plugin: 'org.spongepowered.mixin'
 
 
+
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
     //runtimeOnly fg.deobf("maven.modrinth:better-third-person:${BTP_version}")
 
     runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
 
+
+
     implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
+
+    implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}")
+
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -193,7 +204,6 @@ mixin {
     debug.verbose = false
     debug.export = false
     dumpTargetOnFailure = true
-2
 
     // AP Settings
     disableTargetValidator = true

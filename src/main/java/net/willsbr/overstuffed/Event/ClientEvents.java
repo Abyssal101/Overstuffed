@@ -13,14 +13,18 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.Renderer.ScaleBER;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
@@ -88,6 +92,28 @@ public class ClientEvents {
             }
 
         }
+        public static void onClientPlayerTick(LivingEvent.LivingTickEvent event)
+        {
+            if(event.getEntity() instanceof Player)
+            {
+                Player player=(Player)event.getEntity();
+                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                    player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
+
+                        if(event.getEntity().tickCount % 20 == 0)
+                        {
+
+                        }
+                    });
+
+                });
+            }
+
+
+        }
+
+
+
         @SubscribeEvent
         public static void commandRegister(RegisterCommandsEvent event)
         {

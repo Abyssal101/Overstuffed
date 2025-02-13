@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed.">
+    <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
     </list>
@@ -35,7 +39,25 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Overstuffed" type="f1a62948:ProjectNode" />
-                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Overstuffed" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="forgegradle prepare runs" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Overstuffed" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="forgegradle runs" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Overstuffed" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="ide" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -45,11 +67,6 @@
     </system>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -61,114 +78,48 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Abyssal101/Overstuffed.git&quot;,
-    &quot;accountId&quot;: &quot;56b36aa7-d796-4e74-963f-e200f8e1c438&quot;
+    &quot;accountId&quot;: &quot;13610289-1b91-4025-a5c1-48862f3c5c22&quot;
   }
 }</component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="2klTh2Lg8OFuoO95bWjGLUY6vMR" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="2sBQ6IHSpVDayHQCs0MJwrYb3YT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Gradle.Build Overstuffed.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.C:/Users/wlbra/Local Documents/GitHub/Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [:createMcpToSrg :createMcpToSrg :createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.C:/Users/wlbra/IdeaProjects/Overstuffed [createMcpToSrg].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Overstuffed [:cpw.mods.bootstraplauncher.BootstrapLauncher.main()].executor&quot;: &quot;Debug&quot;,
+    &quot;Gradle.Overstuffed [:prepareRunClientCompile].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Overstuffed [createMcpToSrg].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Overstuffed [genIntellijRuns].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [generatePomFileForMavenJavaPublication].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [publishAllPublicationsToMavenRepository].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [publishToMavenLocal].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [runClient].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed.executor&quot;: &quot;Run&quot;,
-    &quot;JavaMethodFindUsagesOptions.isSearchForTextOccurrences&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Documents/GitHub/Overstuffed&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed\src\main\java\net\willsbr\overstuffed\build" />
-      <recent name="C:\Users\wlbra\OneDrive\Documents\GitHub\Overstuffed" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\User\Documents\GitHub\Overstuffed\src\main\resources\assets\overstuffed\textures\stuffedbar\weightsprites" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="net.willsbr.overstuffed.Mixin" />
-      <recent name="net.willsbr.overstuffed.networking.packet.WeightPackets" />
+      <recent name="C:\Users\wlbra\IdeaProjects\Overstuffed" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Overstuffed [runClient]">
-    <configuration name="Overstuffed [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="Overstuffed [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Application.runClient">
     <configuration name="Overstuffed [genIntellijRuns]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -188,295 +139,47 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Overstuffed [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="publishToMavenLocal" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="Overstuffed [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="runClient" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Gradle.Overstuffed [clean]" />
-      <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
-      <item itemvalue="Gradle.Overstuffed [build]" />
-      <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
-      <item itemvalue="Gradle.Overstuffed [runClient]" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Overstuffed [runClient]" />
-        <item itemvalue="Gradle.Overstuffed [build]" />
         <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
-        <item itemvalue="Gradle.Overstuffed [clean]" />
-        <item itemvalue="Gradle.Overstuffed [publishToMavenLocal]" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ea96819f-deee-4b19-bff6-67cae001aa29" name="Changes" comment="" />
-      <created>1723857281005</created>
+      <changelist id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="" />
+      <created>1737926311211</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1723857281005</updated>
-      <workItem from="1723857282362" duration="242000" />
-      <workItem from="1725045833619" duration="385000" />
-      <workItem from="1725048166863" duration="364000" />
-      <workItem from="1725125703465" duration="764000" />
-      <workItem from="1725126998697" duration="167000" />
-      <workItem from="1725290519726" duration="3528000" />
-      <workItem from="1725294838816" duration="171000" />
-      <workItem from="1725295072182" duration="8951000" />
-      <workItem from="1726339643047" duration="907000" />
-      <workItem from="1726530041402" duration="1067000" />
-      <workItem from="1726626139543" duration="9000" />
-      <workItem from="1726842934435" duration="5264000" />
-      <workItem from="1726884161675" duration="8623000" />
-      <workItem from="1727300621676" duration="214000" />
-      <workItem from="1727315909319" duration="212000" />
-      <workItem from="1728519306611" duration="3894000" />
-      <workItem from="1728525707490" duration="4000" />
-      <workItem from="1728581111860" duration="35000" />
-      <workItem from="1728652535765" duration="631000" />
-      <workItem from="1728837824981" duration="2539000" />
-      <workItem from="1729356066155" duration="608000" />
-      <workItem from="1729473601581" duration="500000" />
-      <workItem from="1730390260068" duration="221000" />
-      <workItem from="1730935223035" duration="1544000" />
-      <workItem from="1731038584661" duration="936000" />
-      <workItem from="1731089914462" duration="9000" />
-      <workItem from="1731258932576" duration="170000" />
-      <workItem from="1731259252157" duration="11366000" />
-      <workItem from="1731270744796" duration="396000" />
-      <workItem from="1731271153109" duration="62000" />
-      <workItem from="1731462764494" duration="1008000" />
-      <workItem from="1731541317471" duration="309000" />
-      <workItem from="1733673920023" duration="5219000" />
-      <workItem from="1733703162735" duration="55000" />
-      <workItem from="1733756737467" duration="2205000" />
+      <updated>1737926311211</updated>
+      <workItem from="1737926312693" duration="3957000" />
+      <workItem from="1737986493466" duration="919000" />
+      <workItem from="1738968870713" duration="3522000" />
+      <workItem from="1739115537078" duration="4850000" />
+      <workItem from="1739196144030" duration="1208000" />
+      <workItem from="1739205543229" duration="471000" />
+      <workItem from="1739330973388" duration="1227000" />
+      <workItem from="1739365228057" duration="4239000" />
     </task>
-    <task id="LOCAL-00001" summary="AAAAA">
-      <option name="closed" value="true" />
-      <created>1724980364549</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1724980364549</updated>
-    </task>
-    <task id="LOCAL-00002" summary="AAAAA">
-      <option name="closed" value="true" />
-      <created>1724980469425</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1724980469425</updated>
-    </task>
-    <task id="LOCAL-00003" summary="AAAA 3">
-      <option name="closed" value="true" />
-      <created>1724981508121</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1724981508121</updated>
-    </task>
-    <task id="LOCAL-00004" summary="AAAA 4">
-      <option name="closed" value="true" />
-      <created>1724982756883</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1724982756883</updated>
-    </task>
-    <task id="LOCAL-00005" summary="AAAA 5">
-      <option name="closed" value="true" />
-      <created>1724983406234</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1724983406234</updated>
-    </task>
-    <task id="LOCAL-00006" summary="AAAA6">
-      <option name="closed" value="true" />
-      <created>1725046116466</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1725046116466</updated>
-    </task>
-    <task id="LOCAL-00007" summary="AAAA7">
-      <option name="closed" value="true" />
-      <created>1725126254186</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1725126254186</updated>
-    </task>
-    <task id="LOCAL-00008" summary="AAAA8">
-      <option name="closed" value="true" />
-      <created>1725291379846</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1725291379846</updated>
-    </task>
-    <task id="LOCAL-00009" summary="AAAA9">
-      <option name="closed" value="true" />
-      <created>1725293989319</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1725293989319</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight">
-      <option name="closed" value="true" />
-      <created>1727315986788</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1727315986788</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Fixed curMaxWeight being 0 on game world load">
-      <option name="closed" value="true" />
-      <created>1728575566695</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1728575566695</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Fixed curMaxWeight being 0 on game world load">
-      <option name="closed" value="true" />
-      <created>1728575604642</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1728575604642</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()">
-      <option name="closed" value="true" />
-      <created>1733758783027</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1733758783027</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work.">
-      <created>1735052591518</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1735052591518</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed.">
-      <created>1736113898703</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1736113898703</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnknownFeatures">
-    <option featureType="dependencySupport" implementationName="java:org.spongepowered:mixin" />
-    <option featureType="dependencySupport" implementationName="java:net.minecraftforge:forge" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="AAAAA" />
-    <MESSAGE value="AAAA 3" />
-    <MESSAGE value="AAAA 4" />
-    <MESSAGE value="AAAA 5" />
-    <MESSAGE value="AAAA6" />
-    <MESSAGE value="AAAA7" />
-    <MESSAGE value="AAAA8" />
-    <MESSAGE value="AAAA9" />
-    <MESSAGE value="Updates so that the Figura plugin can work&#10;Plus fixing a weird error with saving weight changes that prevented players from gaining weight" />
-    <MESSAGE value="Fixed curMaxWeight being 0 on game world load" />
-    <MESSAGE value="Ported to 1.19.2 and fixed the errors&#10;Still need to work on abstracting so I don't have to touch much when swapping&#10;.Level for players and .getX() and .getY()" />
-    <MESSAGE value="Player can gains health and a penalty to movement speed as your weight increases. Balancing needs work." />
-    <MESSAGE value="Made it so you don't sprint(really just gain the speed from sprinting) at stages above weight 4" />
-    <MESSAGE value="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created addCorrectModifier method to make some code more condensed&#10;Made it so on a player leaving the world it will remove the active modifiers in order to prevent them constantly stacking&#10;Changed the &quot;points&quot; UI to a bar that progresses. &#10;Changed the previous weight icon to new one created by tyrus, much more compact.&#10;Removed Old pngs that are no longer needed." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java</url>
-          <line>384</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java</url>
-          <line>382</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="GradleRunConfiguration">
-        <watch expression="xOf5" />
-      </configuration>
-    </watches-manager>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

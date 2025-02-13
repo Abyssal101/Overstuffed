@@ -63,6 +63,7 @@ public class PlayerWeightBar {
 
     public static AttributeModifier[] WEIGHT_SPEED_MODIFIERS= {WEIGHT_SPEED_MODIFIER_1,WEIGHT_SPEED_MODIFIER_2,WEIGHT_SPEED_MODIFIER_3,WEIGHT_SPEED_MODIFIER_4};
 
+    private static int doorwayWedgeCheck=0;
 
     public int getCurrentWeight()
     {
@@ -258,6 +259,17 @@ public class PlayerWeightBar {
     }
     public void setWeightUpdateDelayModifier(double weightUpdateDelayModifier) {
         this.weightUpdateDelayModifier = weightUpdateDelayModifier;
+    }
+
+    public int incrementWedgeCheck()
+    {
+        ++doorwayWedgeCheck;
+        if(doorwayWedgeCheck>=4)
+        {
+            doorwayWedgeCheck=0;
+            return 4;
+        }
+        return doorwayWedgeCheck;
     }
 
     public static void clearModifiers(Player player)
