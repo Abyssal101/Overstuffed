@@ -237,6 +237,13 @@ public class PlayerWeightBar {
         return this.lastWeightStage;
     }
 
+    public int calculateCurrentWeightStage()
+    {
+        int calculatedPercentage=(int)((((double)(this.getCurrentWeight()-this.getMinWeight()))/(this.getCurMaxWeight()- this.getMinWeight()))*100);
+        int xOf5=calculatedPercentage/20;
+        return xOf5;
+    }
+
 
     public int getAmountThroughStage() {
         return amountThroughStage;
@@ -292,13 +299,14 @@ public class PlayerWeightBar {
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
             PlayerWeightBar.clearModifiers(player);
-        int lastWeightStage=weightBar.getLastWeightStage();
+        int newWeightStage=weightBar.calculateCurrentWeightStage();
         ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
 
         //This clears the weight modifiers and sets it correctly when you join
-        if(lastWeightStage!=0)
+
+        if(newWeightStage!=0)
         {
-            if(lastWeightStage==5)
+            if(newWeightStage==5)
             {
                 player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
                 player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[3]);
@@ -306,15 +314,15 @@ public class PlayerWeightBar {
             }
             else
             {
-                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[lastWeightStage-1]);
-                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[lastWeightStage-1]);
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[newWeightStage-1]);
+                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[newWeightStage-1]);
 
             }
+        }
             if(player.getHealth()>player.getMaxHealth())
             {
                 player.setHealth(player.getMaxHealth());
             }
-        }
         });
     }
 

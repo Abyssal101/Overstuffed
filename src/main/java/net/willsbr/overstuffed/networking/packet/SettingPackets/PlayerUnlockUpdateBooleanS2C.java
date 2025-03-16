@@ -36,8 +36,6 @@ public class PlayerUnlockUpdateBooleanS2C {
          //on client
             ClientUnlockData.setAdvancementStatus(this.settingIndex,this.settingIndex);
 
-
-
         });
         return true;
     }

@@ -175,6 +175,9 @@ public class HudOverlay {
             guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugnextmax",""+
                             ClientStuffedBarData.getCurrentLost()+"/"+ClientStuffedBarData.getInterval())
                     ,screenWidth/2,70, Color.RED.hashCode());
+            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugqueueweight",""+
+                            ClientWeightBarData.getQueuedWeight())
+                    ,screenWidth/2,80, Color.RED.hashCode());
 
         }
 

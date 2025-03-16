@@ -16,10 +16,11 @@ public class ClientStuffedBarData {
 
     public static void set(int input, int soft,int firm, int hard)
     {
-        ClientStuffedBarData.playerStuffedBar=input;
-        ClientStuffedBarData.currentSoftLimit=soft;
-        ClientStuffedBarData.currentFirmLimit=firm;
-        ClientStuffedBarData.currentHardLimit=hard;
+
+        ClientStuffedBarData.playerStuffedBar=Math.max(0,input);
+        ClientStuffedBarData.currentSoftLimit=Math.max(0,soft);
+        ClientStuffedBarData.currentFirmLimit=Math.max(0,firm);
+        ClientStuffedBarData.currentHardLimit=Math.max(0,hard);
 
     }
 

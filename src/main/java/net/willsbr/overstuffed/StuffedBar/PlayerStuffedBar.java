@@ -14,11 +14,19 @@ public class PlayerStuffedBar {
     private int overstuffedLevel =1;
     private final int MIN_STUFFED_LEVEL =0;
 
+    public static final int MIN_FULL_POINTS=2;
+    public static final int MIN_STUFFED_POINTS=1;
+    public static final int MIN_OVERSTUFFED_POINTS=1;
+
+
+
+
     private int stuffedLost=0;
     private int addState=0;
 
     //what the amount of stuffed lost should be before it adds new
-    private int interval=30;
+    private int interval=4;
+
 
 
     public long lastCallTime;
@@ -53,7 +61,7 @@ public class PlayerStuffedBar {
         //retturns the new state, done really so I don't use break statemetns
         //this logic should occur every time at 30
         stuffedLost=0;
-        if(fullLevel + stuffedLevel +overstuffedLevel<9)
+        if((fullLevel + stuffedLevel +overstuffedLevel)<9)
         {
             if(addState==0)
             {
@@ -79,13 +87,49 @@ public class PlayerStuffedBar {
 
         return addState;
     }
+    public int subStuffedPoint()
+    {
+        //retturns the new state, done really so I don't use break statemetns
+        //this logic should occur every time at 30
+        stuffedLost=0;
+        if((fullLevel + stuffedLevel +overstuffedLevel-1)>=4)
+        {
+            if(addState==0)
+            {
+                overstuffedLevel--;
+                addState=2;
+                return addState;
+            }
+            else if(addState==1)
+            {
+                overstuffedLevel++;
+                stuffedLevel--;
+                addState--;
+                return addState;
+            }
+            else if(addState==2)
+            {
+                stuffedLevel++;
+                fullLevel--;
+                addState--;
+                return addState;
+            }
+        }
+
+        return addState;
+    }
+    public void setAddState(int state)
+    {
+        this.addState=state;
+    }
+
 
     public void copyFrom(PlayerStuffedBar source)
     {
         this.currentStuffedLevel =source.getCurrentStuffedLevel();
-        this.fullLevel =source.getFullPoints();
-        this.stuffedLevel =source.getStuffedPoints();
-        this.overstuffedLevel=source.getOverstuffedPoints();
+        this.fullLevel =source.getFullLevel();
+        this.stuffedLevel =source.getStuffedLevel();
+        this.overstuffedLevel=source.getOverstuffedLevel();
         this.stuffedLost=source.getStuffedLossed();
         this.addState=source.addState;
     }
@@ -130,17 +174,31 @@ public class PlayerStuffedBar {
     public void addStuffedLossed() {
         this.stuffedLost++;
     }
-    public int getFullPoints()
+    public int getFullLevel()
     {
         return this.fullLevel;
     }
-    public int getStuffedPoints()
+    public void setFullLevel(int fullPoints)
+    {
+        this.fullLevel = fullPoints;
+    }
+    public int getStuffedLevel()
     {
         return this.stuffedLevel;
     }
-    public int getOverstuffedPoints()
+    public void setStuffedLevel(int stuffedLevel)
+    {
+        this.stuffedLevel = stuffedLevel;
+    }
+
+    public int getOverstuffedLevel()
     {
         return this.overstuffedLevel;
+    }
+
+    public void setOverstuffedLevel(int overstuffedLevel)
+    {
+        this.overstuffedLevel=overstuffedLevel;
     }
 
     public int getInterval() {
@@ -151,4 +209,17 @@ public class PlayerStuffedBar {
     {
         return addState;
     }
+
+    public void resetLimits()
+    {
+        fullLevel=MIN_FULL_POINTS;
+        stuffedLevel=MIN_STUFFED_POINTS;
+        overstuffedLevel=MIN_OVERSTUFFED_POINTS;
+        //this just makes it so it'll go reset if stuffed is too hgih
+        this.addState=0;
+
+
+        this.addStuffedLevel(0);
+    }
+
 }

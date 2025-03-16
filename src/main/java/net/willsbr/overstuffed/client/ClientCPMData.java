@@ -10,6 +10,9 @@ public class ClientCPMData {
     private static IClientAPI playersAPI;
 
 
+    private static int totalWeightFrames;
+    private static int totalStuffedFrames;
+
 
     public static void setStuffed(String inputStuffed)
     {
@@ -18,6 +21,8 @@ public class ClientCPMData {
             OverstuffedConfig.lastStuffedLayer=OverstuffedConfig.stuffedLayerConfigEntry.get();
         }
         OverstuffedConfig.setStuffedLayer(inputStuffed);
+
+
     }
 
     public static void setWeight(String inputWeight)
@@ -51,9 +56,10 @@ public class ClientCPMData {
         {
             if(!OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(""))
             {
+                String layerName=OverstuffedConfig.stuffedLayerConfigEntry.get();
                 Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
-                int outOf255=(int)(percentFull*255);
-                playersAPI.playAnimation(OverstuffedConfig.stuffedLayerConfigEntry.get(),outOf255);
+                int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(layerName));
+                playersAPI.playAnimation(layerName,outOfMax);
                 playersAPI.playAnimation(OverstuffedConfig.lastStuffedLayer,0);
             }
             return true;
@@ -66,11 +72,11 @@ public class ClientCPMData {
     public static boolean playWeight() {
         if (ModList.get().isLoaded("cpm")) {
             if (OverstuffedConfig.returnSetting(0) == false) {
-
+                String layerName=OverstuffedConfig.weightLayerConfigEntry.get();
                 double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedConfig.minWeight.get());
                 weightRatio = weightRatio / (OverstuffedConfig.maxWeight.get() - OverstuffedConfig.minWeight.get());
-                int outof255 = (int) (weightRatio * 255);
-                playersAPI.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(), outof255);
+                int outofMax = (int) (weightRatio * playersAPI.getAnimationMaxValue(layerName));
+                playersAPI.playAnimation(layerName, outofMax);
                 return true;
             } else {
                 //This is stage based gaining
@@ -82,11 +88,15 @@ public class ClientCPMData {
 
                     ClientWeightBarData.setLastWeightStage(xOf5);
                 }
+                String layerName=OverstuffedConfig.weightLayerConfigEntry.get();
                 //this is the starting point, the stage if you will
                 playersAPI.playAnimation(OverstuffedConfig.lastWeightLayer, 0);
-                int outOf255 = (int) (ClientWeightBarData.getLastWeightStage() * 0.2 * 255);
+                int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * 0.2 * playersAPI.getAnimationMaxValue(layerName));
                 //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
-                playersAPI.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(), outOf255 + ClientWeightBarData.getAmountThroughStage());
+                if(outOfMax!=-1)
+                {
+                    playersAPI.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(), outOfMax + ClientWeightBarData.getAmountThroughStage());
+                }
 
                 return true;
             }
@@ -94,6 +104,26 @@ public class ClientCPMData {
         }
         return false;
       }
+
+    public static int getTotalWeightFrames() {
+
+        if(ModList.get().isLoaded("cpm")) {
+            if (!OverstuffedConfig.weightLayerConfigEntry.get().contentEquals("")) {
+                totalWeightFrames=playersAPI.getAnimationMaxValue(OverstuffedConfig.weightLayerConfigEntry.get());
+            }
+        }
+
+        return totalWeightFrames;
     }
+
+    public static int getTotalStuffedFrames() {
+        if(ModList.get().isLoaded("cpm")) {
+            if (!OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals("")) {
+                totalStuffedFrames=playersAPI.getAnimationMaxValue(OverstuffedConfig.stuffedLayerConfigEntry.get());
+            }
+        }
+        return totalStuffedFrames;
+    }
+}
 
 

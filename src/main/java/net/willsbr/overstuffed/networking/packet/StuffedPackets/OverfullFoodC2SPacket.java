@@ -1,7 +1,6 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -53,7 +52,7 @@ public class OverfullFoodC2SPacket {
                                             player.getSoundSource(), 1f, 1f);
                                 }
                             });
-                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(),stuffedBar.getStuffedPoints() ,stuffedBar.getOverstuffedPoints()),player);
+                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getStuffedLevel() ,stuffedBar.getOverstuffedLevel()),player);
                         });
                     }
                 }

@@ -1,9 +1,11 @@
 package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
@@ -40,8 +42,8 @@ public class setWeightS2CPacket {
                     if(level.isClientSide)
                     {
                         ClientWeightBarData.setCurrentWeight(this.weight);
-                        CPMData.checkIfUpdateCPM("weight");
 
+                        CPMData.checkIfUpdateCPM("weight");
                     }
 
                 }

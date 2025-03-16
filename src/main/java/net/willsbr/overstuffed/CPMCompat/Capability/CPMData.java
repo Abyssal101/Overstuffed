@@ -14,12 +14,17 @@ public class CPMData {
 
     private String lastWeightLayerName;
 
+    private int stuffedLayerFrames;
+    private int weightLayerFrames;
+
+
     public CPMData(){
         this.stuffedLayerName="";
         this.lastStuffedLayerName="";
         this.weightLayerName="";
         this.lastWeightLayerName="";
-
+        this.stuffedLayerFrames=100;
+        this.weightLayerFrames=100;
 
     }
 
@@ -74,12 +79,16 @@ public class CPMData {
     {
         nbt.putString("stuffedlayer", stuffedLayerName);
         nbt.putString("weightlayer", weightLayerName);
+        nbt.putInt("stuffedlayerframes", stuffedLayerFrames);
+        nbt.putInt("weightlayerframes", weightLayerFrames);
 
     }
     public void loadNBTData(CompoundTag nbt)
     {
         this.stuffedLayerName =nbt.getString("stuffedlayer");
         this.weightLayerName = nbt.getString("weightlayer");
+        this.stuffedLayerFrames = nbt.getInt("stuffedlayerframes");
+        this.weightLayerFrames = nbt.getInt("weightlayerframes");
     }
 
     public String getWeightLayerName() {
@@ -105,4 +114,23 @@ public class CPMData {
     public void setLastStuffedLayerName(String lastStuffedLayerName) {
         this.lastStuffedLayerName = lastStuffedLayerName;
     }
+
+    public void setStuffedFrames(int frames)
+    {
+        this.stuffedLayerFrames = frames;
+    }
+    public int getStuffedLayerFrames()
+    {
+        return this.stuffedLayerFrames;
+    }
+    public void setWeightFrames(int frames)
+    {
+        this.weightLayerFrames = frames;
+    }
+    public int getWeightLayerFrames()
+    {
+        return this.weightLayerFrames;
+    }
+
+
 }

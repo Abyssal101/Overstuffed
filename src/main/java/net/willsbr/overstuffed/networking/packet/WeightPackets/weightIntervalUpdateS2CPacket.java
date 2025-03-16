@@ -40,16 +40,9 @@ public class weightIntervalUpdateS2CPacket {
         context.enqueueWork(() ->
                 {
                     //here we are on the client
-                    ServerPlayer player=context.getSender();
-                    System.out.println(interval);
+
                     ClientStuffedBarData.setInterval(interval);
                     ClientStuffedBarData.setCurrentLost(currentLost);
-
-
-
-
-
-
                 }
         );
         return true;

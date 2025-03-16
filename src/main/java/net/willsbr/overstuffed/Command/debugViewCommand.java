@@ -37,9 +37,9 @@ public class debugViewCommand {
         player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
 
             player.sendSystemMessage(Component.literal("Stuffed Level: "+stuffedBar.getCurrentStuffedLevel()));
-            player.sendSystemMessage(Component.literal("Full points: "+stuffedBar.getFullPoints()));
-            player.sendSystemMessage(Component.literal("Stuffed points: "+stuffedBar.getStuffedPoints()));
-            player.sendSystemMessage(Component.literal("Overstuffed points: "+stuffedBar.getOverstuffedPoints()));
+            player.sendSystemMessage(Component.literal("Full points: "+stuffedBar.getFullLevel()));
+            player.sendSystemMessage(Component.literal("Stuffed points: "+stuffedBar.getStuffedLevel()));
+            player.sendSystemMessage(Component.literal("Overstuffed points: "+stuffedBar.getOverstuffedLevel()));
             player.sendSystemMessage(Component.literal("Progress to next Point: "+stuffedBar.getStuffedLossed()));
             player.sendSystemMessage(Component.literal("Add State: "+stuffedBar.getAddState()));
             player.sendSystemMessage(Component.literal("Interval between points: "+stuffedBar.getInterval()));

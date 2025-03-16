@@ -12,6 +12,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightS2CPacket;
@@ -42,6 +43,7 @@ public class setCurrentWeight {
                 else{
                     weightBar.setCurrentWeight(index);
                     ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
+                    PlayerWeightBar.addCorrectModifier(player);
                     player.sendSystemMessage(Component.translatable("commands.overstuffed.setweightsuccess",Component.literal(player.getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),Component.literal(index+"").withStyle(ChatFormatting.DARK_GRAY)));
                 }
 

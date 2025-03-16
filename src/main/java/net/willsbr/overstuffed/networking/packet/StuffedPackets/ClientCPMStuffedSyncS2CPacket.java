@@ -1,5 +1,6 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
@@ -49,7 +50,7 @@ public class ClientCPMStuffedSyncS2CPacket {
             CPMData.checkIfUpdateCPM("stuffed");
             if(OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayer))
             {
-                context.getSender().sendSystemMessage(Component.translatable("commands.overstuffed.stuffedupdatesuccess"));
+                Minecraft.getInstance().player.sendSystemMessage(Component.translatable("commands.overstuffed.stuffedupdatesuccess"));
             }
         });
         return true;

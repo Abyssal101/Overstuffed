@@ -4,14 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="Moved the wedge event to clientside so that way players don't lag out the server, and added slowness effect for the xWedgeCheck&#10;Need to finalize the feel of it">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setMaxStuffed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/setMaxStuffedS2CPacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/QueuedWeightSyncS2CPacket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/CPMCompat/Capability/CPMData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/CPMCompat/Capability/CPMData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/debugViewCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/debugViewCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/OverStuffed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/StuffedBar/PlayerStuffedBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/StuffedBar/PlayerStuffedBar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientStuffedBarData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/CPMDataC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/CPMDataC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/OverstuffedEffectC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/OverstuffedEffectC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerUnlockUpdateBooleanS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerUnlockUpdateBooleanS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/ClientCPMStuffedSyncS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/ClientCPMStuffedSyncS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodC2SPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setMinWeightDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setMinWeightDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/weightIntervalUpdateS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/weightIntervalUpdateS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +138,13 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\wlbra\IdeaProjects\Overstuffed\src\main\resources\assets\overstuffed\textures\stuffedbar" />
       <recent name="C:\Users\wlbra\IdeaProjects\Overstuffed" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.willsbr.overstuffed.networking.packet.WeightPackets" />
+      <recent name="net.willsbr.overstuffed.networking.packet.StuffedPackets" />
+      <recent name="net.willsbr.overstuffed.Command" />
     </key>
   </component>
   <component name="RunManager" selected="Application.runClient">
@@ -172,11 +200,53 @@
       <workItem from="1739205543229" duration="471000" />
       <workItem from="1739330973388" duration="1227000" />
       <workItem from="1739365228057" duration="4239000" />
+      <workItem from="1739412692930" duration="3298000" />
+      <workItem from="1739452770223" duration="2919000" />
+      <workItem from="1740181501674" duration="2521000" />
+      <workItem from="1740364248550" duration="3000" />
+      <workItem from="1741227588161" duration="4760000" />
+      <workItem from="1741531663809" duration="2243000" />
+      <workItem from="1741565182438" duration="4519000" />
+      <workItem from="1741608533517" duration="3386000" />
+      <workItem from="1742141001048" duration="15660000" />
     </task>
+    <task id="LOCAL-00001" summary="Added Pekhui to runtime&#10;Made it so wedging worked with pekhui scaling&#10;Removed testing fill blocks">
+      <option name="closed" value="true" />
+      <created>1739413044794</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739413044794</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Moved the wedge event to clientside so that way players don't lag out the server, and added slowness effect for the xWedgeCheck&#10;Need to finalize the feel of it">
+      <option name="closed" value="true" />
+      <created>1739413817487</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739413817487</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added Pekhui to runtime&#10;Made it so wedging worked with pekhui scaling&#10;Removed testing fill blocks" />
+    <MESSAGE value="Moved the wedge event to clientside so that way players don't lag out the server, and added slowness effect for the xWedgeCheck&#10;Need to finalize the feel of it" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved the wedge event to clientside so that way players don't lag out the server, and added slowness effect for the xWedgeCheck&#10;Need to finalize the feel of it" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/StuffedBar/PlayerStuffedBar.java</url>
+          <line>128</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

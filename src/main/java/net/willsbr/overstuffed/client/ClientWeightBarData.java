@@ -12,6 +12,8 @@ public class ClientWeightBarData {
     private static int lastWeightStage = 0;
     private static int amountThroughStage;
 
+    private static int queuedWeight = 0;
+
     public static void setCurrentWeight(int newWeight) {
 
         ClientWeightBarData.currentWeight = newWeight;
@@ -38,5 +40,12 @@ public class ClientWeightBarData {
     public static void setAmountThroughStage(int amountThroughStage) {
         ClientWeightBarData.amountThroughStage = amountThroughStage;
     }
-    
+
+    public static int getQueuedWeight() {
+        return queuedWeight;
+    }
+
+    public static void setQueuedWeight(int queuedWeight) {
+        ClientWeightBarData.queuedWeight = queuedWeight;
+    }
 }
