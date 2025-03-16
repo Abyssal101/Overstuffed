@@ -1,16 +1,15 @@
 package net.willsbr.overstuffed.Menu;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
@@ -19,6 +18,7 @@ import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanC2S;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
@@ -53,8 +53,6 @@ public class ConfigScreen extends Screen {
     private ToggleButton stageBasedWeight;
 
     private ToggleButton weightEffect;
-
-    private ToggleButton momentum;
 
     private OptionSlider burpFrequency;
 
@@ -132,17 +130,15 @@ public class ConfigScreen extends Screen {
         this.stageBasedWeight.setTooltipText("False: Weight visually udates with every tick. \n True: Weight visually updates once you reach every 20% weight interval.");
 
 
-        this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
+        //this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
 
-        this.momentum.setTooltipText("Locked: Planned Feature");
-        this.weightEffect= new ToggleButton(centerW+-160,100,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"),OverstuffedConfig.returnSetting(2));
+        this.weightEffect= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"),OverstuffedConfig.returnSetting(2),true);
         this.weightEffect.setTooltipText("Locked: Planned Feature");
 
         //TODO MAKE the Sliders have translateable components
 
         this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
         this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
-        this.momentum.setLocked(true);
         this.weightEffect.setLocked(true);
 
 
@@ -204,7 +200,6 @@ public class ConfigScreen extends Screen {
         // If this is not done, users cannot click on items in the list
        //this.addRenderableWidget(this.optionsList);
         this.addRenderableWidget(stageBasedWeight);
-        this.addRenderableWidget(momentum);
         this.addRenderableWidget(weightEffect);
         this.addRenderableWidget(burpFrequency);
         this.addRenderableWidget(gurgleFrequency);
@@ -318,6 +313,12 @@ public class ConfigScreen extends Screen {
         {
             OverstuffedConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
         }
+        if(ModList.get().isLoaded("cpm"))
+        {
+            ModMessages.sendToServer(new CPMDataC2SPacket(OverstuffedConfig.stuffedLayerConfigEntry.get(),OverstuffedConfig.weightLayerConfigEntry.get(),
+                    ClientCPMData.getTotalStuffedFrames(),ClientCPMData.getTotalWeightFrames()));
+
+        }
 
         OverstuffedConfig.setSetting(0, stageBasedWeight.getSetting());
         if(Minecraft.getInstance().player != null)
@@ -325,7 +326,12 @@ public class ConfigScreen extends Screen {
 
             ModMessages.sendToServer(new PlayerToggleUpdateBooleanC2S(0, stageBasedWeight.getSetting()));
         }
-        OverstuffedConfig.setSetting(1, momentum.getSetting());
+
+
+
+
+
+        //OverstuffedConfig.setSetting(1, momentum.getSetting());
         OverstuffedConfig.setSetting(2, weightEffect.getSetting());
         System.out.println(burpFrequency.getValue()+"Burp");
         OverstuffedConfig.burpFrequency.set(burpFrequency.getValue());

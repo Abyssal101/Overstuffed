@@ -12,6 +12,7 @@ import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.ClientCPMStuffedSyncS2CPacket;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.setMaxStuffedS2CPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.*;
 
 public class ModMessages {
@@ -58,11 +59,23 @@ public class ModMessages {
                 .encoder(ClientCPMStuffedSyncS2CPacket::toBytes)
                 .consumerMainThread(ClientCPMStuffedSyncS2CPacket::handle)
                 .add();
+        net.messageBuilder(setMaxStuffedS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(setMaxStuffedS2CPacket::new)
+                .encoder(setMaxStuffedS2CPacket::toBytes)
+                .consumerMainThread(setMaxStuffedS2CPacket::handle)
+                .add();
+
         net.messageBuilder(ClientCPMWeightSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ClientCPMWeightSyncS2CPacket::new)
                 .encoder(ClientCPMWeightSyncS2CPacket::toBytes)
                 .consumerMainThread(ClientCPMWeightSyncS2CPacket::handle)
                 .add();
+        net.messageBuilder(QueuedWeightSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(QueuedWeightSyncS2CPacket::new)
+                .encoder(QueuedWeightSyncS2CPacket::toBytes)
+                .consumerMainThread(QueuedWeightSyncS2CPacket::handle)
+                .add();
+
         net.messageBuilder(CPMDataC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(CPMDataC2SPacket::new)
                 .encoder(CPMDataC2SPacket::toBytes)

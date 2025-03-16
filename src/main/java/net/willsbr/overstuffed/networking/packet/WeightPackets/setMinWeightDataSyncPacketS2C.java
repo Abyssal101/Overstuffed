@@ -1,5 +1,6 @@
 package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
@@ -37,7 +38,7 @@ public class setMinWeightDataSyncPacketS2C {
         {
             OverstuffedConfig.minWeight.set(minWeight);
             CPMData.checkIfUpdateCPM("weight");
-            context.getSender().sendSystemMessage(Component.translatable("commands.overstuffed.minweightupdatesuccess"));
+            Minecraft.getInstance().player.sendSystemMessage(Component.translatable("commands.overstuffed.minweightupdatesuccess"));
         });
         return true;
     }

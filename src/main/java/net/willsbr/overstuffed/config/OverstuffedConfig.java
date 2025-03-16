@@ -1,6 +1,8 @@
 package net.willsbr.overstuffed.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
 
 public class OverstuffedConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
@@ -100,8 +102,10 @@ public class OverstuffedConfig {
 
         stuffedHudYOffset.save();
         stuffedHudXOffset.save();
-
         debugView.save();
+
+
+
     }
 
     public static boolean returnSetting(int index)

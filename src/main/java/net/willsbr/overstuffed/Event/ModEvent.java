@@ -1,25 +1,11 @@
 package net.willsbr.overstuffed.Event;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
@@ -42,12 +28,12 @@ import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanS2C;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
+import net.willsbr.overstuffed.networking.packet.WeightPackets.QueuedWeightSyncS2CPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.weightIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
 
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
 public class ModEvent {
@@ -78,13 +64,16 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         //stuffedbar
+
         if(event.isWasDeath()) {
+            event.getOriginal().reviveCaps();
+
             event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
+                    newStore.subStuffedLevel(oldStore.getStuffedLevel()+oldStore.getFullLevel()+oldStore.getOverstuffedLevel());
                 });
             });
-            event.getOriginal().reviveCaps();
             event.getOriginal().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(oldStore -> {
                 event.getEntity().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
@@ -94,7 +83,6 @@ public class ModEvent {
 
                 });
             });
-
             event.getOriginal().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
@@ -112,6 +100,8 @@ public class ModEvent {
         //For end portal logic
         if (event.getEntity() instanceof ServerPlayer && event.getOriginal() instanceof ServerPlayer) {
             if (!event.isWasDeath()) {
+                event.getOriginal().reviveCaps();
+
                 event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(oldStore -> {
                     event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
                         newStore.copyFrom(oldStore);
@@ -176,42 +166,42 @@ public class ModEvent {
             //Come back to if really jarring
             if((event.player.tickCount&5)==0)
             {
-                if(xOf5==weightBar.getLastWeightStage()+1)
-                {
-                    //checks if we reached new stage
-                    if(((weightBar.getLastWeightStage()*20+((int)((((double)weightBar.getAmountThroughStage())/255)*100)))/20)==xOf5)
-                    {
-                        weightBar.setLastWeightStage(xOf5);
-                        weightBar.setAmountThroughStage(0);
-                        ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
+                AtomicInteger totalWeightFrames = new AtomicInteger(100); // Default value
 
-                    }
-                    else
+                event.player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
+                    // Now you can safely use cpmData here
+                    totalWeightFrames.set(cpmData.getWeightLayerFrames());
+                });
+                double percentageThroughStage=(((double)weightBar.getAmountThroughStage())/totalWeightFrames.get())*100;
+                int progressionCheck=(weightBar.getLastWeightStage()*20+((int)percentageThroughStage));
+                //TODO Change from xOf5 and any instance of 20 or 5 or otherwise to modular
+
+                if(progressionCheck%20==0 && (progressionCheck/20)==xOf5)
+                {
+                    weightBar.setLastWeightStage(xOf5);
+                    weightBar.setAmountThroughStage(0);
+                    ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
+                }
+                else {
+                    if(xOf5>=weightBar.getLastWeightStage()+1)
                     {
                         weightBar.setAmountThroughStage(weightBar.getAmountThroughStage()+1);
                         ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
-                    }
-                }
-                else if(xOf5==(weightBar.getLastWeightStage()-1)){
-                    if(((weightBar.getLastWeightStage()*20+((int)((((double)weightBar.getAmountThroughStage())/255)*100))))==(xOf5*20))
-                    {
-                        weightBar.setLastWeightStage(xOf5);
-                        weightBar.setAmountThroughStage(0);
-                        ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
+
                     }
                     else
                     {
                         weightBar.setAmountThroughStage(weightBar.getAmountThroughStage()-1);
                         ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
                     }
+                }
 
-                }
-                else
-                {
-                    weightBar.setLastWeightStage(xOf5);
-                    ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), 0), (ServerPlayer) event.player);
-                    System.out.println("Error weight weight stages, increase or decreasing by greater than 1 stage");
-                }
+//                else
+//                {
+//                    weightBar.setLastWeightStage(xOf5);
+//                    ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), 0), (ServerPlayer) event.player);
+//                    System.out.println("Error weight weight stages, increase or decreasing by greater than 1 stage");
+//                }
             }
 
 
@@ -223,8 +213,8 @@ public class ModEvent {
         event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
             event.player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
 
-                int calculatedPercentage=(int)((((double)(weightBar.getCurrentWeight()-weightBar.getMinWeight()))/(weightBar.getCurMaxWeight()- weightBar.getMinWeight()))*100);
-                int xOf5=calculatedPercentage/20;
+                int xOf5=weightBar.calculateCurrentWeightStage();
+
                 int lastWeightStage=weightBar.getLastWeightStage();
                 //create weight updates here
                 if(OverstuffedConfig.returnSetting(0)==true)
@@ -237,9 +227,8 @@ public class ModEvent {
                 weightBarEffects(event,weightBar,xOf5,lastWeightStage);
 
 
-                if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())))
+                if(OverstuffedConfig.gurgleFrequency.get()>0 & weightBar.getLastWeightStage()>=1 && event.player.getRandom().nextFloat() < (0.002f*Math.sqrt(OverstuffedConfig.gurgleFrequency.get())*weightBar.getLastWeightStage()))
                 {
-
                     event.player.level().playSound(null, event.player.blockPosition(),ModSounds.GURGLE_SOUNDS.get(
                                     event.player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size())-1).get(),
                             event.player.getSoundSource(), 0.5f, 1f);
@@ -252,7 +241,7 @@ public class ModEvent {
                         int foodCals = weightBar.getWeightChanges();
                         //this makes it so the weight chance from a single food item gets added to the total amount
                         if (foodCals != 0) {
-                            weightBar.addChangetoQueue(foodCals * 2);
+                            weightBar.addChangetoQueue(foodCals);
                             int checkDelay = foodCals * 10;
                             if (checkDelay > 1000) {
                                 weightBar.setWeightUpdateDelay(1000);
@@ -266,7 +255,10 @@ public class ModEvent {
                     }
                     else
                     {
+
                         weightBar.addWeight();
+                        ModMessages.sendToPlayer(new QueuedWeightSyncS2CPacket(weightBar.getQueuedWeight()),(ServerPlayer) event.player);
+
                     }
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()), (ServerPlayer) event.player);
                     weightBar.setWeightUpdateStatus(false);
@@ -315,7 +307,7 @@ public class ModEvent {
     public static void stuffedSystem(TickEvent.PlayerTickEvent event)
     {
         event.player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
-            if(stuffedBar.getCurrentStuffedLevel() > 0 && event.player.getRandom().nextFloat() < 0.01f
+            if(stuffedBar.getCurrentStuffedLevel() > 0 && event.player.getRandom().nextFloat() < (0.01f*Math.max(10-event.player.getFoodData().getFoodLevel(),1))
                     && event.player.getFoodData().getFoodLevel()<20) { // Once Every 10 Seconds on Avg
 
                 stuffedBar.subStuffedLevel(1);
@@ -340,8 +332,8 @@ public class ModEvent {
 
 
 
-                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(), stuffedBar.getStuffedPoints(),
-                        stuffedBar.getOverstuffedPoints()),(ServerPlayer) event.player);
+                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(), stuffedBar.getStuffedLevel(),
+                        stuffedBar.getOverstuffedLevel()),(ServerPlayer) event.player);
 
             }
 //                if((stuffedBar.lastCallTime!=-1 && (event.player.level.getGameTime()- stuffedBar.lastCallTime)>stuffedBar.lastFoodDuration))
@@ -367,7 +359,10 @@ public class ModEvent {
             //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
             //Maybe could make it just this, but slightly more effcient I think?
             PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
-            weightBar.setLastWeightStage(xOf5);
+           if(OverstuffedConfig.returnSetting(0)!=true)
+           {
+               weightBar.setLastWeightStage(xOf5);
+           }
         }
 
 
@@ -391,8 +386,10 @@ public class ModEvent {
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullPoints(),stuffedBar.getOverstuffedPoints(),
-                            stuffedBar.getOverstuffedPoints()), player);
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getOverstuffedLevel(),
+                            stuffedBar.getOverstuffedLevel()), player);
+
+
                 });
                 player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
                     //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(cpmData.getStuffedLayerName()),player);

@@ -87,10 +87,9 @@ public class OverStuffed
     {
         // Some common setup code
         event.enqueueWork(() ->{
-            ModMessages.register();
             // ModVillagers.registerPOIS();
         });
-        //ModMessages.register();
+        ModMessages.register();
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
