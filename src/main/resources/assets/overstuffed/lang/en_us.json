@@ -43,7 +43,9 @@
   "message.overstuffed.debugcurrentstuffed": "Current Stuffed: %1$s",
   "message.overstuffed.debugmaxstuffed": "Max Stuffed: %1$s",
   "message.overstuffed.debugnextmax": "# of stuffed points to next max: %1$s",
-  "message.overstuffed.debugqueueweight": "Queued Weight:%1$s",
+  "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
+  "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
+
 
   "menu.overstuffed.stagebasedweightbutton":"Stage Based Weight:",
   "menu.overstuffed.weightmomentumbutton":"Weight Momentum:",

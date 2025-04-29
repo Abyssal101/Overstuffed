@@ -1,8 +1,6 @@
 package net.willsbr.overstuffed.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
 
 public class OverstuffedConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
@@ -19,8 +17,9 @@ public class OverstuffedConfig {
     public static ForgeConfigSpec.ConfigValue<String> stuffedLayerConfigEntry;
     public static String lastStuffedLayer="";
 
+    public static ForgeConfigSpec.ConfigValue<Boolean> stageGain;
 
-    public static ForgeConfigSpec.ConfigValue<String> toggleList;
+    public static ForgeConfigSpec.ConfigValue<Boolean> weightEffects;
 
     public static ForgeConfigSpec.ConfigValue<Integer> burpFrequency;
     public static ForgeConfigSpec.ConfigValue<Integer> gurgleFrequency;
@@ -29,8 +28,8 @@ public class OverstuffedConfig {
 
     public static ForgeConfigSpec.ConfigValue<Integer> minWeight;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayX;
-    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayY;
+    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayXOffset;
+    public static ForgeConfigSpec.ConfigValue<Integer> weightDisplayYOffSet;
 
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudXOffset;
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudYOffset;
@@ -51,10 +50,10 @@ public class OverstuffedConfig {
                 .comment(" Name of CPM Value Layer for Stuffed.")
                 .define("stuffed_layer_config_entry", "stuffed");
 
-        //Default Config Values, order mirrors the list found on Github
-        //0 1 1
-        toggleList=builder.comment("List of the boolean values for the settings")
-                .define("config_toggle_values","0 1 1");
+        stageGain=builder.comment("Stage based gaining for those who want more a more sudden change")
+                .define("config_stage_gain",false);
+        weightEffects=builder.comment("Currently enables/disables all forms of weight effects")
+                .define("config_weight_effects",true);
 
         burpFrequency=builder.comment("1-10, the frequency that burps occur")
                 .define("config_burp_frequency,",5);
@@ -70,11 +69,11 @@ public class OverstuffedConfig {
         builder.comment("This section is for graphics related settings");
         builder.push("Overstuffed Graphics Options");
 
-        weightDisplayX=builder.comment("The weight display's current X position")
-                .define("weightdisplayx,",100);
+        weightDisplayXOffset =builder.comment("The weight display's current X position")
+                .define("weightdisplayx,",0);
 
-        weightDisplayY=builder.comment("The weight display's current Y position")
-                .define("weightdisplayy,",10);
+        weightDisplayYOffSet =builder.comment("The weight display's current Y position")
+                .define("weightdisplayy,",0);
 
         stuffedHudXOffset =builder.comment("The stuffed hud's X offset from it's default position")
                 .define("stuffedhudx,",0);
@@ -90,15 +89,14 @@ public class OverstuffedConfig {
     public static void saveConfig() {
         weightLayerConfigEntry.save();
         stuffedLayerConfigEntry.save();
-        toggleList.save();
         burpFrequency.save();
         gurgleFrequency.save();
 
         maxWeight.save();
         minWeight.save();
 
-        weightDisplayX.save();
-        weightDisplayY.save();
+        weightDisplayXOffset.save();
+        weightDisplayYOffSet.save();
 
         stuffedHudYOffset.save();
         stuffedHudXOffset.save();
@@ -108,30 +106,7 @@ public class OverstuffedConfig {
 
     }
 
-    public static boolean returnSetting(int index)
-    {
-        //Defaults to return false on index not being possible in array, so too high or negative
-        String[] tempString=toggleList.get().split(" ");
-        if(index>=0 && index<tempString.length)
-        {
-            int result=Integer.parseInt(tempString[index]);
 
-            if(result==1)
-            {
-                return true;
-            }
-            else if(result==0)
-            {
-                return false;
-            }
-            else {
-                System.out.println("Error in Return Setting");
-                return false;
-            }
-
-        }
-        return false;
-    }
     public static void setWeightLayer(String newLayer)
     {
         if(!weightLayerConfigEntry.get().contentEquals("") && !weightLayerConfigEntry.get().contentEquals(newLayer))
@@ -150,31 +125,7 @@ public class OverstuffedConfig {
     }
 
 
-    public static void setSetting(int index, boolean input)
-    {
-        String[] tempString=toggleList.get().split(" ");
-        if(index>=0 && index<tempString.length)
-        {
 
-            if(input)
-            {
-                tempString[index]="1";
-            }
-            else
-            {
-                tempString[index]="0";
-            }
-            String combine="";
-            for(int i=0;i<tempString.length;i++)
-            {
-                combine=combine+tempString[i]+" ";
-            }
-            combine.trim();
-            toggleList.set(combine);
-
-            toggleList.save();
-        }
-    }
     //Created because the figura plugin can't recognize ForgeConfigSpec.ConfigValue<String>
     //At least in common. This is easier than creating a whole seperate section in the forge
     //area of the plugin
@@ -186,7 +137,6 @@ public class OverstuffedConfig {
     {
         return minWeight.get();
     }
-
 
 
 }

@@ -41,6 +41,7 @@ public class setCurrentWeight {
 
                 }
                 else{
+                    System.out.println(weightBar.getCurrentWeight());
                     weightBar.setCurrentWeight(index);
                     ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
                     PlayerWeightBar.addCorrectModifier(player);

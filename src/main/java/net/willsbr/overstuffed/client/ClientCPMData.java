@@ -71,7 +71,7 @@ public class ClientCPMData {
     }
     public static boolean playWeight() {
         if (ModList.get().isLoaded("cpm")) {
-            if (OverstuffedConfig.returnSetting(0) == false) {
+            if (!OverstuffedConfig.stageGain.get()) {
                 String layerName=OverstuffedConfig.weightLayerConfigEntry.get();
                 double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedConfig.minWeight.get());
                 weightRatio = weightRatio / (OverstuffedConfig.maxWeight.get() - OverstuffedConfig.minWeight.get());
@@ -91,6 +91,7 @@ public class ClientCPMData {
                 String layerName=OverstuffedConfig.weightLayerConfigEntry.get();
                 //this is the starting point, the stage if you will
                 playersAPI.playAnimation(OverstuffedConfig.lastWeightLayer, 0);
+
                 int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * 0.2 * playersAPI.getAnimationMaxValue(layerName));
                 //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
                 if(outOfMax!=-1)

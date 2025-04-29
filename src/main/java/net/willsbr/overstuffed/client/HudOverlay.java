@@ -3,16 +3,23 @@ package net.willsbr.overstuffed.client;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import com.tom.cpl.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
+import org.joml.Quaternionf;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static net.willsbr.overstuffed.client.AbstractClientMethods.AbstractDraw;
 
@@ -61,8 +68,8 @@ public class HudOverlay {
         int rightHeight = 49;
         int leftHeight = 10;
 
-        int left = screenWidth / 2 + leftHeight + OverstuffedConfig.stuffedHudXOffset.get();
-        int top = screenHeight - rightHeight -OverstuffedConfig.stuffedHudYOffset.get();
+        int left = screenWidth / 2 + leftHeight ;
+        int top = screenHeight - rightHeight ;
         rightHeight += 10;
 
         WEIGHTSTAGESPRITES[0]=WEIGHTSPRITE0;
@@ -126,6 +133,7 @@ public class HudOverlay {
 
 
 
+
         poseStack.pushPose();
         poseStack.scale(2,2,2);
         poseStack.popPose();
@@ -141,13 +149,11 @@ public class HudOverlay {
         //1.19.2
         if(outOf100/20==5)
         {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],screenWidth/2-12+OverstuffedConfig.weightDisplayX.get(),top-5+OverstuffedConfig.weightDisplayY.get(),24,24);
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],screenWidth/2-12+OverstuffedConfig.weightDisplayXOffset.get(),top-5+OverstuffedConfig.weightDisplayYOffSet.get(),24,24);
         }
         else {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],screenWidth/2-12+OverstuffedConfig.weightDisplayX.get(),top-5+OverstuffedConfig.weightDisplayY.get(),24,24);
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],screenWidth/2-12+OverstuffedConfig.weightDisplayXOffset.get(),top-5+OverstuffedConfig.weightDisplayYOffSet.get(),24,24);
         }
-
-
 
         if(OverstuffedConfig.debugView.get())
         {
@@ -157,30 +163,106 @@ public class HudOverlay {
 
             //Stuffed current valaue
             //# of food to get to next stuffed
+            ArrayList<Component> info= new ArrayList<Component>();
+            info.add(Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight()));
+            info.add(Component.translatable("message.overstuffed.debugmaxweight",""+OverstuffedConfig.getMaxWeight()));
+            info.add(Component.translatable("message.overstuffed.debugminweight",""+OverstuffedConfig.getMinWeight()));
+            info.add(Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar()));
+            info.add(Component.translatable("message.overstuffed.debugmaxstuffed",""+
+                    (ClientStuffedBarData.getSoftLimit()+ ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit())));
+            info.add(Component.translatable("message.overstuffed.debugnextmax",""+
+                    ClientStuffedBarData.getCurrentLost()+"/"+ClientStuffedBarData.getInterval()));
+            info.add(Component.translatable("message.overstuffed.debugqueueweight",""+
+                    ClientWeightBarData.getQueuedWeight()));
+            info.add(Component.translatable("message.overstuffed.debugtotalqueueweight",""+
+                    ClientWeightBarData.getTotalQueuedWeight()));
 
-           guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight())
-                   ,screenWidth/2,20, Color.RED.hashCode());
 
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugmaxweight",""+OverstuffedConfig.getMaxWeight())
-                    ,screenWidth/2,30, Color.RED.hashCode());
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugminweight",""+OverstuffedConfig.getMinWeight())
-                    ,screenWidth/2,40, Color.RED.hashCode());
-
-
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar())
-                    ,screenWidth/2,50, Color.RED.hashCode());
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugmaxstuffed",""+
-                            (ClientStuffedBarData.getSoftLimit()+ ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()))
-                    ,screenWidth/2,60, Color.RED.hashCode());
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugnextmax",""+
-                            ClientStuffedBarData.getCurrentLost()+"/"+ClientStuffedBarData.getInterval())
-                    ,screenWidth/2,70, Color.RED.hashCode());
-            guiGraphics.drawCenteredString( font, Component.translatable("message.overstuffed.debugqueueweight",""+
-                            ClientWeightBarData.getQueuedWeight())
-                    ,screenWidth/2,80, Color.RED.hashCode());
+            for(int i=0;i<info.size();i++)
+            {
+                guiGraphics.drawCenteredString( font,info.get(i)
+                        ,screenWidth/2,20+10*i, Color.RED.hashCode());
+            }
 
         }
 
     });
 
+
+    static private void renderPlayerModel(PoseStack poseStack) {
+//        int x = width / 2;
+//        int y = height / 2;
+
+        // Player rendering area size
+        int size = 30;
+
+        drawEntity(poseStack, 100, 100, size,
+                10, 10,
+                Minecraft.getInstance().player);
+    }
+
+    /**
+     * This method handles drawing the player entity
+     */
+    public static void drawEntity(PoseStack poseStack, int x, int y, int size,
+                                  float mouseX, float mouseY, LivingEntity entity) {
+        float f = (float)Math.atan(mouseX / 40.0F);
+        float f1 = (float)Math.atan(mouseY / 40.0F);
+
+        PoseStack posestack = RenderSystem.getModelViewStack();
+        posestack.pushPose();
+        posestack.translate(x, y, 1050.0D);
+        posestack.scale(1.0F, 1.0F, -1.0F);
+
+        RenderSystem.applyModelViewMatrix();
+
+        PoseStack posestack1 = new PoseStack();
+        posestack1.translate(0.0D, 0.0D, 1000.0D);
+        posestack1.scale((float)size, (float)size, (float)size);
+
+        Axis Vector3f = null;
+        Quaternionf quaternion = Vector3f.ZP.rotationDegrees(180.0F);
+        Quaternionf quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        quaternion.mul(quaternion1);
+        posestack1.mulPose(quaternion);
+
+        float f2 = entity.yBodyRot;
+        float f3 = entity.getYRot();
+        float f4 = entity.getXRot();
+        float f5 = entity.yHeadRotO;
+        float f6 = entity.yHeadRot;
+
+        entity.yBodyRot = 180.0F + f * 20.0F;
+        entity.setYRot(180.0F + f * 40.0F);
+        entity.setXRot(-f1 * 20.0F);
+        entity.yHeadRot = entity.getYRot();
+        entity.yHeadRotO = entity.getYRot();
+
+        EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        //quaternion1.conj();
+        dispatcher.overrideCameraOrientation(quaternion1);
+        dispatcher.setRenderShadow(false);
+
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance()
+                .renderBuffers().bufferSource();
+
+        RenderSystem.runAsFancy(() -> {
+            dispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F,
+                    posestack1, bufferSource, 15728880);
+        });
+
+        bufferSource.endBatch();
+        dispatcher.setRenderShadow(true);
+
+        entity.yBodyRot = f2;
+        entity.setYRot(f3);
+        entity.setXRot(f4);
+        entity.yHeadRotO = f5;
+        entity.yHeadRot = f6;
+
+        posestack.popPose();
+        RenderSystem.applyModelViewMatrix();
+    }
+
 }
+

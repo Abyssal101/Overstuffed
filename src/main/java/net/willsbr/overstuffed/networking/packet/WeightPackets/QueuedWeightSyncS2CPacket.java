@@ -12,24 +12,26 @@ import java.util.function.Supplier;
 public class QueuedWeightSyncS2CPacket {
 
     private final int queuedWeight;
+    private final int totalQueuedWeight;
 
 
     //sending data from server to client here
 
 
-    public QueuedWeightSyncS2CPacket(int queue){
+    public QueuedWeightSyncS2CPacket(int queue,int totalQueue){
             this.queuedWeight = queue;
+            this.totalQueuedWeight = totalQueue;
     }
 
     public QueuedWeightSyncS2CPacket(FriendlyByteBuf buf){
-
             this.queuedWeight =buf.readInt();
+            this.totalQueuedWeight =buf.readInt();
 
     }
 
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(this.queuedWeight);
-
+        buf.writeInt(this.totalQueuedWeight);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
@@ -37,7 +39,7 @@ public class QueuedWeightSyncS2CPacket {
         context.enqueueWork(() ->
         {
             //here we are on the client!
-            ClientWeightBarData.setQueuedWeight(queuedWeight);
+            ClientWeightBarData.setQueuedWeight(queuedWeight,totalQueuedWeight);
         });
         return true;
     }

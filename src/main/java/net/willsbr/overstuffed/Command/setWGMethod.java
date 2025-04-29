@@ -11,11 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
+import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
-import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerToggleUpdateBooleanS2C;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsPollS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
 
 public class setWGMethod {
@@ -30,31 +31,32 @@ public class setWGMethod {
     private static int levelBasedGaining(CommandSourceStack pSource, Player player, String input) throws CommandSyntaxException {
 
         player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
-            if(input.toLowerCase().contentEquals("false"))
-            {
-                playerToggles.setToggle(0,false);
-                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                    weightBar.setLastWeightStage(-1);
-                        });
+            player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                if(input.toLowerCase().contentEquals("false"))
+                {
+                    serverSettings.setStageGain(false);
+                    player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                        weightBar.setLastWeightStage(-1);
+                    });
 
-                ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(0,false),(ServerPlayer) player);
-            }
-            else  if(input.toLowerCase().contentEquals("true"))
-            {
-                playerToggles.setToggle(0,true);
-                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                    int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get())/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get())*100);
-                    int xOf5=calculatedPercentage/20;
-                    weightBar.setLastWeightStage(xOf5);
-                    ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),(ServerPlayer) player);
-                });
-                ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(0,true),(ServerPlayer) player);
+                }
+                else  if(input.toLowerCase().contentEquals("true"))
+                {
+                    player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                        int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get())/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get())*100);
+                        int xOf5=calculatedPercentage/20;
+                        weightBar.setLastWeightStage(xOf5);
+                        ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),(ServerPlayer) player);
+                    });
+                    //ModMessages.sendToPlayer(new PlayerToggleUpdateBooleanS2C(0,true),(ServerPlayer) player);
 
-            }
-            else
-            {
-                player.sendSystemMessage(Component.literal("Invalid input, should be *true* or *false*"));
-            }
+                }
+                else
+                {
+                    player.sendSystemMessage(Component.literal("Invalid input, should be *true* or *false*"));
+                }
+            });
+
         });
         return 0;
     }

@@ -1,13 +1,11 @@
 package net.willsbr.overstuffed.Menu;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -111,7 +109,7 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Weight Display X Coord"));
-        this.weightDisplayX.setValue(OverstuffedConfig.weightDisplayX.get()+"");
+        this.weightDisplayX.setValue(OverstuffedConfig.weightDisplayXOffset.get()+"");
 
         this.weightDisplayY = new EditBox(
                 font,
@@ -120,7 +118,7 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Weight Display Y Coord"));
-        this.weightDisplayY.setValue(OverstuffedConfig.weightDisplayY.get()+"");
+        this.weightDisplayY.setValue(OverstuffedConfig.weightDisplayYOffSet.get()+"");
 
         this.stuffedHudXOffset=new EditBox(
                 font,
@@ -199,6 +197,14 @@ public class GraphicsConfigScreen extends Screen {
         this.renderBackground(guiGraphics);
         // Then the widgets if this is a direct child of the Screen
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        int rightHeight = 49;
+        int leftHeight = 10;
+
+        int left = screenW / 2 + leftHeight ;
+        int top = screenH - rightHeight ;
+
+
         // Draw the title
         guiGraphics.drawCenteredString( font, this.getTitle().getString(),
                 this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
@@ -206,9 +212,9 @@ public class GraphicsConfigScreen extends Screen {
 
         pose.pushPose();
         pose.scale(.8f,0.8f,1);
-        guiGraphics.drawCenteredString(  font, "Weight Display X Coordinate",(int)(this.weightDisplayX.getX()*1.2+20*1.2),50,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(  font, "Weight Display X Offset",(int)(this.weightDisplayX.getX()*1.2+20*1.2),50,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(  font, "Weight Display Y Coordinate",(int)(this.weightDisplayY.getX()*1.2+30*1.2),50,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(  font, "Weight Display Y Offset",(int)(this.weightDisplayY.getX()*1.2+30*1.2),50,Color.WHITE.hashCode());
 
         guiGraphics.drawCenteredString(  font, "Stuffed Hud X Offset",(int)(this.stuffedHudXOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
 
@@ -217,12 +223,13 @@ public class GraphicsConfigScreen extends Screen {
 
         pose.popPose();
 
+
         if(weightDisplayY.isFocused() || weightDisplayX.isFocused())
         {
             //RenderSystem.setShaderTexture(0,WEIGHTPLACEHOLDER);
 
-            guiGraphics.blit(WEIGHTPLACEHOLDER,this.getEditBoxInt("weight",true),
-                    this.getEditBoxInt("weight",false),0,0,34,34,20,20);
+            guiGraphics.blit(WEIGHTPLACEHOLDER,this.getEditBoxInt("weight",true)+screenW/2-12,
+                    this.getEditBoxInt("weight",false)+top,0,0,20,20,20,20);
         }
 
         if(stuffedHudYOffset.isFocused() || stuffedHudXOffset.isFocused())
@@ -230,7 +237,7 @@ public class GraphicsConfigScreen extends Screen {
             //RenderSystem.setShaderTexture(0,WEIGHTPLACEHOLDER);
 
             guiGraphics.blit(WEIGHTPLACEHOLDER,screenW/2+10+this.getEditBoxInt("stuffed",true),
-                    screenH-45-this.getEditBoxInt("stuffed",false),0,0,70,6,34,34);
+                    screenH-47-this.getEditBoxInt("stuffed",false),0,0,70,6,34,34);
         }
 
 
@@ -256,8 +263,8 @@ public class GraphicsConfigScreen extends Screen {
             nonNumFlag=false;
         }
         else{
-            OverstuffedConfig.weightDisplayX.set(this.getEditBoxInt("weight", true));
-            OverstuffedConfig.weightDisplayY.set(this.getEditBoxInt("weight", false));
+            OverstuffedConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
+            OverstuffedConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
 
             OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
             OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));

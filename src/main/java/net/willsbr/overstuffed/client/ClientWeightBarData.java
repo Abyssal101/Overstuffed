@@ -13,6 +13,7 @@ public class ClientWeightBarData {
     private static int amountThroughStage;
 
     private static int queuedWeight = 0;
+    private static int totalQueuedWeight = 0;
 
     public static void setCurrentWeight(int newWeight) {
 
@@ -45,7 +46,16 @@ public class ClientWeightBarData {
         return queuedWeight;
     }
 
-    public static void setQueuedWeight(int queuedWeight) {
+    public static void setQueuedWeight(int queuedWeight, int totalQueuedWeight) {
         ClientWeightBarData.queuedWeight = queuedWeight;
+        ClientWeightBarData.totalQueuedWeight = totalQueuedWeight;
+    }
+
+    public static int getTotalQueuedWeight() {
+        return totalQueuedWeight;
+    }
+
+    public static void setTotalQueuedWeight(int totalQueuedWeight) {
+        ClientWeightBarData.totalQueuedWeight = totalQueuedWeight;
     }
 }

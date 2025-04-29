@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.WeightSystem;
+package net.willsbr.overstuffed.ServerPlayerSettings;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -8,28 +8,27 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerWeightBarProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerServerSettingsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<PlayerWeightBar> PLAYER_WEIGHT_BAR = CapabilityManager.get(
-            new CapabilityToken<PlayerWeightBar>() {});
-    private PlayerWeightBar weightBar =null;
-    private final LazyOptional<PlayerWeightBar> optional=LazyOptional.of(this::createWeightBar);
+    public static Capability<PlayerServerSettings> PLAYER_SERVER_SETTINGS = CapabilityManager.get(
+            new CapabilityToken<PlayerServerSettings>() {});
+    private PlayerServerSettings playerServerSettings =null;
+    private final LazyOptional<PlayerServerSettings> optional=LazyOptional.of(this::createPlayerServerSettings);
 
-    private PlayerWeightBar createWeightBar() {
-        if(this.weightBar ==null)
+    private PlayerServerSettings createPlayerServerSettings() {
+        if(this.playerServerSettings ==null)
         {
-            this.weightBar =new PlayerWeightBar();
+            this.playerServerSettings =new PlayerServerSettings();
         }
-        return this.weightBar;
+        return this.playerServerSettings;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap== PLAYER_WEIGHT_BAR)
+        if(cap== PLAYER_SERVER_SETTINGS)
         {
             return optional.cast();
         }
@@ -39,12 +38,12 @@ public class PlayerWeightBarProvider implements ICapabilityProvider, INBTSeriali
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt= new CompoundTag();
-        createWeightBar().saveNBTData(nbt);
+        createPlayerServerSettings().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createWeightBar().loadNBTData(nbt);
+        createPlayerServerSettings().loadNBTData(nbt);
     }
 }

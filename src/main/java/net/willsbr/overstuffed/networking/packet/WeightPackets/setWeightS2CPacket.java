@@ -1,5 +1,7 @@
 package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -37,14 +39,10 @@ public class setWeightS2CPacket {
         context.enqueueWork(() ->
                 {
                     //here we are on the client
-                    ServerPlayer player=context.getSender();
-                    Level level=player.level();
-                    if(level.isClientSide)
-                    {
+                    LocalPlayer player= Minecraft.getInstance().player;
                         ClientWeightBarData.setCurrentWeight(this.weight);
-
                         CPMData.checkIfUpdateCPM("weight");
-                    }
+
 
                 }
         );

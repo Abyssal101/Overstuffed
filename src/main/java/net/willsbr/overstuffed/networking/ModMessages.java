@@ -140,22 +140,9 @@ public class ModMessages {
                 .encoder(maxWeightDataSyncPacketS2C::toBytes)
                 .consumerMainThread(maxWeightDataSyncPacketS2C::handle)
                 .add();
-        net.messageBuilder(PlayerToggleUpdateBooleanS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerToggleUpdateBooleanS2C::new)
-                .encoder(PlayerToggleUpdateBooleanS2C::toBytes)
-                .consumerMainThread(PlayerToggleUpdateBooleanS2C::handle)
-                .add();
 
-        net.messageBuilder(PlayerToggleUpdateBooleanC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PlayerToggleUpdateBooleanC2S::new)
-                .encoder(PlayerToggleUpdateBooleanC2S::toBytes)
-                .consumerMainThread(PlayerToggleUpdateBooleanC2S::handle)
-                .add();
-        net.messageBuilder(PlayerToggleUpdateIntegerS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerToggleUpdateIntegerS2C::new)
-                .encoder(PlayerToggleUpdateIntegerS2C::toBytes)
-                .consumerMainThread(PlayerToggleUpdateIntegerS2C::handle)
-                .add();
+
+
         net.messageBuilder(PlayerUnlockUpdateBooleanS2C.class,id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(PlayerUnlockUpdateBooleanS2C::new)
                 .encoder(PlayerUnlockUpdateBooleanS2C::toBytes)
@@ -172,16 +159,24 @@ public class ModMessages {
                 .encoder(WeightMaxMinPollS2C::toBytes)
                 .consumerMainThread(WeightMaxMinPollS2C::handle)
                 .add();
-
-
-
-
-
         net.messageBuilder(weightIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(weightIntervalUpdateS2CPacket::new)
                 .encoder(weightIntervalUpdateS2CPacket::toBytes)
                 .consumerMainThread(weightIntervalUpdateS2CPacket::handle)
                 .add();
+
+        //Server Sync Settings
+        net.messageBuilder(PlayerSyncAllSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerSyncAllSettingsC2S::new)
+                .encoder(PlayerSyncAllSettingsC2S::toBytes)
+                .consumerMainThread(PlayerSyncAllSettingsC2S::handle)
+                .add();
+        net.messageBuilder(PlayerSyncAllSettingsPollS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerSyncAllSettingsPollS2C::new)
+                .encoder(PlayerSyncAllSettingsPollS2C::toBytes)
+                .consumerMainThread(PlayerSyncAllSettingsPollS2C::handle)
+                .add();
+
 
     }
 

@@ -1,20 +1,15 @@
 package net.willsbr.overstuffed.WeightSystem;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.UUID;
 
 public class PlayerWeightBar {
@@ -75,7 +70,6 @@ public class PlayerWeightBar {
 
     public void addWeight()
     {
-
         if(currentWeight+1<=this.curMaxWeight && queuedWeight>0)
         {
             currentWeight++;
@@ -121,6 +115,17 @@ public class PlayerWeightBar {
         }
         return change;
     }
+    public int getTotalWeightChanges()
+    {
+        int sum=0;
+        for(int i=0; i<weightChanges.size(); i++)
+        {
+            sum+=weightChanges.get(i);
+        }
+        return sum;
+    }
+
+
 
     public boolean weightUpdateStatus()
     {
@@ -241,6 +246,8 @@ public class PlayerWeightBar {
     {
         int calculatedPercentage=(int)((((double)(this.getCurrentWeight()-this.getMinWeight()))/(this.getCurMaxWeight()- this.getMinWeight()))*100);
         int xOf5=calculatedPercentage/20;
+        xOf5=Math.min(0,xOf5);
+        //TODO make it so it's max is clamped also when you set that variable
         return xOf5;
     }
 
