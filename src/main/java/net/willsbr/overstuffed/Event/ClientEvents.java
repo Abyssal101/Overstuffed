@@ -2,6 +2,7 @@ package net.willsbr.overstuffed.Event;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -79,7 +80,6 @@ public class ClientEvents {
                     }
                     else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
-
 
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
                         currentPlayer.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
@@ -417,18 +417,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void commandRegister(RegisterCommandsEvent event)
         {
-            CommandDispatcher commands=event.getDispatcher();
-            SetLayer.register(commands, event.getBuildContext());
-            setMaxWeightCommand.register(commands, event.getBuildContext());
-            setMinWeightCommand.register(commands,event.getBuildContext());
-            setCurrentWeight.register(commands,event.getBuildContext());
-            //clearLayers.register(commands, event.getBuildContext());
-            debugViewCommand.register(commands, event.getBuildContext());
-            setMaxStuffed.register(commands, event.getBuildContext());
-            //setWGMethod.register(commands,event.getBuildContext());
-            //setBurpFrequency.register(commands, event.getBuildContext());
-            //setGurgleFrequency.register(commands, event.getBuildContext());
-
+            registerCommands(event);
         }
     }
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
@@ -459,5 +448,19 @@ public class ClientEvents {
 
     }
 
+    public static void registerCommands(RegisterCommandsEvent event)
+    {
+        CommandDispatcher<CommandSourceStack> commands = event.getDispatcher();
+        SetLayer.register(commands, event.getBuildContext());
+        setMaxWeightCommand.register(commands, event.getBuildContext());
+        setMinWeightCommand.register(commands,event.getBuildContext());
+        setCurrentWeight.register(commands,event.getBuildContext());
+        //clearLayers.register(commands, event.getBuildContext());
+        debugViewCommand.register(commands, event.getBuildContext());
+        setMaxStuffed.register(commands, event.getBuildContext());
+        //setWGMethod.register(commands,event.getBuildContext());
+        //setBurpFrequency.register(commands, event.getBuildContext());
+        //setGurgleFrequency.register(commands, event.getBuildContext());
 
+    }
 }

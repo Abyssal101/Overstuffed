@@ -245,10 +245,8 @@ public class PlayerWeightBar {
     public int calculateCurrentWeightStage()
     {
         int calculatedPercentage=(int)((((double)(this.getCurrentWeight()-this.getMinWeight()))/(this.getCurMaxWeight()- this.getMinWeight()))*100);
-        int xOf5=calculatedPercentage/20;
-        xOf5=Math.min(0,xOf5);
-        //TODO make it so it's max is clamped also when you set that variable
-        return xOf5;
+        //TODO make it so it's max is clamped when you set the total levels of weight
+        return calculatedPercentage/20;
     }
 
 

@@ -16,6 +16,9 @@
   "advancement.overstuffed.fattytitle": "Fatty",
   "advancement.overstuffed.fattydescription": "You managed to reach your max weight!",
 
+  "advancements.overstuffed.recipes.scale.title": "Weight Watcher",
+  "advancements.overstuffed.recipes.scale.description": "Craft a scale to measure your weight",
+
   "block.overstuffed.scale": "Scale",
 
   "commands.overstuffed.stuffedupdatesuccess": "Stuffed layer successfully updated",
@@ -29,6 +32,8 @@
   "commands.overstuffed.setbelowzero": "ERROR: Set below zero",
   "commands.overstuffed.maxbelowmin": "ERROR: Set max below min",
   "commands.overstuffed.minabovemax": "ERROR: Set min above max",
+
+  "message.overstuffed.cpmversion": "ERROR: CPM Version is lower than %1$s",
 
 
   "debug.overstuffed.true": "True",

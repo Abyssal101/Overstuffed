@@ -1,11 +1,14 @@
 package net.willsbr.overstuffed.Event;
 
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
@@ -17,6 +20,7 @@ import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocks;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
@@ -40,6 +44,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Mod.EventBusSubscriber(modid= OverStuffed.MODID)
 public class ModEvent {
 
+    @SubscribeEvent
+    public static void commandRegister(RegisterCommandsEvent event)
+    {
+        ClientEvents.registerCommands(event);
+    }
 
     //START OF STUFF NEEDED FOR A CAPABILITY
     @SubscribeEvent
@@ -70,16 +79,19 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         //stuffedbar
+        event.getOriginal().reviveCaps();
+
         if (event.getEntity() instanceof ServerPlayer && event.getOriginal() instanceof ServerPlayer)
         {
+
             event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
+                event.getEntity().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
+
                 });
             });
 
             //put all shit that should always copy below this
-            event.getOriginal().reviveCaps();
             event.getOriginal().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(oldStore -> {
                 event.getEntity().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
@@ -381,7 +393,8 @@ public class ModEvent {
 
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getOverstuffedLevel(),
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel()
+                            ,stuffedBar.getStuffedLevel(),
                             stuffedBar.getOverstuffedLevel()), player);
 
 

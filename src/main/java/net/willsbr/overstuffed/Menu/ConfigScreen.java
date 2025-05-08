@@ -13,7 +13,6 @@ import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
-import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
 import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
@@ -132,14 +131,15 @@ public class ConfigScreen extends Screen {
 
         //this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
 
+        //TODO Fixed lock
         this.weightEffect= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"),OverstuffedConfig.weightEffects.get(),true);
-        this.weightEffect.setTooltipText("Locked: Planned Feature");
+        this.weightEffect.setLocked(false);
+        this.weightEffect.setTooltipText("Enables/Disables effects related to gaining and losing weight");
 
         //TODO MAKE the Sliders have translateable components
 
         this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
         this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
-        this.weightEffect.setLocked(true);
 
 
         //ALL editbox sizes are based off this first editbox.
@@ -253,11 +253,27 @@ public class ConfigScreen extends Screen {
        guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
        guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
 
-        if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1)
+       //Error Handling
+        if(ModList.get().isLoaded("cpm") && ClientCPMData.CPMUpdated()==-1)
         {
-           guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
+            guiGraphics.drawCenteredString(font, Component.translatable("message.overstuffed.cpmversion",Component.literal(ClientCPMData.minCPMVersion)), this.width/2,30,Color.RED.hashCode());
 
         }
+        else{
+            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1
+                    &&  Minecraft.getInstance().player!=null)
+            {
+                guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
+            }
+            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.stuffedLayerEditBox.getValue())==-1
+                    && Minecraft.getInstance().player!=null)
+            {
+                guiGraphics.drawCenteredString(font, "Error: Stuffed Layer inputted was not found", this.width/ 2+100,stuffedLayerEditBox.getY()+20,Color.RED.hashCode());
+
+            }
+        }
+
+
 
        guiGraphics.drawCenteredString(font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.getY(),Color.white.hashCode());
        guiGraphics.drawCenteredString(font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.getY()+10,Color.GRAY.hashCode());
@@ -313,7 +329,7 @@ public class ConfigScreen extends Screen {
         {
             OverstuffedConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
         }
-        if(ModList.get().isLoaded("cpm") && Minecraft.getInstance().player!=null)
+        if(ModList.get().isLoaded("cpm") && Minecraft.getInstance().player!=null && ClientCPMData.getPlayersAPI()!=null)
         {
 
             ModMessages.sendToServer(new CPMDataC2SPacket(OverstuffedConfig.stuffedLayerConfigEntry.get(),OverstuffedConfig.weightLayerConfigEntry.get(),
@@ -323,12 +339,14 @@ public class ConfigScreen extends Screen {
 
         //OverstuffedConfig.setSetting(1, momentum.getSetting());
         OverstuffedConfig.weightEffects.set(weightEffect.getSetting());
-        System.out.println(burpFrequency.getValue()+"Burp");
         OverstuffedConfig.burpFrequency.set(burpFrequency.getValue());
         OverstuffedConfig.gurgleFrequency.set(gurgleFrequency.getValue());
+        if(Minecraft.getInstance().player!=null)
+        {
+            ModMessages.sendToServer(new PlayerSyncAllSettingsC2S(OverstuffedConfig.stageGain.get(),
+                    OverstuffedConfig.weightEffects.get(),OverstuffedConfig.burpFrequency.get(),OverstuffedConfig.gurgleFrequency.get()));
+        }
 
-        ModMessages.sendToServer(new PlayerSyncAllSettingsC2S(OverstuffedConfig.stageGain.get(),
-                OverstuffedConfig.weightEffects.get(),OverstuffedConfig.burpFrequency.get(),OverstuffedConfig.gurgleFrequency.get()));
 
 
         int max;
@@ -365,8 +383,12 @@ public class ConfigScreen extends Screen {
 
                 }
                 else {
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +
-                            "weight is too low. Must be at least 100"));
+                    if(Minecraft.getInstance().player!=null)
+                    {
+                        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +
+                                "weight is too low. Must be at least 100"));
+                    }
+
                 }
 
 
@@ -379,7 +401,7 @@ public class ConfigScreen extends Screen {
         }
 
         OverstuffedConfig.saveConfig();
-        if(CPMData.checkIfUpdateCPM("weight")==false)
+        if(CPMData.checkIfUpdateCPM("weight")==false && Minecraft.getInstance().player!=null)
         {
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: CPM is not loaded. No visual changes can occur"));
         }

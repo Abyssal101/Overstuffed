@@ -44,21 +44,25 @@ public class PlayerSyncAllSettingsC2S {
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
-        NetworkEvent.Context context= supplier.get();
-        context.enqueueWork(() ->
-        {
-            ServerPlayer player=context.getSender();
+        NetworkEvent.Context context = supplier.get();
+        ServerPlayer player = context.getSender();
+
+        if (player == null) {
+            return false;
+        }
+
+        context.enqueueWork(() -> {
             player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                 serverSettings.setWeightEffects(weightEffects);
                 serverSettings.setStageGain(stageBased);
                 serverSettings.setBurpFrequency(burpFrequency);
                 serverSettings.setGurgleFrequency(gurgleFrequency);
             });
-
-
-
         });
+
+        context.setPacketHandled(true);
         return true;
+
     }
     public static PlayerSyncAllSettingsC2S setSpecifc(String name, boolean input)
     {

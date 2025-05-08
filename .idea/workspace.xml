@@ -4,31 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="Fixed Burst gain not working, had to deal with weight effects changing lastWeightStagae&#10;Finished setMaxStuffed, use 4 0 to reset incase anything funky happens:&#10; example usage /overstuffed setMaxStuffed 5 1, first number is the number of points, second is the state, so 1 represents 2 overstuffed levels and 1 full level, while 2 represents 1 overstuffed level and 1 full level.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/ServerPlayerSettings/PlayerServerSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/ServerPlayerSettings/PlayerServerSettingsProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerSyncAllSettingsC2S.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerSyncAllSettingsPollS2C.java" afterDir="false" />
+    <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="Added an advancement where if you get a heavy weighted pressure plate you unlock the recipe for a scale">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setCurrentWeight.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setWGMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/setWGMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/ConfigScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Menu/GraphicsConfigScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBarProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBarProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientWeightBarData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/config/OverstuffedConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerToggleUpdateBooleanC2S.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerToggleUpdateBooleanS2C.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SettingPackets/PlayerToggleUpdateIntegerS2C.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/QueuedWeightSyncS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/QueuedWeightSyncS2CPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/overstuffed/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,17 +76,29 @@
     &quot;assignee&quot;: &quot;Abyssal101&quot;
   }
 }</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="04f6b0f5-2272-4715-8dd9-75171805353e" />
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Abyssal101/Overstuffed.git&quot;,
-    &quot;accountId&quot;: &quot;13610289-1b91-4025-a5c1-48862f3c5c22&quot;
+    &quot;accountId&quot;: &quot;04f6b0f5-2272-4715-8dd9-75171805353e&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minecraftforge/fmlcore/1.20.1-47.3.0/1b8da50bc0e1d273ee10988d0bfd0a71865dd44/fmlcore-1.20.1-47.3.0-sources.jar!/net/minecraftforge/fml/ModList.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2sBQ6IHSpVDayHQCs0MJwrYb3YT" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -124,9 +113,12 @@
     &quot;Gradle.Overstuffed [:prepareRunClientCompile].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Overstuffed [createMcpToSrg].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Overstuffed [genIntellijRuns].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Overstuffed [runClient].executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlbra/IdeaProjects/Overstuffed/src/main/java/net/willsbr/overstuffed/PlayerSettings&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -137,7 +129,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -156,7 +148,7 @@
       <recent name="net.willsbr.overstuffed.Command" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.runClient">
+  <component name="RunManager" selected="Gradle.Overstuffed [runClient]">
     <configuration name="Overstuffed [genIntellijRuns]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -179,8 +171,31 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="Overstuffed [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runClient" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Overstuffed [runClient]" />
         <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
       </list>
     </recent_temporary>
@@ -188,8 +203,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -227,6 +242,8 @@
       <workItem from="1743424536483" duration="96000" />
       <workItem from="1743424874021" duration="2497000" />
       <workItem from="1743471436837" duration="4000" />
+      <workItem from="1746497233870" duration="2438000" />
+      <workItem from="1746563638024" duration="10119000" />
     </task>
     <task id="LOCAL-00001" summary="Added Pekhui to runtime&#10;Made it so wedging worked with pekhui scaling&#10;Removed testing fill blocks">
       <option name="closed" value="true" />
@@ -252,7 +269,23 @@
       <option name="project" value="LOCAL" />
       <updated>1742160050396</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fixed config screen from breaking in the main menu">
+      <option name="closed" value="true" />
+      <created>1746497840439</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746497840439</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added an advancement where if you get a heavy weighted pressure plate you unlock the recipe for a scale">
+      <option name="closed" value="true" />
+      <created>1746497885895</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746497885895</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,7 +295,20 @@
     <MESSAGE value="Added Pekhui to runtime&#10;Made it so wedging worked with pekhui scaling&#10;Removed testing fill blocks" />
     <MESSAGE value="Moved the wedge event to clientside so that way players don't lag out the server, and added slowness effect for the xWedgeCheck&#10;Need to finalize the feel of it" />
     <MESSAGE value="Fixed Burst gain not working, had to deal with weight effects changing lastWeightStagae&#10;Finished setMaxStuffed, use 4 0 to reset incase anything funky happens:&#10; example usage /overstuffed setMaxStuffed 5 1, first number is the number of points, second is the state, so 1 represents 2 overstuffed levels and 1 full level, while 2 represents 1 overstuffed level and 1 full level." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Burst gain not working, had to deal with weight effects changing lastWeightStagae&#10;Finished setMaxStuffed, use 4 0 to reset incase anything funky happens:&#10; example usage /overstuffed setMaxStuffed 5 1, first number is the number of points, second is the state, so 1 represents 2 overstuffed levels and 1 full level, while 2 represents 1 overstuffed level and 1 full level." />
+    <MESSAGE value="Fixed config screen from breaking in the main menu" />
+    <MESSAGE value="Added an advancement where if you get a heavy weighted pressure plate you unlock the recipe for a scale" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added an advancement where if you get a heavy weighted pressure plate you unlock the recipe for a scale" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java</url>
+          <line>161</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

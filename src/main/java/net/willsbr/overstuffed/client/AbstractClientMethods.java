@@ -19,4 +19,6 @@ public class AbstractClientMethods {
         guiGraphics.blit(texture,x, y,0,0,0,textureWidth,textureHeight,uvWidth,uvHeight);
     }
 
+
+
 }

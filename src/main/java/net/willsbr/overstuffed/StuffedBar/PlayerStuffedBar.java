@@ -25,7 +25,7 @@ public class PlayerStuffedBar {
     private int addState=0;
 
     //what the amount of stuffed lost should be before it adds new
-    private int interval=4;
+    private int interval=30;
 
 
 
@@ -126,7 +126,7 @@ public class PlayerStuffedBar {
 
     public void copyFrom(PlayerStuffedBar source)
     {
-        this.currentStuffedLevel =source.getCurrentStuffedLevel();
+        //this.currentStuffedLevel =source.getCurrentStuffedLevel();
         this.fullLevel =source.getFullLevel();
         this.stuffedLevel =source.getStuffedLevel();
         this.overstuffedLevel=source.getOverstuffedLevel();

@@ -263,13 +263,16 @@ public class GraphicsConfigScreen extends Screen {
             nonNumFlag=false;
         }
         else{
-            OverstuffedConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
-            OverstuffedConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
+            if(Minecraft.getInstance().player!=null)
+            {
+                OverstuffedConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
+                OverstuffedConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
 
-            OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
-            OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
+                OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
+                OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
+            }
+
         }
-
 
         OverstuffedConfig.debugView.set(debugView.getSetting());
 

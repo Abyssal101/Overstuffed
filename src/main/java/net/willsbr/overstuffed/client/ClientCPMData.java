@@ -1,8 +1,16 @@
 package net.willsbr.overstuffed.client;
 
 import com.tom.cpm.api.IClientAPI;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraftforge.fml.ModList;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.networking.ModMessages;
+
+import java.awt.*;
 
 public class ClientCPMData {
 
@@ -12,6 +20,9 @@ public class ClientCPMData {
 
     private static int totalWeightFrames;
     private static int totalStuffedFrames;
+
+    public static final String minCPMVersion="0.6.20a";
+    private static String loadedCPMVersion="0.0.0";
 
 
     public static void setStuffed(String inputStuffed)
@@ -34,14 +45,24 @@ public class ClientCPMData {
         OverstuffedConfig.setWeightLayer(inputWeight);
     }
 
-
-
+    //checks to see if CPM is a high enough version
+    public static int CPMUpdated()
+    {
+        //inital check to make certain CPM is loaded, otherwise it's always gonna be 0.0.0
+        if(ModList.get().isLoaded("cpm") && loadedCPMVersion.contentEquals("0.0.0"))
+        {
+            loadedCPMVersion=ModList.get().getModContainerById("cpm").get().getModInfo().getVersion().toString();
+        }
+        return compareVersions(loadedCPMVersion,minCPMVersion);
+    }
 
     public static IClientAPI getPlayersAPI() {
         if(ModList.get().isLoaded("cpm"))
         {
-            return playersAPI;
-
+            if(CPMUpdated()!=-1)
+            {
+                return playersAPI;
+            }
         }
         return null;
     }
@@ -52,7 +73,7 @@ public class ClientCPMData {
 
     public static boolean playStuffed()
     {
-        if(ModList.get().isLoaded("cpm"))
+        if(ModList.get().isLoaded("cpm") && getPlayersAPI()!=null)
         {
             if(!OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(""))
             {
@@ -70,7 +91,8 @@ public class ClientCPMData {
 
     }
     public static boolean playWeight() {
-        if (ModList.get().isLoaded("cpm")) {
+        if (ModList.get().isLoaded("cpm") && getPlayersAPI() != null) {
+
             if (!OverstuffedConfig.stageGain.get()) {
                 String layerName=OverstuffedConfig.weightLayerConfigEntry.get();
                 double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedConfig.minWeight.get());
@@ -124,6 +146,41 @@ public class ClientCPMData {
             }
         }
         return totalStuffedFrames;
+    }
+
+
+    //utilized to check if CPM is at least the latest version
+    //if first is greater than second returns one
+    public static int compareVersions(String version1, String version2) {
+        String[] v1Parts = version1.split("\\.");
+        String[] v2Parts = version2.split("\\.");
+
+        //does the min, ideally they are always the same but this way they don't crash.
+        int length = Math.min(v1Parts.length, v2Parts.length);
+        for (int i = 0; i < length; i++) {
+            try
+            {
+                int v1=0;
+                int v2=0;
+                for(int e=0;e<v1Parts[i].length();e++)
+                {
+                    v1=0;
+                    v2=0;
+                    v1+=v1Parts[i].charAt(e);
+                    v2+=v2Parts[i].charAt(e);
+                    if (v1 < v2) return -1;
+                    if (v1 > v2) return 1;
+                }
+
+
+            } catch (NumberFormatException e) {
+
+            }
+
+
+
+        }
+        return 0;
     }
 }
 
