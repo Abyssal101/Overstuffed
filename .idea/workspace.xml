@@ -5,7 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c881483a-a8dc-4f38-81b0-c68c343eca01" name="Changes" comment="Added an advancement where if you get a heavy weighted pressure plate you unlock the recipe for a scale">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Command/figuraNBTUpdateCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/CommonEventMethods.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SyncCPMDataCapS2C.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SyncCapsS2C.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SyncServerSettingCapS2C.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SyncStuffedCapS2C.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/SyncWeightCapS2C.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ModEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinCanEat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinCanEat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixincanStartSprinting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Mixin/MixinCanStartSprinting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/StuffedBar/PlayerStuffedBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/StuffedBar/PlayerStuffedBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/WeightSystem/PlayerWeightBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/HudOverlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/ModMessages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/OverfullFoodDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/setMaxStuffedS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/setMaxStuffedS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/BurstGainDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/BurstGainDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/ClientCPMWeightSyncS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/ClientCPMWeightSyncS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/QueuedWeightSyncS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/QueuedWeightSyncS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/WeightBarDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/WeightBarDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/WeightMaxMinPollS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/WeightMaxMinPollS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/maxWeightDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/maxWeightDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setMinWeightDataSyncPacketS2C.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setMinWeightDataSyncPacketS2C.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/setWeightS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/WeightPackets/weightIntervalUpdateS2CPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/networking/packet/StuffedPackets/stuffedIntervalUpdateS2CPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mixinconfig.overstuffed.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,12 +67,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Overstuffed" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="forgegradle prepare runs" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Overstuffed" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="forgegradle runs" type="c8890929:TasksNode$1" />
               </path>
               <path>
@@ -68,6 +90,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -103,36 +130,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.runClient.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build Overstuffed.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.C:/Users/wlbra/IdeaProjects/Overstuffed [:prepareRunClientCompile].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.C:/Users/wlbra/IdeaProjects/Overstuffed [createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [:cpw.mods.bootstraplauncher.BootstrapLauncher.main()].executor&quot;: &quot;Debug&quot;,
-    &quot;Gradle.Overstuffed [:prepareRunClientCompile].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [createMcpToSrg].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [genIntellijRuns].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Overstuffed [runClient].executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/wlbra/IdeaProjects/Overstuffed/src/main/java/net/willsbr/overstuffed/PlayerSettings&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.runClient.executor": "Run",
+    "Gradle.Build Overstuffed.executor": "Run",
+    "Gradle.C:/Users/wlbra/IdeaProjects/Overstuffed [:prepareRunClientCompile].executor": "Run",
+    "Gradle.C:/Users/wlbra/IdeaProjects/Overstuffed [createMcpToSrg].executor": "Run",
+    "Gradle.Overstuffed [:cpw.mods.bootstraplauncher.BootstrapLauncher.main()].executor": "Debug",
+    "Gradle.Overstuffed [:prepareRunClientCompile].executor": "Run",
+    "Gradle.Overstuffed [createMcpToSrg].executor": "Run",
+    "Gradle.Overstuffed [genIntellijRuns].executor": "Run",
+    "Gradle.Overstuffed [prepareRunServer].executor": "Run",
+    "Gradle.Overstuffed [runClient].executor": "Debug",
+    "Gradle.Overstuffed [runServer].executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Changing-Caps-To-Attributes",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/wlbra/IdeaProjects/Overstuffed/src/main/java/net/willsbr/overstuffed/PlayerSettings",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlbra\IdeaProjects\Overstuffed\src\main\java\net\willsbr\overstuffed\PlayerSettings" />
@@ -142,10 +171,11 @@
       <recent name="C:\Users\wlbra\IdeaProjects\Overstuffed" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.willsbr.overstuffed.networking.packet" />
+      <recent name="net.willsbr.overstuffed.Command" />
       <recent name="net.willsbr.overstuffed.networking.packet.SettingPackets" />
       <recent name="net.willsbr.overstuffed.networking.packet.WeightPackets" />
       <recent name="net.willsbr.overstuffed.networking.packet.StuffedPackets" />
-      <recent name="net.willsbr.overstuffed.Command" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Overstuffed [runClient]">
@@ -161,6 +191,28 @@
         <option name="taskNames">
           <list>
             <option value="genIntellijRuns" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="Overstuffed [prepareRunServer]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="prepareRunServer" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -193,9 +245,33 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="Overstuffed [runServer]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runServer" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Overstuffed [runClient]" />
+        <item itemvalue="Gradle.Overstuffed [runServer]" />
+        <item itemvalue="Gradle.Overstuffed [prepareRunServer]" />
         <item itemvalue="Gradle.Overstuffed [genIntellijRuns]" />
       </list>
     </recent_temporary>
@@ -244,6 +320,14 @@
       <workItem from="1743471436837" duration="4000" />
       <workItem from="1746497233870" duration="2438000" />
       <workItem from="1746563638024" duration="10119000" />
+      <workItem from="1746665167386" duration="1208000" />
+      <workItem from="1746741471637" duration="7979000" />
+      <workItem from="1746807415240" duration="11236000" />
+      <workItem from="1746838811499" duration="1269000" />
+      <workItem from="1746992234581" duration="785000" />
+      <workItem from="1746993042165" duration="5400000" />
+      <workItem from="1747087036288" duration="7589000" />
+      <workItem from="1747250928721" duration="1626000" />
     </task>
     <task id="LOCAL-00001" summary="Added Pekhui to runtime&#10;Made it so wedging worked with pekhui scaling&#10;Removed testing fill blocks">
       <option name="closed" value="true" />
@@ -303,9 +387,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/client/ClientCPMData.java</url>
-          <line>161</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/src/main/java/net/willsbr/overstuffed/Event/ClientEvents.java</url>
+          <line>272</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

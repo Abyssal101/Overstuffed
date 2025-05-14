@@ -9,10 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.networking.packet.*;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
-import net.willsbr.overstuffed.networking.packet.StuffedPackets.ClientCPMStuffedSyncS2CPacket;
-import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
-import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
-import net.willsbr.overstuffed.networking.packet.StuffedPackets.setMaxStuffedS2CPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.*;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.*;
 
 public class ModMessages {
@@ -159,10 +156,10 @@ public class ModMessages {
                 .encoder(WeightMaxMinPollS2C::toBytes)
                 .consumerMainThread(WeightMaxMinPollS2C::handle)
                 .add();
-        net.messageBuilder(weightIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(weightIntervalUpdateS2CPacket::new)
-                .encoder(weightIntervalUpdateS2CPacket::toBytes)
-                .consumerMainThread(weightIntervalUpdateS2CPacket::handle)
+        net.messageBuilder(stuffedIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(stuffedIntervalUpdateS2CPacket::new)
+                .encoder(stuffedIntervalUpdateS2CPacket::toBytes)
+                .consumerMainThread(stuffedIntervalUpdateS2CPacket::handle)
                 .add();
 
         //Server Sync Settings
@@ -176,7 +173,31 @@ public class ModMessages {
                 .encoder(PlayerSyncAllSettingsPollS2C::toBytes)
                 .consumerMainThread(PlayerSyncAllSettingsPollS2C::handle)
                 .add();
-
+        net.messageBuilder(SyncCapsS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncCapsS2C::new)
+                .encoder(SyncCapsS2C::toBytes)
+                .consumerMainThread(SyncCapsS2C::handle)
+                .add();
+        net.messageBuilder(SyncCPMDataCapS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncCPMDataCapS2C::new)
+                .encoder(SyncCPMDataCapS2C::toBytes)
+                .consumerMainThread(SyncCPMDataCapS2C::handle)
+                .add();
+        net.messageBuilder(SyncServerSettingCapS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncServerSettingCapS2C::new)
+                .encoder(SyncServerSettingCapS2C::toBytes)
+                .consumerMainThread(SyncServerSettingCapS2C::handle)
+                .add();
+        net.messageBuilder(SyncStuffedCapS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncStuffedCapS2C::new)
+                .encoder(SyncStuffedCapS2C::toBytes)
+                .consumerMainThread(SyncStuffedCapS2C::handle)
+                .add();
+        net.messageBuilder(SyncWeightCapS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncWeightCapS2C::new)
+                .encoder(SyncWeightCapS2C::toBytes)
+                .consumerMainThread(SyncWeightCapS2C::handle)
+                .add();
 
     }
 

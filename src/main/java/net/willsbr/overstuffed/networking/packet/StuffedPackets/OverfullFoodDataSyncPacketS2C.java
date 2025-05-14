@@ -1,10 +1,14 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class OverfullFoodDataSyncPacketS2C {
@@ -47,6 +51,17 @@ public class OverfullFoodDataSyncPacketS2C {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
             ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
+
+            LocalPlayer player= Minecraft.getInstance().player;
+            Objects.requireNonNull(player).getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
+                    .ifPresent(stuffedBar -> {
+                        stuffedBar.setStuffedLevel(stuffed_bar);
+                        stuffedBar.setFullLevel(this.currentSoftLimit);
+                        stuffedBar.setStuffedLevel(this.currentFirmLimit);
+                        stuffedBar.setOverstuffedLevel(this.currentHardLimit);
+                    });
+
+
             CPMData.checkIfUpdateCPM("stuffed");
 
         });

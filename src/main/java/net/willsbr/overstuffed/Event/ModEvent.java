@@ -1,7 +1,5 @@
 package net.willsbr.overstuffed.Event;
 
-import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +18,6 @@ import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocks;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.Command.*;
 import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
@@ -36,7 +33,7 @@ import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodData
 import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.QueuedWeightSyncS2CPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.weightIntervalUpdateS2CPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.stuffedIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,7 +44,7 @@ public class ModEvent {
     @SubscribeEvent
     public static void commandRegister(RegisterCommandsEvent event)
     {
-        ClientEvents.registerCommands(event);
+        CommonEventMethods.registerCommands(event);
     }
 
     //START OF STUFF NEEDED FOR A CAPABILITY
@@ -216,6 +213,10 @@ public class ModEvent {
                 if (serverSettings.stageBasedGain()) {
                     burstGain(weightBar,serverSettings, event, xOf5);
                 }
+                if(!serverSettings.stageBasedGain())
+                {
+                        weightBar.setLastWeightStage(xOf5);
+                }
 
 
                 //Adding and removing health modifiers
@@ -224,7 +225,7 @@ public class ModEvent {
 
 
                 if (serverSettings.getGurgleFrequency() > 0 & weightBar.getLastWeightStage() >= 1 &&
-                        event.player.getRandom().nextFloat() < (0.001f * Math.sqrt(OverstuffedConfig.gurgleFrequency.get() * weightBar.getLastWeightStage()))) {
+                        event.player.getRandom().nextFloat() < (0.001f * Math.sqrt(serverSettings.getGurgleFrequency() * weightBar.getLastWeightStage()))) {
                     event.player.level().playSound(null, event.player.blockPosition(), ModSounds.GURGLE_SOUNDS.get(
                                     event.player.getRandom().nextIntBetweenInclusive(1, ModSounds.GURGLE_SOUNDS.size()) - 1).get(),
                             event.player.getSoundSource(), 0.5f, 1f);
@@ -288,9 +289,6 @@ public class ModEvent {
                     }
 
                 }
-                //TODO CHECK THIS WORKS DUMMY
-
-                event.player.serializeNBT();
 
             });
             });
@@ -310,7 +308,7 @@ public class ModEvent {
                 {
                     stuffedBar.addStuffedPoint();
                 }
-                ModMessages.sendToPlayer(new weightIntervalUpdateS2CPacket(stuffedBar.getStuffedLossed(),stuffedBar.getInterval()),(ServerPlayer)event.player);
+                ModMessages.sendToPlayer(new stuffedIntervalUpdateS2CPacket(stuffedBar.getStuffedLossed(),stuffedBar.getInterval()),(ServerPlayer)event.player);
 
 
                 //Playing sound logic
@@ -356,13 +354,15 @@ public class ModEvent {
             {
                 if(xOf5!=lastWeightStage)
                 {
+
                     //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
                     //Maybe could make it just this, but slightly more effcient I think?
                     PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
-                    if(serverSettings.stageBasedGain())
-                    {
-                        weightBar.setLastWeightStage(xOf5);
-                    }
+                    //TODO see if moving this below this method call causes issues
+//                    if(serverSettings.stageBasedGain())
+//                    {
+//                        weightBar.setLastWeightStage(xOf5);
+//                    }
 
 
                 }
@@ -430,6 +430,15 @@ public class ModEvent {
     public static void onPlayerLeaveWorld(EntityLeaveLevelEvent event)
     {
         if (!event.getLevel().isClientSide())
+        {
+            if (event.getEntity() instanceof ServerPlayer player)
+            {
+                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                    PlayerWeightBar.clearModifiers(player);
+                });
+            }
+        }
+        else
         {
             if (event.getEntity() instanceof ServerPlayer player)
             {

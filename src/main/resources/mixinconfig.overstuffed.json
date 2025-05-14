@@ -4,9 +4,14 @@
   "minVersion": "0.8",
   "mixins":
   [
-    "MixinCanEat",
-    "MixincanStartSprinting"
+    "MixinCanEat"
   ],
+  "client":
+  [
+    "MixinCanStartSprinting"
+  ],
+
+
   "refmap":"mixinconfig.overstuffed.refmap.json"
 
 }
