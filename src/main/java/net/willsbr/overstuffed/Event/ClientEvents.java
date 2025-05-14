@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -63,6 +64,7 @@ public class ClientEvents {
                     ItemStack heldItem=useItemEvent.getItem();
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
                     //322 is id for golden apple
+
                     if(heldItem.is(Items.GOLDEN_APPLE))
                     {
                         int duration=600;
@@ -438,7 +440,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("stuffedbar", HudOverlay.HUD_STUFFEDBAR);
+            event.registerAbove(VanillaGuiOverlay.VIGNETTE.id(),"stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 
         @SubscribeEvent
