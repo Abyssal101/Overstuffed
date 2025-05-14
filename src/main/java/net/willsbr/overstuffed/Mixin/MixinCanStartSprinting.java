@@ -14,16 +14,16 @@ public abstract class MixinCanStartSprinting {
     @Inject(method = "canStartSprinting",at =@At("RETURN"),cancellable = true)
     protected void canStartSprinting(CallbackInfoReturnable<Boolean> cir)
     {
-//        assert Minecraft.getInstance().level != null;
-//        if(Minecraft.getInstance().level.isClientSide)
-//        {
-//            Minecraft.getInstance().player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightbar -> {
-//                if(weightbar.getLastWeightStage()>=4)
-//                {
-//                    cir.setReturnValue(false);
-//                }
-//            });
-//        }
+        assert Minecraft.getInstance().level != null;
+        if(Minecraft.getInstance().level.isClientSide)
+        {
+            Minecraft.getInstance().player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightbar -> {
+                if(weightbar.calculateCurrentWeightStage()>=4)
+                {
+                    cir.setReturnValue(false);
+                }
+            });
+        }
 
     }
 }
