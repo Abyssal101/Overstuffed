@@ -23,14 +23,7 @@ public class SyncStuffedCapS2C {
     }
 
     public SyncStuffedCapS2C(FriendlyByteBuf buf){
-        String output=buf.readUtf();
-
          this.stuffedBar=buf.readNbt();
-
-
-
-
-
     }
 
     public void toBytes(FriendlyByteBuf buf){

@@ -53,11 +53,11 @@ public class OverfullFoodDataSyncPacketS2C {
             ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
 
             LocalPlayer player= Minecraft.getInstance().player;
-            Objects.requireNonNull(player).getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
+            player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
                     .ifPresent(stuffedBar -> {
                         stuffedBar.setStuffedLevel(stuffed_bar);
                         stuffedBar.setFullLevel(this.currentSoftLimit);
-                        stuffedBar.setStuffedLevel(this.currentFirmLimit);
+                        stuffedBar.setFullLevel(this.currentFirmLimit);
                         stuffedBar.setOverstuffedLevel(this.currentHardLimit);
                     });
 

@@ -18,6 +18,7 @@ import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocks;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.overstuffed.Command.figuraNBTUpdateCommand;
 import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
@@ -414,7 +415,7 @@ public class ModEvent {
                 player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
 
                 });
-
+                figuraNBTUpdateCommand.updateNBT(player);
             }
 
 

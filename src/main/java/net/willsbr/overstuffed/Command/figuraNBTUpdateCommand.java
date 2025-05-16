@@ -33,7 +33,11 @@ public class figuraNBTUpdateCommand {
     }
 
     private static int updateNBT(CommandSourceStack pSource, Player player) throws CommandSyntaxException {
+       updateNBT(player);
+        return 0;
+    }
 
+    public static void updateNBT(Player player)  {
         CompoundTag cpmNBT= new CompoundTag();
         CompoundTag stuffedNBT= new CompoundTag();
         CompoundTag weightNBT= new CompoundTag();
@@ -53,24 +57,7 @@ public class figuraNBTUpdateCommand {
         player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
             serverSettings.saveNBTData(serverSettingsNBT);
         });
-
-        //ModMessages.sendToPlayer(new SyncCapsS2C(weightNBT,stuffedNBT,cpmNBT,serverSettingsNBT),(ServerPlayer) player);
-        ModMessages.sendToPlayer(new SyncWeightCapS2C(weightNBT),(ServerPlayer) player);
-        System.out.println("Weight");
-        ModMessages.sendToPlayer(new SyncStuffedCapS2C(stuffedNBT),(ServerPlayer) player);
-        System.out.println("Stuffed");
-
-        ModMessages.sendToPlayer(new SyncCPMDataCapS2C(cpmNBT),(ServerPlayer) player);
-        System.out.println("CPMData");
-
-        ModMessages.sendToPlayer(new SyncServerSettingCapS2C(serverSettingsNBT),(ServerPlayer) player);
-        System.out.println("ServerSettings");
-
-
-
-
-
-        return 0;
+        ModMessages.sendToPlayer(new SyncCapsS2C(weightNBT,stuffedNBT,cpmNBT,serverSettingsNBT),(ServerPlayer) player);
     }
 
 }

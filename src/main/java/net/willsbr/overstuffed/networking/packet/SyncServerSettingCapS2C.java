@@ -20,17 +20,10 @@ public class SyncServerSettingCapS2C {
     public SyncServerSettingCapS2C(CompoundTag settings){
 
         settingsData=settings;
-
-
     }
 
     public SyncServerSettingCapS2C(FriendlyByteBuf buf){
-        String output=buf.readUtf();
          this.settingsData=buf.readNbt();
-
-
-
-
     }
 
     public void toBytes(FriendlyByteBuf buf){

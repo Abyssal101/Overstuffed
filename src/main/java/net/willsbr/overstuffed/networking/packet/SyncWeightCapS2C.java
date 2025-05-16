@@ -22,7 +22,6 @@ public class SyncWeightCapS2C {
     }
 
     public SyncWeightCapS2C(FriendlyByteBuf buf){
-        String output=buf.readUtf();
         this.weightBar=buf.readNbt();
     }
 

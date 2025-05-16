@@ -27,18 +27,10 @@ public class SyncCPMDataCapS2C {
     }
 
     public SyncCPMDataCapS2C(FriendlyByteBuf buf){
-        String output=buf.readUtf();
          this.cpmData=buf.readNbt();
-
-
-
-
-
     }
 
     public void toBytes(FriendlyByteBuf buf){
-       // buf.writeUtf(this.stuffedLayer);
-
         buf.writeNbt(this.cpmData);
 
 

@@ -33,7 +33,6 @@ public class SyncCapsS2C {
     }
 
     public SyncCapsS2C(FriendlyByteBuf buf){
-        String output=buf.readUtf();
         this.weightBar=buf.readNbt();
          this.stuffedBar=buf.readNbt();
          this.cpmData=buf.readNbt();
