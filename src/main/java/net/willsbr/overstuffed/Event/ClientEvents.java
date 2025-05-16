@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -63,6 +64,7 @@ public class ClientEvents {
                     ItemStack heldItem=useItemEvent.getItem();
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
                     //322 is id for golden apple
+
                     if(heldItem.is(Items.GOLDEN_APPLE))
                     {
                         int duration=600;
@@ -84,11 +86,18 @@ public class ClientEvents {
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
                         currentPlayer.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
                         {
-                            stuffedBar.updateNBTData();
+                            stuffedBar.addStuffedLevel(1, useItemEvent.getEntity().level().getGameTime(), heldItem.getUseDuration());
                         });
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
-                        int weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
+                        int weightForQueue=0;
+                       try{
+                           weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
+                       }
+                       catch(Exception e)
+                       {
+
+                       }
 
                         //Makes weight have more of an impact I guess
                         ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
@@ -113,7 +122,7 @@ public class ClientEvents {
 
                         if(event.getEntity().tickCount % 20 == 0)
                         {
-                            if(Math.random()<weightBar.getLastWeightStage()*0.05)
+                            if(Math.random()<weightBar.calculateCurrentWeightStage()*0.05)
                             {
                                 xWedgeCheck(player,Minecraft.getInstance().level,0.3);
                                 zWedgeCheck(player,Minecraft.getInstance().level,0.3);
@@ -404,8 +413,7 @@ public class ClientEvents {
 
             if(noOpenSpace)
             {
-                MobEffectInstance wedgeSlowness=new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100,4);
-                player.addEffect(wedgeSlowness);
+                ModMessages.sendToServer(new OverstuffedEffectC2SPacket(1,100,4));
             }
 
 
@@ -431,7 +439,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("stuffedbar", HudOverlay.HUD_STUFFEDBAR);
+            event.registerAbove(VanillaGuiOverlay.VIGNETTE.id(),"stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 
         @SubscribeEvent
@@ -450,17 +458,6 @@ public class ClientEvents {
 
     public static void registerCommands(RegisterCommandsEvent event)
     {
-        CommandDispatcher<CommandSourceStack> commands = event.getDispatcher();
-        SetLayer.register(commands, event.getBuildContext());
-        setMaxWeightCommand.register(commands, event.getBuildContext());
-        setMinWeightCommand.register(commands,event.getBuildContext());
-        setCurrentWeight.register(commands,event.getBuildContext());
-        //clearLayers.register(commands, event.getBuildContext());
-        debugViewCommand.register(commands, event.getBuildContext());
-        setMaxStuffed.register(commands, event.getBuildContext());
-        //setWGMethod.register(commands,event.getBuildContext());
-        //setBurpFrequency.register(commands, event.getBuildContext());
-        //setGurgleFrequency.register(commands, event.getBuildContext());
-
+        CommonEventMethods.registerCommands(event);
     }
 }

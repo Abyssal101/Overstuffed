@@ -2,9 +2,12 @@ package net.willsbr.overstuffed.WeightSystem;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
@@ -41,8 +44,6 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
-
-
     private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_1 = new AttributeModifier(UUID.fromString("31580520-a812-447f-89d6-8bd82cf790ed"), "health from stage 1 weight", 2, AttributeModifier.Operation.ADDITION);
     private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_2 = new AttributeModifier(UUID.fromString("28571767-3553-459f-82bd-4ac9dc94378a"), "health from stage 2 weight", 4, AttributeModifier.Operation.ADDITION);
 
@@ -155,6 +156,10 @@ public class PlayerWeightBar {
         return queuedWeight;
     }
 
+    public void setQueuedWeight(int newW)
+    {
+        this.queuedWeight=newW;
+    }
 
 
     public void copyFrom(PlayerWeightBar source)

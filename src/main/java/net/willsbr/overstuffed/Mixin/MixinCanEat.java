@@ -17,29 +17,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinCanEat {
 
 
-    @Shadow public abstract FoodData getFoodData();
-    @Inject(method = "canEat",at =@At("RETURN"),cancellable = true)
-    protected void canEat(boolean pCanAlwaysEat, CallbackInfoReturnable<Boolean> cir)
-    {
-        Player player = (Player)(Object)this;
+    @Shadow
+    public abstract FoodData getFoodData();
 
-         if(ClientStuffedBarData.getPlayerStuffedBar()<(ClientStuffedBarData.getSoftLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getHardLimit()))
-         {
-             cir.setReturnValue(true);
-         }
-         else if(!player.level().isClientSide())
-         {
-             player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedbar -> {
-                 if(stuffedbar.getCurrentStuffedLevel()<
-                         (stuffedbar.getFullLevel()+stuffedbar.getStuffedLevel()+stuffedbar.getOverstuffedLevel()))
-                 {
-                     cir.setReturnValue(true);
+    @Inject(method = "canEat", at = @At("RETURN"), cancellable = true)
+    protected void canEat(boolean pCanAlwaysEat, CallbackInfoReturnable<Boolean> cir) {
+        Player player = (Player) (Object) this;
+        if (!player.level().isClientSide()) {
+            player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedbar -> {
+                if (stuffedbar.getCurrentStuffedLevel() <
+                        (stuffedbar.getFullLevel() + stuffedbar.getStuffedLevel() + stuffedbar.getOverstuffedLevel())) {
+                    cir.setReturnValue(true);
+                }
 
-                 }
-
-             });
-         }
-         }
+            });
+        } else {
+            if (ClientStuffedBarData.getPlayerStuffedBar() < (ClientStuffedBarData.getSoftLimit() + ClientStuffedBarData.getFirmLimit() + ClientStuffedBarData.getHardLimit())) {
+                cir.setReturnValue(true);
+            }
+        }
 
     }
+}
 

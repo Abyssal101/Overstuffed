@@ -29,9 +29,9 @@ displayURL="https://github.com/Abyssal101/Overstuffed" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="overstuffed.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks for this example mod goes to Java" #optional
+credits="" #optional
 # A text field displayed in the mod UI
-authors="Abyssal101, psq95" #optional
+authors="Abyssal101, psq95, Spritework done by Tyrus5255" #optional
 # Display Test controls the display for your mod in the server connection screen
 # MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
 # IGNORE_SERVER_VERSION means that your mod will not cause a red X if it's present on the server but not on the client. This is what you should use if you're a server only mod.
@@ -41,7 +41,7 @@ authors="Abyssal101, psq95" #optional
 displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-A weight gain mod.
+A Weight/Food Managment mod that has compatibility with CPM and Figura!.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.overstuffed]] #optional
