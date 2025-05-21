@@ -37,6 +37,10 @@ public class PlayerStuffedBar {
     {
         return currentStuffedLevel;
     }
+    public void setCurrentStuffedLevel(int i)
+    {
+        this.currentStuffedLevel =i;
+    }
 
 
 
