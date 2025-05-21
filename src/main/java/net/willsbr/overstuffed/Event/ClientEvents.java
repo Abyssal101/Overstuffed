@@ -39,6 +39,7 @@ import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SP
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
+import net.willsbr.overstuffed.util.ModTags;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
@@ -65,19 +66,11 @@ public class ClientEvents {
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
                     //322 is id for golden apple
 
-                    if(heldItem.is(Items.GOLDEN_APPLE))
+                    if(heldItem.is(ModTags.Items.GOLDEN_DIET_FOODS))
                     {
-                        int duration=600;
-                        int amplifier=0;
+                        int duration = heldItem.is(Items.GOLDEN_APPLE) ? 600 : 200;
+                        int amplifier = 0;
                         //  currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,amplifier));
-                        ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
-
-                    }
-                    else if(heldItem.is(Items.GOLDEN_CARROT))
-                    {
-                        int duration=200;
-                        int amplifier=0;
-                        // currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,0));
                         ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
                     }
                     else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)

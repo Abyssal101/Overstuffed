@@ -40,7 +40,7 @@ public class OverfullFoodDataSyncPacketS2C {
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(stuffed_bar);
         buf.writeInt(currentSoftLimit);
-        buf.writeInt(this.currentFirmLimit);
+        buf.writeInt(currentFirmLimit);
         buf.writeInt(currentHardLimit);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -55,9 +55,9 @@ public class OverfullFoodDataSyncPacketS2C {
             LocalPlayer player= Minecraft.getInstance().player;
             player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
                     .ifPresent(stuffedBar -> {
-                        stuffedBar.setStuffedLevel(stuffed_bar);
+                        stuffedBar.setCurrentStuffedLevel(this.stuffed_bar);
                         stuffedBar.setFullLevel(this.currentSoftLimit);
-                        stuffedBar.setFullLevel(this.currentFirmLimit);
+                        stuffedBar.setStuffedLevel(this.currentFirmLimit);
                         stuffedBar.setOverstuffedLevel(this.currentHardLimit);
                     });
 
