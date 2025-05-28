@@ -37,6 +37,10 @@ public class PlayerStuffedBar {
     {
         return currentStuffedLevel;
     }
+    public void setCurrentStuffedLevel(int i)
+    {
+        this.currentStuffedLevel =i;
+    }
 
 
 
@@ -170,6 +174,10 @@ public class PlayerStuffedBar {
     public int getStuffedLossed() {
         return stuffedLost;
     }
+    public void setStuffedLossed(int stuffedLost) {
+        this.stuffedLost = stuffedLost;
+    }
+
 
     public void addStuffedLossed() {
         this.stuffedLost++;
@@ -203,6 +211,9 @@ public class PlayerStuffedBar {
 
     public int getInterval() {
         return interval;
+    }
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 
     public int getAddState()

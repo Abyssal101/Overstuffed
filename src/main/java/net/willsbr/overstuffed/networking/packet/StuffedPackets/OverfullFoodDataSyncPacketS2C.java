@@ -1,10 +1,14 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class OverfullFoodDataSyncPacketS2C {
@@ -36,7 +40,7 @@ public class OverfullFoodDataSyncPacketS2C {
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(stuffed_bar);
         buf.writeInt(currentSoftLimit);
-        buf.writeInt(this.currentFirmLimit);
+        buf.writeInt(currentFirmLimit);
         buf.writeInt(currentHardLimit);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
@@ -47,6 +51,17 @@ public class OverfullFoodDataSyncPacketS2C {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
             ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
+
+            LocalPlayer player= Minecraft.getInstance().player;
+            player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
+                    .ifPresent(stuffedBar -> {
+                        stuffedBar.setCurrentStuffedLevel(this.stuffed_bar);
+                        stuffedBar.setFullLevel(this.currentSoftLimit);
+                        stuffedBar.setStuffedLevel(this.currentFirmLimit);
+                        stuffedBar.setOverstuffedLevel(this.currentHardLimit);
+                    });
+
+
             CPMData.checkIfUpdateCPM("stuffed");
 
         });

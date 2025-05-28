@@ -3,7 +3,9 @@ package net.willsbr.overstuffed.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.Effects.ModEffects;
@@ -58,7 +60,10 @@ public class OverstuffedEffectC2SPacket {
                             if(effectIndex==0)
                             {
                                 player.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), effectDuration ,effectAmplifier));
-
+                            }
+                            else if(effectIndex==1)
+                            {
+                                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, effectDuration ,effectAmplifier));
                             }
                         });
                     }

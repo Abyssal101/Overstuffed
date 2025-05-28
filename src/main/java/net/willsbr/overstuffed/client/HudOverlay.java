@@ -91,14 +91,15 @@ public class HudOverlay {
         //New stuffed bar
 
        // AbstractDraw(gui,guiGraphics,STUFFED_BAR, (int)(left-10),(int)(top),84,8);
+        int barLeft=left+OverstuffedConfig.stuffedHudXOffset.get();
+        int barTop=top-OverstuffedConfig.stuffedHudYOffset.get();
 
-
-        AbstractDraw(gui,guiGraphics,STUFFED_BAR_BEG, (int)(left),(int)(top),10,8);
-        AbstractDraw(gui,guiGraphics,STUFFED_BAR_END, (int)(left+(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-2)*8+10),(int)(top),10,8);
+        AbstractDraw(gui,guiGraphics,STUFFED_BAR_BEG, (int)(barLeft),(int)(barTop),10,8);
+        AbstractDraw(gui,guiGraphics,STUFFED_BAR_END, (int)(barLeft+(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-2)*8+10),(int)(barTop),10,8);
 
         for(int i=1;i<(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1);i++)
         {
-            AbstractDraw(gui,guiGraphics,STUFFED_BAR_MID, (int)(left+8*(i-1)+10),(int)(top),8,8);
+            AbstractDraw(gui,guiGraphics,STUFFED_BAR_MID, (int)(barLeft+8*(i-1)+10),(int)(barTop),8,8);
         }
 
 
@@ -106,27 +107,27 @@ public class HudOverlay {
         {
             if(i<ClientStuffedBarData.getSoftLimit()-1)
             {
-                AbstractDraw(gui,guiGraphics,STUFFED_PART, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,STUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
             else if(i==ClientStuffedBarData.getSoftLimit()-1)
             {
-                AbstractDraw(gui,guiGraphics,STUFFED_END, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,STUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
             else if(i<(ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
             {
-                AbstractDraw(gui,guiGraphics,OVERSTUFFED_PART, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,OVERSTUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
             else if(i==(ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
             {
-                AbstractDraw(gui,guiGraphics,OVERSTUFFED_END, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,OVERSTUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
             else if(i<(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
             {
-                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_PART, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
             else if(i==(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
             {
-                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_END, (int)(left+2+8*i),(int)(top+2),8,4);
+                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
             }
         }
 

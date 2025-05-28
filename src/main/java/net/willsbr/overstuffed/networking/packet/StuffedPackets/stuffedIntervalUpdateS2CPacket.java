@@ -1,30 +1,29 @@
-package net.willsbr.overstuffed.networking.packet.WeightPackets;
+package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
+import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class weightIntervalUpdateS2CPacket {
+public class stuffedIntervalUpdateS2CPacket {
     private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.WeightBar";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
     private static  int currentLost;
     private static  int interval;
 
-    public weightIntervalUpdateS2CPacket(int currentL, int intervl){
+    public stuffedIntervalUpdateS2CPacket(int currentL, int intervl){
         currentLost = currentL;
         interval = intervl;
 
     }
 
-    public weightIntervalUpdateS2CPacket(FriendlyByteBuf buf){
+    public stuffedIntervalUpdateS2CPacket(FriendlyByteBuf buf){
         currentLost =buf.readInt();
         interval = buf.readInt();
 
@@ -40,7 +39,12 @@ public class weightIntervalUpdateS2CPacket {
         context.enqueueWork(() ->
                 {
                     //here we are on the client
+                    LocalPlayer player= Minecraft.getInstance().player;
 
+                    Objects.requireNonNull(player).getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+                        stuffedBar.setInterval(interval);
+                        stuffedBar.setStuffedLossed(currentLost);
+                    });
                     ClientStuffedBarData.setInterval(interval);
                     ClientStuffedBarData.setCurrentLost(currentLost);
                 }

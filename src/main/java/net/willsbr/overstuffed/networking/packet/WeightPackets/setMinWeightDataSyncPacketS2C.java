@@ -1,6 +1,7 @@
 package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
@@ -8,6 +9,7 @@ import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class setMinWeightDataSyncPacketS2C {
@@ -37,6 +39,10 @@ public class setMinWeightDataSyncPacketS2C {
         context.enqueueWork(() ->
         {
             OverstuffedConfig.minWeight.set(minWeight);
+            LocalPlayer player= Minecraft.getInstance().player;
+            Objects.requireNonNull(player).getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                weightBar.setMinWeight(minWeight);
+            });
             CPMData.checkIfUpdateCPM("weight");
             Minecraft.getInstance().player.sendSystemMessage(Component.translatable("commands.overstuffed.minweightupdatesuccess"));
         });

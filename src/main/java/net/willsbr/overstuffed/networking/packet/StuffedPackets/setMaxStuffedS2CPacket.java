@@ -1,15 +1,19 @@
 package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class setMaxStuffedS2CPacket {
@@ -52,6 +56,18 @@ public class setMaxStuffedS2CPacket {
                         int sum=newFullLimit+newStuffedLimit+newOverstuffedLimit;
                         ClientStuffedBarData.set(Math.min(ClientStuffedBarData.getPlayerStuffedBar(),sum),this.newFullLimit,
                                 this.newStuffedLimit,this.newOverstuffedLimit);
+
+                    LocalPlayer player= Minecraft.getInstance().player;
+                    Objects.requireNonNull(player).getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
+                            .ifPresent(stuffedBar -> {
+                       stuffedBar.setStuffedLevel(Math.min(sum,ClientStuffedBarData.getPlayerStuffedBar()));
+                       stuffedBar.setFullLevel(this.newFullLimit);
+                       stuffedBar.setStuffedLevel(this.newStuffedLimit);
+                       stuffedBar.setOverstuffedLevel(this.newOverstuffedLimit);
+                       stuffedBar.setAddState(this.newAddState);
+
+                    });
+
                     ClientCPMData.playStuffed();
                 }
         );
