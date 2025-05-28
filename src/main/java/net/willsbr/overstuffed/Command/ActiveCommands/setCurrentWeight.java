@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.Command;
+package net.willsbr.overstuffed.Command.ActiveCommands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -11,7 +11,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
@@ -21,18 +20,19 @@ public class setCurrentWeight {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setWeight.failed"));
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed")
+        pDispatcher.register(
+                Commands.literal("overstuffed")
                 .then(Commands.literal("setCurrentWeight")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.argument("target", EntityArgument.players())
                         .then(Commands.argument("newWeight", IntegerArgumentType.integer())
                         .executes(context ->
-                                setWeight(context.getSource(), EntityArgument.getPlayer(context, "target"),IntegerArgumentType.getInteger(context,"newWeight")))).
-                executes(context -> setWeight(context.getSource(), context.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(context,"newWeight"))))));
+                                setWeight(context.getSource(), EntityArgument.getPlayer(context, "target"),IntegerArgumentType.getInteger(context,"newWeight"))))
+                )));
     }
 
     private static int setWeight(CommandSourceStack pSource, ServerPlayer player, int index) throws CommandSyntaxException {
-        if(player.hasPermissions(2))
+        if(pSource.getPlayer().hasPermissions(2))
         {
             player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 if(index>weightBar.getCurMaxWeight() || index<weightBar.getMinWeight())

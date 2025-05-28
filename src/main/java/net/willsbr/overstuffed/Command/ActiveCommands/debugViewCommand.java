@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.Command;
+package net.willsbr.overstuffed.Command.ActiveCommands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -9,14 +9,18 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.overstuffed.Command.CommandHandler;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 public class debugViewCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
 
+
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed").then(Commands.literal("debugView").executes((p_138618_) -> {
+        pDispatcher.register(Commands.literal("overstuffed")
+                .then(Commands.literal("debugView")
+                        .executes((p_138618_) -> {
             return viewEverything(p_138618_.getSource(),p_138618_.getSource().getPlayer());
         })));
     }
@@ -53,5 +57,7 @@ public class debugViewCommand {
 
         return 0;
     }
+
+
 
 }

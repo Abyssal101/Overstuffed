@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.Command;
+package net.willsbr.overstuffed.Command.ActiveCommands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;

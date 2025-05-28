@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -21,11 +20,11 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
-import net.willsbr.overstuffed.Command.*;
+import net.willsbr.overstuffed.Command.ActiveCommands.*;
+import net.willsbr.overstuffed.Command.CommandHandler;
 import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.OverStuffed;
@@ -304,7 +303,7 @@ public class ClientEvents {
 //        for(int i=0;i<10;i++)
 //        {
 //            for(int j=0;j<10;j++)
-//            {
+//            {ww
 //                BlockPos copy=feetBlock;
 //                copy=copy.offset(i-5,-1,j-5);
 //                playerLevel.setBlockAndUpdate(copy,Blocks.BIRCH_PLANKS.defaultBlockState());
@@ -451,6 +450,7 @@ public class ClientEvents {
     public static void registerCommands(RegisterCommandsEvent event)
     {
         CommandDispatcher<CommandSourceStack> commands = event.getDispatcher();
+        CommandHandler.generateCommands(commands,event.getBuildContext());
         SetLayer.register(commands, event.getBuildContext());
         setMaxWeightCommand.register(commands, event.getBuildContext());
         setMinWeightCommand.register(commands,event.getBuildContext());
@@ -458,6 +458,7 @@ public class ClientEvents {
         //clearLayers.register(commands, event.getBuildContext());
         debugViewCommand.register(commands, event.getBuildContext());
         setMaxStuffed.register(commands, event.getBuildContext());
+        setHitbox.register(commands, event.getBuildContext());
         //setWGMethod.register(commands,event.getBuildContext());
         //setBurpFrequency.register(commands, event.getBuildContext());
         //setGurgleFrequency.register(commands, event.getBuildContext());

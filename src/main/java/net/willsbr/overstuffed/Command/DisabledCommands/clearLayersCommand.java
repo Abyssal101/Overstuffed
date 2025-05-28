@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.Command;
+package net.willsbr.overstuffed.Command.DisabledCommands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -21,6 +21,7 @@ public class clearLayersCommand {
         pDispatcher.register(Commands.literal("overstuffed").then(Commands.literal("clearLayers").executes((p_138618_) -> {
             return clearLayers(p_138618_.getSource(),p_138618_.getSource().getPlayer());
         })));
+
     }
 
     private static int clearLayers(CommandSourceStack pSource, Player player) throws CommandSyntaxException {
