@@ -27,7 +27,7 @@
   "commands.overstuffed.minweightupdatesuccess": "Minimum Weight successfully updated",
   "commands.overstuffed.setweightsuccess": "Succesfully set the weight of %1$s to %2$s",
   "commands.setHitbox.failed": "Failed to set dimensions",
-  commands.setHitbox.nopehkui:"Pekhui is not loaded, cannot use scaling",
+  "commands.setHitbox.nopehkui":"Pekhui is not loaded, cannot use scaling",
 
   "commands.overstuffed.errorsamename": "ERROR: Your layer already has that name",
   "commands.overstuffed.setbelowzero": "ERROR: Set below zero",
