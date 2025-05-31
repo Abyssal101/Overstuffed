@@ -30,11 +30,11 @@ public class setHitbox {
         if(ModList.get().isLoaded("pehkui"))
         {
             SCALE_CONFIGS.put("width", new ScaleConfig(ScaleTypes.WIDTH, 0.2, 16.0));
-            SCALE_CONFIGS.put("hitboxWidth", new ScaleConfig(ScaleTypes.HITBOX_WIDTH, 0.5, 16));
+            SCALE_CONFIGS.put("hitbox_width", new ScaleConfig(ScaleTypes.HITBOX_WIDTH, 0.5, 16));
             SCALE_CONFIGS.put("height", new ScaleConfig(ScaleTypes.HEIGHT, 0.2, 16.0));
-            SCALE_CONFIGS.put("hitboxHeight", new ScaleConfig(ScaleTypes.HITBOX_HEIGHT, 0.2, 16));
+            SCALE_CONFIGS.put("hitbox_height", new ScaleConfig(ScaleTypes.HITBOX_HEIGHT, 0.5, 16));
             SCALE_CONFIGS.put("motion", new ScaleConfig(ScaleTypes.MOTION, 0.2, 1.0));
-            SCALE_CONFIGS.put("eyeHeight", new ScaleConfig(ScaleTypes.EYE_HEIGHT, 0.2, 16.0));
+            SCALE_CONFIGS.put("eye_height", new ScaleConfig(ScaleTypes.EYE_HEIGHT, 0.2, 16.0));
         }
     }
 
@@ -66,25 +66,25 @@ public class setHitbox {
                                     DoubleArgumentType.getDouble(context, "value"))));
             hitboxCommand.then(heightCommand);
 
-            // Add hitboxWidth command
-            LiteralArgumentBuilder<CommandSourceStack> hitboxWidthCommand = Commands.literal("hitboxWidth")
+            // Add hitbox_width command
+            LiteralArgumentBuilder<CommandSourceStack> hitbox_widthCommand = Commands.literal("hitbox_width")
                     .then(Commands.argument("value", DoubleArgumentType.doubleArg())
                             .executes(context -> setScale(
                                     context.getSource(),
-                                    "hitboxWidth",
-                                    SCALE_CONFIGS.get("hitboxWidth"),
+                                    "hitbox_width",
+                                    SCALE_CONFIGS.get("hitbox_width"),
                                     DoubleArgumentType.getDouble(context, "value"))));
-            hitboxCommand.then(hitboxWidthCommand);
+            hitboxCommand.then(hitbox_widthCommand);
 
-            // Add hitboxHeight command
-            LiteralArgumentBuilder<CommandSourceStack> hitboxHeightCommand = Commands.literal("hitboxHeight")
+            // Add hitbox_height command
+            LiteralArgumentBuilder<CommandSourceStack> hitbox_heightCommand = Commands.literal("hitbox_height")
                     .then(Commands.argument("value", DoubleArgumentType.doubleArg())
                             .executes(context -> setScale(
                                     context.getSource(),
-                                    "hitboxHeight",
-                                    SCALE_CONFIGS.get("hitboxHeight"),
+                                    "hitbox_height",
+                                    SCALE_CONFIGS.get("hitbox_height"),
                                     DoubleArgumentType.getDouble(context, "value"))));
-            hitboxCommand.then(hitboxHeightCommand);
+            hitboxCommand.then(hitbox_heightCommand);
 
             // Add motion command
             LiteralArgumentBuilder<CommandSourceStack> motionCommand = Commands.literal("motion")
@@ -96,15 +96,15 @@ public class setHitbox {
                                     DoubleArgumentType.getDouble(context, "value"))));
             hitboxCommand.then(motionCommand);
 
-            // Add eyeHeight command
-            LiteralArgumentBuilder<CommandSourceStack> eyeHeightCommand = Commands.literal("eyeHeight")
+            // Add eye_height command
+            LiteralArgumentBuilder<CommandSourceStack> eye_heightCommand = Commands.literal("eye_height")
                     .then(Commands.argument("value", DoubleArgumentType.doubleArg())
                             .executes(context -> setScale(
                                     context.getSource(),
-                                    "eyeHeight",
-                                    SCALE_CONFIGS.get("eyeHeight"),
+                                    "eye_height",
+                                    SCALE_CONFIGS.get("eye_height"),
                                     DoubleArgumentType.getDouble(context, "value"))));
-            hitboxCommand.then(eyeHeightCommand);
+            hitboxCommand.then(eye_heightCommand);
 
             // Add reset command
             LiteralArgumentBuilder<CommandSourceStack> resetCommand = Commands.literal("reset")

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.willsbr.overstuffed.Command.*;
+import net.willsbr.overstuffed.Command.ActiveCommands.*;
 
 public class CommonEventMethods {
 
