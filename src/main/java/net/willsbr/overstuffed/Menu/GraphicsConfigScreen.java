@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.OverStuffed;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -109,7 +109,7 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Weight Display X Coord"));
-        this.weightDisplayX.setValue(OverstuffedConfig.weightDisplayXOffset.get()+"");
+        this.weightDisplayX.setValue(OverstuffedClientConfig.weightDisplayXOffset.get()+"");
 
         this.weightDisplayY = new EditBox(
                 font,
@@ -118,7 +118,7 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Weight Display Y Coord"));
-        this.weightDisplayY.setValue(OverstuffedConfig.weightDisplayYOffSet.get()+"");
+        this.weightDisplayY.setValue(OverstuffedClientConfig.weightDisplayYOffSet.get()+"");
 
         this.stuffedHudXOffset=new EditBox(
                 font,
@@ -127,7 +127,7 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Stuffed Hud X Offset"));
-        this.stuffedHudXOffset.setValue(OverstuffedConfig.stuffedHudXOffset.get()+"");
+        this.stuffedHudXOffset.setValue(OverstuffedClientConfig.stuffedHudXOffset.get()+"");
 
         this.stuffedHudYOffset = new EditBox(
                 font,
@@ -136,10 +136,10 @@ public class GraphicsConfigScreen extends Screen {
                 35,
                 25,
                 Component.literal("Stuffed Hud Y Offset"));
-        this.stuffedHudYOffset.setValue(OverstuffedConfig.stuffedHudYOffset.get()+"");
+        this.stuffedHudYOffset.setValue(OverstuffedClientConfig.stuffedHudYOffset.get()+"");
 
         this.debugView= new ToggleButton(screenW/2-50,150,100,20,
-                Component.translatable("message.overstuffed.debugbutton"),OverstuffedConfig.debugView.get());
+                Component.translatable("message.overstuffed.debugbutton"), OverstuffedClientConfig.debugView.get());
         this.debugView.setLocked(false);
 
         this.toConfigScreen= new PortProofButton(screenW - 120, 8, 100, 20,
@@ -265,20 +265,20 @@ public class GraphicsConfigScreen extends Screen {
         else{
             if(Minecraft.getInstance().player!=null)
             {
-                OverstuffedConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
-                OverstuffedConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
+                OverstuffedClientConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
+                OverstuffedClientConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
 
-                OverstuffedConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
-                OverstuffedConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
+                OverstuffedClientConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
+                OverstuffedClientConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
             }
 
         }
 
-        OverstuffedConfig.debugView.set(debugView.getSetting());
+        OverstuffedClientConfig.debugView.set(debugView.getSetting());
 
 
 
-        OverstuffedConfig.saveConfig();
+        OverstuffedClientConfig.saveConfig();
 
         // Call last in case it interferes with the override
         super.onClose();

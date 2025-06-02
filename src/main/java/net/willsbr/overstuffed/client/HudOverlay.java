@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.tom.cpl.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.willsbr.overstuffed.OverStuffed;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import org.joml.Quaternionf;
 
 import java.awt.*;
@@ -91,8 +90,8 @@ public class HudOverlay {
         //New stuffed bar
 
        // AbstractDraw(gui,guiGraphics,STUFFED_BAR, (int)(left-10),(int)(top),84,8);
-        int barLeft=left+OverstuffedConfig.stuffedHudXOffset.get();
-        int barTop=top-OverstuffedConfig.stuffedHudYOffset.get();
+        int barLeft=left+ OverstuffedClientConfig.stuffedHudXOffset.get();
+        int barTop=top- OverstuffedClientConfig.stuffedHudYOffset.get();
 
         AbstractDraw(gui,guiGraphics,STUFFED_BAR_BEG, (int)(barLeft),(int)(barTop),10,8);
         AbstractDraw(gui,guiGraphics,STUFFED_BAR_END, (int)(barLeft+(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-2)*8+10),(int)(barTop),10,8);
@@ -144,19 +143,19 @@ public class HudOverlay {
         //AbstractDraw(gui,guiGraphics,WEIGHTSPRITEBACKGROUND, OverstuffedConfig.weightDisplayX.get(), OverstuffedConfig.weightDisplayY.get(),33,33);
 
 
-        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.getMinWeight())/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.getMinWeight()))*100);
+        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.getMinWeight())/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.getMinWeight()))*100);
         //for checking which sprite is currently being displayed.
         //System.out.println(outOf100/20-1+"/5");
         //1.19.2
         if(outOf100/20==5)
         {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],screenWidth/2-12+OverstuffedConfig.weightDisplayXOffset.get(),top-5+OverstuffedConfig.weightDisplayYOffSet.get(),24,24);
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get(),24,24);
         }
         else {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],screenWidth/2-12+OverstuffedConfig.weightDisplayXOffset.get(),top-5+OverstuffedConfig.weightDisplayYOffSet.get(),24,24);
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get(),24,24);
         }
 
-        if(OverstuffedConfig.debugView.get())
+        if(OverstuffedClientConfig.debugView.get())
         {
             //Current Weight
             //Max Weight
@@ -166,8 +165,8 @@ public class HudOverlay {
             //# of food to get to next stuffed
             ArrayList<Component> info= new ArrayList<Component>();
             info.add(Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight()));
-            info.add(Component.translatable("message.overstuffed.debugmaxweight",""+OverstuffedConfig.getMaxWeight()));
-            info.add(Component.translatable("message.overstuffed.debugminweight",""+OverstuffedConfig.getMinWeight()));
+            info.add(Component.translatable("message.overstuffed.debugmaxweight",""+ OverstuffedClientConfig.getMaxWeight()));
+            info.add(Component.translatable("message.overstuffed.debugminweight",""+ OverstuffedClientConfig.getMinWeight()));
             info.add(Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar()));
             info.add(Component.translatable("message.overstuffed.debugmaxstuffed",""+
                     (ClientStuffedBarData.getSoftLimit()+ ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit())));

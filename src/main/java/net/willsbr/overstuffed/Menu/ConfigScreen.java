@@ -15,7 +15,7 @@ import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsC2S;
@@ -124,7 +124,7 @@ public class ConfigScreen extends Screen {
 
         //buttons
         //TODO MAKE LOCKED BUTTONS ACTUAL TIE TO PLAYER UNLOCK
-        this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,Component.translatable("menu.overstuffed.stagebasedweightbutton"),OverstuffedConfig.stageGain.get());
+        this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,Component.translatable("menu.overstuffed.stagebasedweightbutton"), OverstuffedClientConfig.stageGain.get());
         this.stageBasedWeight.setLocked(false);
         this.stageBasedWeight.setTooltipText("False: Weight visually udates with every tick. \n True: Weight visually updates once you reach every 20% weight interval.");
 
@@ -132,14 +132,14 @@ public class ConfigScreen extends Screen {
         //this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
 
         //TODO Fixed lock
-        this.weightEffect= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"),OverstuffedConfig.weightEffects.get(),true);
+        this.weightEffect= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"), OverstuffedClientConfig.weightEffects.get(),true);
         this.weightEffect.setLocked(false);
         this.weightEffect.setTooltipText("Enables/Disables effects related to gaining and losing weight");
 
         //TODO MAKE the Sliders have translateable components
 
-        this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"),OverstuffedConfig.burpFrequency.get()*0.1);
-        this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"),OverstuffedConfig.gurgleFrequency.get()*0.1);
+        this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"), OverstuffedClientConfig.burpFrequency.get()*0.1);
+        this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"), OverstuffedClientConfig.gurgleFrequency.get()*0.1);
 
 
         //ALL editbox sizes are based off this first editbox.
@@ -150,7 +150,7 @@ public class ConfigScreen extends Screen {
                 130,
                 25,
                 Component.literal("Weight Layer"));
-        this.weightLayerEditBox.setValue(OverstuffedConfig.weightLayerConfigEntry.get());
+        this.weightLayerEditBox.setValue(OverstuffedClientConfig.weightLayerConfigEntry.get());
 
         this.stuffedLayerEditBox = new EditBox(
                 font,
@@ -159,7 +159,7 @@ public class ConfigScreen extends Screen {
                 weightLayerEditBox.getWidth(),
                 weightLayerEditBox.getHeight(),
                 Component.literal("Stuffed Layer"));
-        this.stuffedLayerEditBox.setValue(OverstuffedConfig.stuffedLayerConfigEntry.get());
+        this.stuffedLayerEditBox.setValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get());
 
         this.maxWeight= new EditBox(
                 font,
@@ -168,7 +168,7 @@ public class ConfigScreen extends Screen {
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Max Weight"));
-        this.maxWeight.setValue(OverstuffedConfig.maxWeight.get()+"");
+        this.maxWeight.setValue(OverstuffedClientConfig.maxWeight.get()+"");
         //So you can't go above 9999 because of this
         this.maxWeight.setMaxLength(4);
 
@@ -179,7 +179,7 @@ public class ConfigScreen extends Screen {
                 50,
                 weightLayerEditBox.getHeight(),
                 Component.literal("Min Weight"));
-        this.minWeight.setValue(OverstuffedConfig.minWeight.get()+"");
+        this.minWeight.setValue(OverstuffedClientConfig.minWeight.get()+"");
         //So you can't go above 9999 because of this
         this.minWeight.setMaxLength(4);
 
@@ -321,30 +321,30 @@ public class ConfigScreen extends Screen {
     @Override
     public void onClose() {
         // Save mod configuration
-        if(!OverstuffedConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayerEditBox.getValue()))
+        if(!OverstuffedClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayerEditBox.getValue()))
         {
-            OverstuffedConfig.setWeightLayer(this.weightLayerEditBox.getValue());
+            OverstuffedClientConfig.setWeightLayer(this.weightLayerEditBox.getValue());
         }
-        if(!OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayerEditBox.getValue()))
+        if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayerEditBox.getValue()))
         {
-            OverstuffedConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
+            OverstuffedClientConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
         }
         if(ModList.get().isLoaded("cpm") && Minecraft.getInstance().player!=null && ClientCPMData.getPlayersAPI()!=null)
         {
 
-            ModMessages.sendToServer(new CPMDataC2SPacket(OverstuffedConfig.stuffedLayerConfigEntry.get(),OverstuffedConfig.weightLayerConfigEntry.get(),
+            ModMessages.sendToServer(new CPMDataC2SPacket(OverstuffedClientConfig.stuffedLayerConfigEntry.get(), OverstuffedClientConfig.weightLayerConfigEntry.get(),
                     ClientCPMData.getTotalStuffedFrames(),ClientCPMData.getTotalWeightFrames()));
         }
-        OverstuffedConfig.stageGain.set(stageBasedWeight.getSetting());
+        OverstuffedClientConfig.stageGain.set(stageBasedWeight.getSetting());
 
         //OverstuffedConfig.setSetting(1, momentum.getSetting());
-        OverstuffedConfig.weightEffects.set(weightEffect.getSetting());
-        OverstuffedConfig.burpFrequency.set(burpFrequency.getValue());
-        OverstuffedConfig.gurgleFrequency.set(gurgleFrequency.getValue());
+        OverstuffedClientConfig.weightEffects.set(weightEffect.getSetting());
+        OverstuffedClientConfig.burpFrequency.set(burpFrequency.getValue());
+        OverstuffedClientConfig.gurgleFrequency.set(gurgleFrequency.getValue());
         if(Minecraft.getInstance().player!=null)
         {
-            ModMessages.sendToServer(new PlayerSyncAllSettingsC2S(OverstuffedConfig.stageGain.get(),
-                    OverstuffedConfig.weightEffects.get(),OverstuffedConfig.burpFrequency.get(),OverstuffedConfig.gurgleFrequency.get()));
+            ModMessages.sendToServer(new PlayerSyncAllSettingsC2S(OverstuffedClientConfig.stageGain.get(),
+                    OverstuffedClientConfig.weightEffects.get(), OverstuffedClientConfig.burpFrequency.get(), OverstuffedClientConfig.gurgleFrequency.get()));
         }
 
 
@@ -361,8 +361,8 @@ public class ConfigScreen extends Screen {
                     if(Minecraft.getInstance().player != null)
                     {
                         //Normalizing old weight to new min and max
-                        double weightRatio=((double)ClientWeightBarData.getPlayerWeight()-OverstuffedConfig.minWeight.get());
-                        weightRatio=weightRatio/(OverstuffedConfig.maxWeight.get()-OverstuffedConfig.minWeight.get());
+                        double weightRatio=((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.minWeight.get());
+                        weightRatio=weightRatio/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.minWeight.get());
                         //System.out.println("Ratio"+weightRatio);
                         int newRange=max-min;
 
@@ -371,8 +371,8 @@ public class ConfigScreen extends Screen {
                         //System.out.println(ClientWeightBarData.getPlayerWeight());
                         ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
 
-                        OverstuffedConfig.maxWeight.set(max);
-                        OverstuffedConfig.minWeight.set(min);
+                        OverstuffedClientConfig.maxWeight.set(max);
+                        OverstuffedClientConfig.minWeight.set(min);
                         ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
                         ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
                     }
@@ -400,7 +400,7 @@ public class ConfigScreen extends Screen {
             //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
         }
 
-        OverstuffedConfig.saveConfig();
+        OverstuffedClientConfig.saveConfig();
         if(CPMData.checkIfUpdateCPM("weight")==false && Minecraft.getInstance().player!=null)
         {
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: CPM is not loaded. No visual changes can occur"));

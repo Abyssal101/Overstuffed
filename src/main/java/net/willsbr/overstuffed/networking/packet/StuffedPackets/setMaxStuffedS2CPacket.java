@@ -3,15 +3,10 @@ package net.willsbr.overstuffed.networking.packet.StuffedPackets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientCPMData;
 import net.willsbr.overstuffed.client.ClientStuffedBarData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
 
 import java.util.Objects;
 import java.util.function.Supplier;

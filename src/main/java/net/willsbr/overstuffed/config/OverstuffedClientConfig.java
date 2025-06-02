@@ -2,7 +2,7 @@ package net.willsbr.overstuffed.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class OverstuffedConfig {
+public class OverstuffedClientConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
 
     static {

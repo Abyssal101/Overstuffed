@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.sound.ModSounds;
 
@@ -45,12 +45,7 @@ public class OverfullFoodC2SPacket {
                             stuffedBar.addStuffedLevel(1, level.getGameTime(), lastFood.getUseDuration());
                             player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
                                 //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
-                                if(player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
-                                {
-                                    player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
-                                                    player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
-                                            player.getSoundSource(), 1f, 1f);
-                                }
+                                ModSounds.playBurp(player);
                             });
                             ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getStuffedLevel() ,stuffedBar.getOverstuffedLevel()),player);
                         });

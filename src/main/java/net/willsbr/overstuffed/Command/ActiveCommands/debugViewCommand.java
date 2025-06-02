@@ -9,9 +9,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.Command.CommandHandler;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 public class debugViewCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
@@ -30,10 +29,10 @@ public class debugViewCommand {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
 
             player.sendSystemMessage(Component.literal("Current Config CPM Layers"));
-            player.sendSystemMessage(Component.literal("Current Stuffed Layer: "+ OverstuffedConfig.stuffedLayerConfigEntry.get()));
-            player.sendSystemMessage(Component.literal("Last Stuffed Layer: "+OverstuffedConfig.lastStuffedLayer));
-            player.sendSystemMessage(Component.literal("Current Weight Layer: "+OverstuffedConfig.weightLayerConfigEntry.get()));
-            player.sendSystemMessage(Component.literal("Last Weight Layer: "+OverstuffedConfig.lastWeightLayer));
+            player.sendSystemMessage(Component.literal("Current Stuffed Layer: "+ OverstuffedClientConfig.stuffedLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Stuffed Layer: "+ OverstuffedClientConfig.lastStuffedLayer));
+            player.sendSystemMessage(Component.literal("Current Weight Layer: "+ OverstuffedClientConfig.weightLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Weight Layer: "+ OverstuffedClientConfig.lastWeightLayer));
 
             player.sendSystemMessage(Component.literal("-------------------------------"));
         });

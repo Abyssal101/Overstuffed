@@ -17,6 +17,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -37,6 +38,7 @@ import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SP
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
+import net.willsbr.overstuffed.util.ModTags;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
@@ -62,33 +64,26 @@ public class ClientEvents {
                     ItemStack heldItem=useItemEvent.getItem();
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
                     //322 is id for golden apple
-                    if(heldItem.is(Items.GOLDEN_APPLE))
+                    if(heldItem.is(ModTags.Items.GOLDEN_DIET_FOODS))
                     {
-                        int duration=600;
-                        int amplifier=0;
-                        //  currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,amplifier));
+                        int duration = heldItem.is(Items.GOLDEN_APPLE) ? 600 : 200;
+                        int amplifier = 0;
                         ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
 
-                    }
-                    else if(heldItem.is(Items.GOLDEN_CARROT))
-                    {
-                        int duration=200;
-                        int amplifier=0;
-                        // currentPlayer.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration ,0));
-                        ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
                     }
                     else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
-
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
-                        currentPlayer.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
-                        {
-                            stuffedBar.updateNBTData();
-                        });
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
-                        int weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
+                        int weightForQueue=0;
+                        try{
+                            weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
+                        }
+                        catch(NullPointerException e)
+                        {
 
+                        }
                         //Makes weight have more of an impact I guess
                         ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
                     }
@@ -430,7 +425,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("stuffedbar", HudOverlay.HUD_STUFFEDBAR);
+            event.registerAbove(VanillaGuiOverlay.VIGNETTE.id(),"stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 
         @SubscribeEvent

@@ -2,11 +2,15 @@ package net.willsbr.overstuffed.sound;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import java.util.ArrayList;
 
@@ -61,6 +65,67 @@ public class ModSounds {
         //return SOUND_EVENTS.register(name, () -> new SoundEvent.createVariableRangeEvent(id));
 
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
+
+    }
+
+
+    //TODO make a setting that dictates the volume of these
+    //TODO Improve them with better variation and whatnot
+    public static void playBurp(Player player)
+    {
+        if(player.level().isClientSide)
+        {
+            if(player.getRandom().nextIntBetweenInclusive(0,10)<OverstuffedClientConfig.burpFrequency.get())
+            {
+                player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                                player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
+                        player.getSoundSource(), 1f, 1f);
+
+            }
+        }
+        else
+        {
+            player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                if(player.getRandom().nextIntBetweenInclusive(0,10)<serverSettings.getBurpFrequency())
+                {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                                    player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
+                            player.getSoundSource(), 1f, 1f);
+
+                }
+            });
+
+        }
+
+    }
+    public static void playGurgle(Player player)
+    {
+
+        if(player.level().isClientSide)
+        {
+            if(player.getRandom().nextIntBetweenInclusive(0,10)<OverstuffedClientConfig.burpFrequency.get())
+            {
+                player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
+                                player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
+                        player.getSoundSource(), 1f, 1f);
+
+            }
+        }
+        else
+        {
+            player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                    if (serverSettings.getGurgleFrequency() > 0 & weightBar.getLastWeightStage() >= 1 &&
+                            player.getRandom().nextFloat() < (0.001f * Math.sqrt(serverSettings.getGurgleFrequency() * weightBar.getLastWeightStage())))
+                    {
+                        player.level().playSound(null, player.blockPosition(), ModSounds.GURGLE_SOUNDS.get(
+                                        player.getRandom().nextIntBetweenInclusive(1, ModSounds.GURGLE_SOUNDS.size()) - 1).get(),
+                                player.getSoundSource(), 0.5f, 1f);
+                    }
+                });
+            });
+
+        }
 
     }
 

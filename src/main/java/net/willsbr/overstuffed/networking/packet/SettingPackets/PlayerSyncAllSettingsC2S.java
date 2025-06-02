@@ -1,12 +1,10 @@
 package net.willsbr.overstuffed.networking.packet.SettingPackets;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import java.util.function.Supplier;
 
@@ -68,11 +66,11 @@ public class PlayerSyncAllSettingsC2S {
     {
         if(name.equals("effects"))
         {
-            return new PlayerSyncAllSettingsC2S(input,OverstuffedConfig.stageGain.get(),OverstuffedConfig.burpFrequency.get(),OverstuffedConfig.gurgleFrequency.get());
+            return new PlayerSyncAllSettingsC2S(input, OverstuffedClientConfig.stageGain.get(), OverstuffedClientConfig.burpFrequency.get(), OverstuffedClientConfig.gurgleFrequency.get());
         }
         else if(name.equals("stage"))
         {
-            return new PlayerSyncAllSettingsC2S(OverstuffedConfig.weightEffects.get(),input,OverstuffedConfig.burpFrequency.get(),OverstuffedConfig.gurgleFrequency.get());
+            return new PlayerSyncAllSettingsC2S(OverstuffedClientConfig.weightEffects.get(),input, OverstuffedClientConfig.burpFrequency.get(), OverstuffedClientConfig.gurgleFrequency.get());
         }
         return null;
     }

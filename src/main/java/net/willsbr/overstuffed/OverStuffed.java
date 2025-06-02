@@ -1,12 +1,8 @@
 package net.willsbr.overstuffed;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,10 +24,11 @@ import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Item.ModCreativeModeTab;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.potion.ModPotions;
 import net.willsbr.overstuffed.sound.ModSounds;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import org.slf4j.Logger;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -65,9 +62,13 @@ public class OverStuffed
 
         // generate/read config/overstuffed.toml
         ModLoadingContext.get().registerConfig(
-                ModConfig.Type.COMMON,
-                OverstuffedConfig.GENERAL_SPEC,
-                "overstuffed.toml");
+                ModConfig.Type.CLIENT,
+                OverstuffedClientConfig.GENERAL_SPEC,
+                "overstuffed_client.toml");
+        ModLoadingContext.get().registerConfig(
+                ModConfig.Type.SERVER,
+                OverstuffedWorldConfig.GENERAL_SPEC,
+                "overstuffed_server.toml");
 
         // register ConfigScreen as Config button in Mods list
         ModLoadingContext.get().registerExtensionPoint(
