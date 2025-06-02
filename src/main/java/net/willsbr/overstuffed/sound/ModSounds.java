@@ -75,6 +75,9 @@ public class ModSounds {
     {
         if(player.level().isClientSide)
         {
+            //effectively if the random number is LOWER than the set frequency,
+            // it works! 0 should disable,a and 10 should be max
+
             if(player.getRandom().nextIntBetweenInclusive(0,10)<OverstuffedClientConfig.burpFrequency.get())
             {
                 player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(

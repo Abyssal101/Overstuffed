@@ -44,7 +44,6 @@ public class OverfullFoodC2SPacket {
                             ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
                             stuffedBar.addStuffedLevel(1, level.getGameTime(), lastFood.getUseDuration());
                             player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
-                                //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
                                 ModSounds.playBurp(player);
                             });
                             ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getStuffedLevel() ,stuffedBar.getOverstuffedLevel()),player);

@@ -96,7 +96,6 @@ public class ModEvent {
             event.getOriginal().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(oldStore -> {
                 event.getEntity().getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
-
                     //ModMessages.sendToPlayer(new ClientCPMStuffedSyncS2CPacket(oldStore.getStuffedLayerName()),(ServerPlayer) event.getEntity());
                     //ModMessages.sendToPlayer(new ClientCPMWeightSyncS2CPacket(oldStore.getWeightLayerName()),(ServerPlayer) event.getEntity());
 
@@ -284,12 +283,9 @@ public class ModEvent {
                         ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()), (ServerPlayer) event.player);
                         weightBar.setSavedTickforWeightLoss(-1);
                     }
-
                 }
-
             });
             });
-
         });
     }
     public static void stuffedSystem(TickEvent.PlayerTickEvent event)
@@ -309,11 +305,8 @@ public class ModEvent {
                     stuffedBar.addStuffedPoint();
                 }
                 ModMessages.sendToPlayer(new stuffedIntervalUpdateS2CPacket(stuffedBar.getStuffedLossed(),stuffedBar.getInterval()),(ServerPlayer)event.player);
-                //Playing sound logic
-                    //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
-                    if((event.player.getRandom().nextIntBetweenInclusive(0,10)*2)< OverstuffedClientConfig.burpFrequency.get()) {
-                        ModSounds.playBurp(event.player);
-                    }
+
+                ModSounds.playBurp(event.player);
                 ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(), stuffedBar.getStuffedLevel(),
                         stuffedBar.getOverstuffedLevel()),(ServerPlayer) event.player);
             }
@@ -324,10 +317,9 @@ public class ModEvent {
 
     public static void weightBarEffects(TickEvent.PlayerTickEvent event,PlayerServerSettings serverSettings, PlayerWeightBar weightBar, int xOf5, int lastWeightStage)
     {
-
             if(!serverSettings.weightEffects())
             {
-                PlayerWeightBar.clearModifiers(event.player);
+                PlayerWeightBar.clearModifiers(event.player,weightBar);
             }
             else
             {
@@ -338,14 +330,7 @@ public class ModEvent {
                     PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
                 }
             }
-
-
-
-
-
-
     }
-
 
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
@@ -378,7 +363,6 @@ public class ModEvent {
             }
         }
     }
-    //
 
     //Hopefully this fixes the player  constantly stacking buffs when you leave and rejoin
     @SubscribeEvent
@@ -390,16 +374,16 @@ public class ModEvent {
             if (event.getEntity() instanceof ServerPlayer player)
             {
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                    PlayerWeightBar.clearModifiers(player);
+                    PlayerWeightBar.clearModifiers(player,weightBar);
                 });
             }
         }
         else
         {
-            if (event.getEntity() instanceof ServerPlayer player)
+            if (event.getEntity() instanceof Player player)
             {
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                    PlayerWeightBar.clearModifiers(player);
+                    PlayerWeightBar.clearModifiers(player,weightBar);
                 });
             }
         }

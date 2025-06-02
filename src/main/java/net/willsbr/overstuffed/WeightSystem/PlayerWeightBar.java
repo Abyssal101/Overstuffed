@@ -42,14 +42,14 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
-    private static AttributeModifier WEIGHT_HEALTH_MODIFIER=
+    private AttributeModifier WEIGHT_HEALTH_MODIFIER =
             new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static AttributeModifier WEIGHT_SPEED_MODIFIER =
-            new AttributeModifier(UUID.fromString("65d64ef1-2703-458d-a799-3d06b1e3a36c"), "speed decrease per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
+    private AttributeModifier WEIGHT_SPEED_MODIFIER =
+            new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"), "speed decrease per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
 
 
     //TODO make this save to NBT when your done
-    private int totalStages = 1;
+    private int totalStages = 5;
 
 
     public int getTotalStages() {
@@ -280,25 +280,25 @@ public class PlayerWeightBar {
     public void setNewModifiers()
     {
         double percentageEffect= (double)this.calculateCurrentWeightStage()/this.getTotalStages();
-        WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
+        this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
                 "health increase from OS",
                 (int)(percentageEffect*OverstuffedWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
 
-        WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
+        this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
                 "speed increase from OS",
-                -(int)(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+                -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
 
-    public static void clearModifiers(Player player)
+    public static void clearModifiers(Player player, PlayerWeightBar weightBar)
     {
-            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIER))
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(weightBar.WEIGHT_HEALTH_MODIFIER))
             {
-                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIER);
+                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
             }
-            if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIER))
+            if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(weightBar.WEIGHT_SPEED_MODIFIER))
             {
-                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIER);
+                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(weightBar.WEIGHT_SPEED_MODIFIER);
             }
     }
 
@@ -307,7 +307,7 @@ public class PlayerWeightBar {
     {
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
-        PlayerWeightBar.clearModifiers(player);
+        PlayerWeightBar.clearModifiers(player, weightBar);
         ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
         int newWeightStage=weightBar.calculateCurrentWeightStage();
 
@@ -315,8 +315,8 @@ public class PlayerWeightBar {
         if(newWeightStage!=0)
         {
             weightBar.setNewModifiers();
-            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIER);
-            player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIER);
+            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
+            player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(weightBar.WEIGHT_SPEED_MODIFIER);
         }
         if(player.getHealth()>player.getMaxHealth())
         {
