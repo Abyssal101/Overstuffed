@@ -62,7 +62,7 @@ public class GraphicsConfigScreen extends Screen {
     private int lastGuiScale;
 
     private boolean nonNumFlag;
-    private static final ResourceLocation WEIGHTPLACEHOLDER = new ResourceLocation(OverStuffed.MODID, "textures/stuffedbar/placeholder.png");
+    private static final ResourceLocation WEIGHTPLACEHOLDER = new ResourceLocation(OverStuffed.MODID, "textures/hud/placeholder.png");
 
 
     public GraphicsConfigScreen() {

@@ -12,6 +12,7 @@ public class AbstractClientMethods {
         //gui.blit(poseStack,x, y,0,0,0,textureWidth,textureHeight,textureHeight,textureWidth);
     }
     public static void AbstractDraw(ForgeGui gui, GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int textureWidth, int textureHeight){
+        //RenderSystem.setShaderTexture(0, texture);
         guiGraphics.blit(texture,x, y,0,0,0,textureWidth,textureHeight,textureWidth,textureHeight);
     }
     public static void AbstractDraw(ForgeGui gui, GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int textureWidth

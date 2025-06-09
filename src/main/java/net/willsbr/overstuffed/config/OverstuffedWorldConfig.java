@@ -13,7 +13,7 @@ public class OverstuffedWorldConfig {
 
 
     public static ForgeConfigSpec.ConfigValue<Integer> amountStuffedLost;
-    public static ForgeConfigSpec.ConfigValue<Double> stuffedLossedMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> stuffedLostMultiplier;
 
     public static ForgeConfigSpec.ConfigValue<Integer> foodFill;
 
@@ -44,7 +44,7 @@ public class OverstuffedWorldConfig {
                 .comment("Represents the baseline for how many points of stuffed you lose with every lost event")
                 .define("stuffed_loss_multiplier", 1);
 
-        stuffedLossedMultiplier = builder
+        stuffedLostMultiplier = builder
                 .comment("Multiplier for how quickly players stuffed bar will deplete when hunger isn't full.")
                 .define("amount_stuffed_lost", 1.0);
 

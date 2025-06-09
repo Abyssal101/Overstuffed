@@ -111,6 +111,7 @@ public class OverStuffed
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            Minecraft.getInstance().getMainRenderTarget().enableStencil();
             // Some client setup code
             //LOGGER.info("HELLO FROM CLIENT SETUP");
             //LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

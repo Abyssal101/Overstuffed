@@ -28,7 +28,6 @@ import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBar;
 import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsPollS2C;
@@ -293,7 +292,7 @@ public class ModEvent {
         event.player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
 
             if(stuffedBar.getCurrentStuffedLevel() > 0 &&
-                    event.player.getRandom().nextFloat() < (0.01f*Math.max(10-event.player.getFoodData().getFoodLevel(),1)*OverstuffedWorldConfig.stuffedLossedMultiplier.get())
+                    event.player.getRandom().nextFloat() < (0.01f*Math.max(10-event.player.getFoodData().getFoodLevel(),1)*OverstuffedWorldConfig.stuffedLostMultiplier.get())
                     && event.player.getFoodData().getFoodLevel()<20) { // Once Every 10 Seconds on Avg
 
                 stuffedBar.subStuffedLevel(OverstuffedWorldConfig.amountStuffedLost.get());
