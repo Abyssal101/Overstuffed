@@ -1,6 +1,10 @@
 package net.willsbr.overstuffed.config;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.SyncClientSettingsC2S;
 
 public class OverstuffedClientConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
@@ -18,8 +22,12 @@ public class OverstuffedClientConfig {
     public static String lastStuffedLayer="";
 
     public static ForgeConfigSpec.ConfigValue<Boolean> stageGain;
+    public static ForgeConfigSpec.ConfigValue<Integer> totalStages;
+
 
     public static ForgeConfigSpec.ConfigValue<Boolean> weightEffects;
+    public static ForgeConfigSpec.ConfigValue<Boolean> granularEffects;
+
 
     public static ForgeConfigSpec.ConfigValue<Integer> burpFrequency;
     public static ForgeConfigSpec.ConfigValue<Integer> gurgleFrequency;
@@ -34,6 +42,9 @@ public class OverstuffedClientConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudXOffset;
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudYOffset;
     public static ForgeConfigSpec.ConfigValue<Boolean> debugView;
+
+    public static ForgeConfigSpec.ConfigValue<Float> maxHitboxWidth;
+
 
 
 
@@ -52,8 +63,12 @@ public class OverstuffedClientConfig {
 
         stageGain=builder.comment("Stage based gaining for those who want more a more sudden change")
                 .define("config_stage_gain",false);
+        totalStages=builder.comment("Amount of stages the player can go through")
+                .define("config_stages",5);
         weightEffects=builder.comment("Currently enables/disables all forms of weight effects")
                 .define("config_weight_effects",true);
+        granularEffects=builder.comment("Do effects get calculated by the immediate current weight versus when a new stage is reached")
+                .define("config_granular",false);
 
         burpFrequency=builder.comment("1-10, the frequency that burps occur")
                 .define("config_burp_frequency,",5);
@@ -84,6 +99,10 @@ public class OverstuffedClientConfig {
         debugView =builder.comment("Boolean to determine if the debug view should be on ")
                 .define("debugview,",false);
 
+        maxHitboxWidth=builder.comment("Max multipler to your hitbox being at max weight should effect")
+                .define("max_hitbox_width,",2.0f);
+
+
     }
 
     public static void saveConfig() {
@@ -101,6 +120,11 @@ public class OverstuffedClientConfig {
         stuffedHudYOffset.save();
         stuffedHudXOffset.save();
         debugView.save();
+        maxHitboxWidth.save();
+        if(Minecraft.getInstance().player!=null)
+        {
+            ModMessages.sendToServer(new SyncClientSettingsC2S());
+        }
 
 
 

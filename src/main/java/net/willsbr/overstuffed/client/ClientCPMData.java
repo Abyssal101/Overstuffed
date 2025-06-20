@@ -70,7 +70,7 @@ public class ClientCPMData {
             if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(""))
             {
                 String layerName= OverstuffedClientConfig.stuffedLayerConfigEntry.get();
-                Double percentFull= ((double)ClientStuffedBarData.getPlayerStuffedBar()/ClientStuffedBarData.getMax());
+                Double percentFull= ((double) ClientCalorieMeter.getCurrentCalories()/ ClientCalorieMeter.getMax());
                 int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(layerName));
                 playersAPI.playAnimation(layerName,outOfMax);
                 playersAPI.playAnimation(OverstuffedClientConfig.lastStuffedLayer,0);

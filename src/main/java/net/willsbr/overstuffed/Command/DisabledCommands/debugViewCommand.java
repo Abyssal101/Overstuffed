@@ -1,4 +1,4 @@
-package net.willsbr.overstuffed.Command.ActiveCommands;
+package net.willsbr.overstuffed.Command.DisabledCommands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -9,7 +9,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 public class debugViewCommand {
@@ -37,13 +37,14 @@ public class debugViewCommand {
             player.sendSystemMessage(Component.literal("-------------------------------"));
         });
 
-        player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
 
-            player.sendSystemMessage(Component.literal("Stuffed Level: "+stuffedBar.getCurrentStuffedLevel()));
-            player.sendSystemMessage(Component.literal("Full points: "+stuffedBar.getFullLevel()));
-            player.sendSystemMessage(Component.literal("Stuffed points: "+stuffedBar.getStuffedLevel()));
-            player.sendSystemMessage(Component.literal("Overstuffed points: "+stuffedBar.getOverstuffedLevel()));
-            player.sendSystemMessage(Component.literal("Progress to next Point: "+stuffedBar.getStuffedLossed()));
+            //TODO UPDATE DEBUG VIEW COMMAND
+//            player.sendSystemMessage(Component.literal("Stuffed Level: "+stuffedBar.getCurrentStuffedLevel()));
+//            player.sendSystemMessage(Component.literal("Full points: "+stuffedBar.getFullLevel()));
+//            player.sendSystemMessage(Component.literal("Stuffed points: "+stuffedBar.getStuffedLevel()));
+//            player.sendSystemMessage(Component.literal("Overstuffed points: "+stuffedBar.getOverstuffedLevel()));
+            player.sendSystemMessage(Component.literal("Progress to next Point: "+stuffedBar.getCalLost()));
             player.sendSystemMessage(Component.literal("Add State: "+stuffedBar.getAddState()));
             player.sendSystemMessage(Component.literal("Interval between points: "+stuffedBar.getInterval()));
 

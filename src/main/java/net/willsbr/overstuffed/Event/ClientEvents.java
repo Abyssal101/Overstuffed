@@ -26,17 +26,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.Command.ActiveCommands.*;
 import net.willsbr.overstuffed.Command.CommandHandler;
+import net.willsbr.overstuffed.Command.DisabledCommands.SetLayer;
+import net.willsbr.overstuffed.Command.DisabledCommands.debugViewCommand;
 import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.Renderer.ScaleBER;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.HudOverlay;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
 import net.willsbr.overstuffed.networking.packet.OverstuffedEffectC2SPacket;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.addWeightC2SPacket;
 import net.willsbr.overstuffed.util.KeyBinding;
 import net.willsbr.overstuffed.util.ModTags;
 
@@ -63,7 +63,6 @@ public class ClientEvents {
                 {
                     ItemStack heldItem=useItemEvent.getItem();
                     //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
-                    //322 is id for golden apple
                     if(heldItem.is(ModTags.Items.GOLDEN_DIET_FOODS))
                     {
                         int duration = heldItem.is(Items.GOLDEN_APPLE) ? 600 : 200;
@@ -76,16 +75,17 @@ public class ClientEvents {
                         ModMessages.sendToServer(new OverfullFoodC2SPacket());
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
-                        int weightForQueue=0;
-                        try{
-                            weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
-                        }
-                        catch(NullPointerException e)
-                        {
-
-                        }
+//                        int weightForQueue=0;
+//                        try{
+//                            weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
+//                        }
+//                        catch(NullPointerException e)
+//                        {
+//
+//                        }
                         //Makes weight have more of an impact I guess
-                        ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
+                        //Moved to modEvents stuffed system
+                        //ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
                     }
 
                 }
@@ -425,15 +425,13 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAbove(VanillaGuiOverlay.VIGNETTE.id(),"stuffedbar", HudOverlay.HUD_STUFFEDBAR);
+            event.registerAbove(VanillaGuiOverlay.FOOD_LEVEL.id(), "stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event)
         {
             //RENDERERS ARE CREATED CLIENT SIDE, GOOD TO KNOW
-
-
             //Block Entities
             event.registerBlockEntityRenderer(ModEntities.SCALE.get(), ScaleBER::new);
 
@@ -452,7 +450,7 @@ public class ClientEvents {
         setCurrentWeight.register(commands,event.getBuildContext());
         //clearLayers.register(commands, event.getBuildContext());
         debugViewCommand.register(commands, event.getBuildContext());
-        setMaxStuffed.register(commands, event.getBuildContext());
+        setMaxCalories.register(commands, event.getBuildContext());
         setHitbox.register(commands, event.getBuildContext());
         //setWGMethod.register(commands,event.getBuildContext());
         //setBurpFrequency.register(commands, event.getBuildContext());

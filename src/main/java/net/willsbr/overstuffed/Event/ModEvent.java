@@ -24,18 +24,19 @@ import net.willsbr.overstuffed.Effects.ModEffects;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBar;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeter;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsPollS2C;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.CalorieMeterDelaySyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.QueuedWeightSyncS2CPacket;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
-import net.willsbr.overstuffed.networking.packet.StuffedPackets.stuffedIntervalUpdateS2CPacket;
+import net.willsbr.overstuffed.networking.packet.StuffedPackets.calIntervalUpdateS2CPacket;
 import net.willsbr.overstuffed.sound.ModSounds;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -56,8 +57,8 @@ public class ModEvent {
         //StuffedBar
         if(event.getObject() instanceof Player)
         {
-            if(!event.getObject().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "properties"), new PlayerStuffedBarProvider());
+            if(!event.getObject().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).isPresent()) {
+                event.addCapability(new ResourceLocation(OverStuffed.MODID, "properties"), new PlayerCalorieMeterProvider());
             }
             if(!event.getObject().getCapability(CPMDataProvider.PLAYER_CPM_DATA).isPresent()) {
                 event.addCapability(new ResourceLocation(OverStuffed.MODID, "configsettings"), new CPMDataProvider());
@@ -78,16 +79,14 @@ public class ModEvent {
     //adds capability back when you die
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        //stuffedbar
         event.getOriginal().reviveCaps();
 
         if (event.getEntity() instanceof ServerPlayer && event.getOriginal() instanceof ServerPlayer)
         {
 
-            event.getOriginal().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(oldStore -> {
-                event.getEntity().getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(newStore -> {
+            event.getOriginal().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
-
                 });
             });
 
@@ -130,7 +129,7 @@ public class ModEvent {
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         //stuffedbar
-        event.register(PlayerStuffedBar.class);
+        event.register(PlayerCalorieMeter.class);
         event.register(CPMData.class);
         event.register(PlayerWeightBar.class);
         event.register(PlayerUnlocks.class);
@@ -289,25 +288,65 @@ public class ModEvent {
     }
     public static void stuffedSystem(TickEvent.PlayerTickEvent event)
     {
-        event.player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+        event.player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter -> {
 
-            if(stuffedBar.getCurrentStuffedLevel() > 0 &&
-                    event.player.getRandom().nextFloat() < (0.01f*Math.max(10-event.player.getFoodData().getFoodLevel(),1)*OverstuffedWorldConfig.stuffedLostMultiplier.get())
-                    && event.player.getFoodData().getFoodLevel()<20) { // Once Every 10 Seconds on Avg
+            if(calorieMeter.checkClearCalories(event.player.tickCount))
+            {
 
-                stuffedBar.subStuffedLevel(OverstuffedWorldConfig.amountStuffedLost.get());
-                event.player.getFoodData().setFoodLevel(event.player.getFoodData().getFoodLevel()+OverstuffedWorldConfig.foodFill.get());
-                stuffedBar.addStuffedLossed();
+                int totalCalories=calorieMeter.getCurrentCalories();
+                double max=calorieMeter.getMaxCalories();
+                //20 is hardcoded in base, so it'll be hard-coded here too!
+                int caloriesLostToHunger=(20-event.player.getFoodData().getFoodLevel())*OverstuffedWorldConfig.calToHungerRate.get();
 
-                if(stuffedBar.getStuffedLossed()>= stuffedBar.getInterval())
+                if((totalCalories/max)>calorieMeter.getSlowMetabolismThres())
                 {
-                    stuffedBar.addStuffedPoint();
+                    totalCalories=(int)(totalCalories*OverstuffedWorldConfig.slowMetabolismMultiplier.get());
                 }
-                ModMessages.sendToPlayer(new stuffedIntervalUpdateS2CPacket(stuffedBar.getStuffedLossed(),stuffedBar.getInterval()),(ServerPlayer)event.player);
+                else if((totalCalories/max)>calorieMeter.getModMetabolismThres())
+                {
+                    totalCalories=(int)(totalCalories*OverstuffedWorldConfig.modMetabolismMultiplier.get());
+                }
+
+                totalCalories=totalCalories-caloriesLostToHunger;
+                if(caloriesLostToHunger>0)
+                {
+                    if(event.player.getFoodData().getFoodLevel()<20)
+                    {
+                        int newFood=Math.min(20,event.player.getFoodData().getFoodLevel()+caloriesLostToHunger/6);
+                        event.player.getFoodData().setFoodLevel(newFood);
+                    }
+                }
+
+                //handles upgrading the max cap if you go past that interval
+                if(calorieMeter.getCalLost()>=calorieMeter.getInterval())
+                {
+                    calorieMeter.setMaxCalories(Math.min(calorieMeter.getMaxCalories()+OverstuffedWorldConfig.calCapIncrement.get()
+                    ,OverstuffedWorldConfig.absCalCap.get()));
+                    calorieMeter.setCalLost(0);
+                }
+
+                if(totalCalories>0)
+                {
+                    calorieMeter.addCalLost(totalCalories);
+                    int finalTotalCalories = totalCalories;
+                    event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+                        weightBar.addWeightChanges(finalTotalCalories / OverstuffedWorldConfig.calToWeightRate.get());
+                    });
+                }
+
+                calorieMeter.setCurrentCalories(0);
+                calorieMeter.setFoodEatenTick(-1);
+                calorieMeter.setCalClearDelay(-1);
+
+                ModMessages.sendToPlayer(new calIntervalUpdateS2CPacket(calorieMeter.getCalLost(),calorieMeter.getInterval()),(ServerPlayer)event.player);
 
                 ModSounds.playBurp(event.player);
-                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(), stuffedBar.getStuffedLevel(),
-                        stuffedBar.getOverstuffedLevel()),(ServerPlayer) event.player);
+
+                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),
+                        calorieMeter.getModMetabolismThres(),
+                        calorieMeter.getModMetabolismThres()),(ServerPlayer) event.player);
+                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),(ServerPlayer) event.player);
+
             }
         });
 
@@ -326,7 +365,14 @@ public class ModEvent {
                 {
                     //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
                     //Maybe could make it just this, but slightly more effcient I think?
+
                     PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
+
+                    //handles adding the correct hitbox changes
+                    PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+
+
+
                 }
             }
     }
@@ -337,10 +383,8 @@ public class ModEvent {
         if (!event.getLevel().isClientSide()) {
 
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel()
-                            ,stuffedBar.getStuffedLevel(),
-                            stuffedBar.getOverstuffedLevel()), player);
+                player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter -> {
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),calorieMeter.getMaxCalories(),calorieMeter.getSlowMetabolismThres()), player);
                 });
 
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {

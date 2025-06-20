@@ -17,12 +17,13 @@ import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
-import org.jline.utils.Colors;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import org.joml.Quaternionf;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import static net.willsbr.overstuffed.client.AbstractClientMethods.AbstractDraw;
 
@@ -34,12 +35,18 @@ public class HudOverlay {
     private static final ResourceLocation SUPERSTUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/hud/superstuffedpoint.png");
 
     private static final ResourceLocation WEIGHTSPRITE0 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon1.png");
-
     private static final ResourceLocation WEIGHTSPRITE1 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon2.png");
     private static final ResourceLocation WEIGHTSPRITE2 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon3.png");
     private static final ResourceLocation WEIGHTSPRITE3 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon4.png");
     private static final ResourceLocation WEIGHTSPRITE4 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon5.png");
 
+    private static final ResourceLocation[] WEIGHTSTAGESPRITES = {
+            WEIGHTSPRITE0,
+            WEIGHTSPRITE1,
+            WEIGHTSPRITE2,
+            WEIGHTSPRITE3,
+            WEIGHTSPRITE4
+    };
 
     private static final ResourceLocation STUFFED_BAR_BEG = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_bar_beg.png");
     private static final ResourceLocation STUFFED_BAR_MID = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_bar_mid.png");
@@ -59,29 +66,79 @@ public class HudOverlay {
     private static Font font;
 
     private static final ResourceLocation STOMACH_ICON_ONE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach4.png");
-    private static final ResourceLocation STOMACH_ONE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach4mask.png");
+    private static final ResourceLocation STOMACH_ONE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask4.png");
 
     private static final ResourceLocation STOMACH_ICON_TWO = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach5.png");
+    private static final ResourceLocation STOMACH_TWO_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask5.png");
+
     private static final ResourceLocation STOMACH_ICON_THREE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach6.png");
+    private static final ResourceLocation STOMACH_THREE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask6.png");
+
     private static final ResourceLocation STOMACH_ICON_FOUR = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach7.png");
+    private static final ResourceLocation STOMACH_FOUR_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask7.png");
+
     private static final ResourceLocation STOMACH_ICON_FIVE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach8.png");
-    private static final ResourceLocation[] STOMACH_ICONS= new ResourceLocation[5];
+    private static final ResourceLocation STOMACH_FIVE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask8.png");
+    private static final ResourceLocation[] STOMACH_ICONS = {
+            STOMACH_ICON_ONE,
+            STOMACH_ICON_TWO,
+            STOMACH_ICON_THREE,
+            STOMACH_ICON_FOUR,
+            STOMACH_ICON_FIVE
+    };
+
+    private static final ResourceLocation[] STOMACH_MASKS = {
+            STOMACH_ONE_MASK,
+            STOMACH_TWO_MASK,
+            STOMACH_THREE_MASK,
+            STOMACH_FOUR_MASK,
+            STOMACH_FIVE_MASK
+    };
+
 
     private static final ResourceLocation GREEN_ACID1 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green1.png");
     private static final ResourceLocation GREEN_ACID2 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green2.png");
     private static final ResourceLocation GREEN_ACID3 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green3.png");
     private static final ResourceLocation GREEN_ACID4 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green4.png");
     private static final ResourceLocation GREEN_ACID5 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green5.png");
-    private static final ResourceLocation[] ACID_SPRITES= new ResourceLocation[5];
 
+    private static final ResourceLocation[] ACID_SPRITES = {
+            GREEN_ACID1,
+            GREEN_ACID2,
+            GREEN_ACID3,
+            GREEN_ACID4,
+            GREEN_ACID5
+    };
+
+
+    private static final ResourceLocation NUMBER_ZERO = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number0.png");
+    private static final ResourceLocation NUMBER_ONE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number1.png");
+    private static final ResourceLocation NUMBER_TWO = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number2.png");
+    private static final ResourceLocation NUMBER_THREE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number3.png");
+    private static final ResourceLocation NUMBER_FOUR = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number4.png");
+    private static final ResourceLocation NUMBER_FIVE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number5.png");
+    private static final ResourceLocation NUMBER_SIX = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number6.png");
+    private static final ResourceLocation NUMBER_SEVEN = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number7.png");
+    private static final ResourceLocation NUMBER_EIGHT = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number8.png");
+    private static final ResourceLocation NUMBER_NINE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number9.png");
+
+
+    private static final ResourceLocation[] NUMBER_SPRITES = {
+            NUMBER_ZERO,
+            NUMBER_ONE,
+            NUMBER_TWO,
+            NUMBER_THREE,
+            NUMBER_FOUR,
+            NUMBER_FIVE,
+            NUMBER_SIX,
+            NUMBER_SEVEN,
+            NUMBER_EIGHT,
+            NUMBER_NINE
+    };
 
     private static long acidTick=0;
     private static int currentAcid=0;
 
-
-
-    private static final ResourceLocation[] WEIGHTSTAGESPRITES= new ResourceLocation[5];
-    private static final ResourceLocation WEIGHTSPRITEBACKGROUND= new ResourceLocation(OverStuffed.MODID,"textures/hud/weightbackground.png");
     public static final IGuiOverlay HUD_STUFFEDBAR=((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         //anything in here gets rendered
         Window curWindow= Minecraft.getInstance().getWindow();
@@ -95,134 +152,22 @@ public class HudOverlay {
         int top = screenHeight - rightHeight ;
         rightHeight += 10;
 
-        WEIGHTSTAGESPRITES[0]=WEIGHTSPRITE0;
-        WEIGHTSTAGESPRITES[1]=WEIGHTSPRITE1;
-        WEIGHTSTAGESPRITES[2]=WEIGHTSPRITE2;
-        WEIGHTSTAGESPRITES[3]=WEIGHTSPRITE3;
-        WEIGHTSTAGESPRITES[4]=WEIGHTSPRITE4;
-
-        STOMACH_ICONS[0]=STOMACH_ICON_ONE;
-        STOMACH_ICONS[1]=STOMACH_ICON_TWO;
-        STOMACH_ICONS[2]=STOMACH_ICON_THREE;
-        STOMACH_ICONS[3]=STOMACH_ICON_FOUR;
-        STOMACH_ICONS[4]=STOMACH_ICON_FIVE;
-
-        ACID_SPRITES[0]=GREEN_ACID1;
-        ACID_SPRITES[1]=GREEN_ACID2;
-        ACID_SPRITES[2]=GREEN_ACID3;
-        ACID_SPRITES[3]=GREEN_ACID4;
-        ACID_SPRITES[4]=GREEN_ACID5;
-
-
         font = Minecraft.getInstance().font;
         PoseStack poseStack=guiGraphics.pose();
-
 
         //need this to actually render
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-
         //New stuffed bar
-
-       // AbstractDraw(gui,guiGraphics,STUFFED_BAR, (int)(left-10),(int)(top),84,8);
-        int barLeft=left+ OverstuffedClientConfig.stuffedHudXOffset.get();
+        int barLeft=left+OverstuffedClientConfig.stuffedHudXOffset.get()+80;
         int barTop=top- OverstuffedClientConfig.stuffedHudYOffset.get();
 
-        AbstractDraw(gui,guiGraphics,STUFFED_BAR_BEG, (int)(barLeft),(int)(barTop),10,8);
-        AbstractDraw(gui,guiGraphics,STUFFED_BAR_END, (int)(barLeft+(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-2)*8+10),(int)(barTop),10,8);
-
-        for(int i=1;i<(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1);i++)
-        {
-            AbstractDraw(gui,guiGraphics,STUFFED_BAR_MID, (int)(barLeft+8*(i-1)+10),(int)(barTop),8,8);
-        }
-
-
-        for(int i=0;i<ClientStuffedBarData.getPlayerStuffedBar();i++)
-        {
-            if(i<ClientStuffedBarData.getSoftLimit()-1)
-            {
-                AbstractDraw(gui,guiGraphics,STUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-            else if(i==ClientStuffedBarData.getSoftLimit()-1)
-            {
-                AbstractDraw(gui,guiGraphics,STUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-            else if(i<(ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
-            {
-                AbstractDraw(gui,guiGraphics,OVERSTUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-            else if(i==(ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
-            {
-                AbstractDraw(gui,guiGraphics,OVERSTUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-            else if(i<(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
-            {
-                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_PART, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-            else if(i==(ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit()+ClientStuffedBarData.getSoftLimit()-1))
-            {
-                AbstractDraw(gui,guiGraphics,SUPERSTUFFED_END, (int)(barLeft+2+8*i),(int)(barTop+2),8,4);
-            }
-        }
-
-
-
-
-
-        poseStack.pushPose();
-        poseStack.scale(2,2,2);
-        poseStack.popPose();
-
-
-        //1.19.2
-
-        //AbstractDraw(gui,guiGraphics,WEIGHTSPRITEBACKGROUND, OverstuffedConfig.weightDisplayX.get(), OverstuffedConfig.weightDisplayY.get(),33,33);
-
-
-        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.getMinWeight())/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.getMinWeight()))*100);
-        //for checking which sprite is currently being displayed.
-        //System.out.println(outOf100/20-1+"/5");
-        //1.19.2
-        if(outOf100/20==5)
-        {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get(),24,24);
-        }
-        else {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get(),24,24);
-        }
-
-        renderStomachIcon(gui,guiGraphics,poseStack);
+        renderStomachIcon(gui,guiGraphics,poseStack,barLeft,barTop);
+        renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get());
 
         if(OverstuffedClientConfig.debugView.get())
         {
-            //Current Weight
-            //Max Weight
-            //Min Weight
-
-            //Stuffed current valaue
-            //# of food to get to next stuffed
-            ArrayList<Component> info= new ArrayList<Component>();
-            info.add(Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight()));
-            info.add(Component.translatable("message.overstuffed.debugmaxweight",""+ OverstuffedClientConfig.getMaxWeight()));
-            info.add(Component.translatable("message.overstuffed.debugminweight",""+ OverstuffedClientConfig.getMinWeight()));
-            info.add(Component.translatable("message.overstuffed.debugcurrentstuffed",""+ ClientStuffedBarData.getPlayerStuffedBar()));
-            info.add(Component.translatable("message.overstuffed.debugmaxstuffed",""+
-                    (ClientStuffedBarData.getSoftLimit()+ ClientStuffedBarData.getHardLimit()+ClientStuffedBarData.getFirmLimit())));
-            info.add(Component.translatable("message.overstuffed.debugnextmax",""+
-                    ClientStuffedBarData.getCurrentLost()+"/"+ClientStuffedBarData.getInterval()));
-            info.add(Component.translatable("message.overstuffed.debugqueueweight",""+
-                    ClientWeightBarData.getQueuedWeight()));
-            info.add(Component.translatable("message.overstuffed.debugtotalqueueweight",""+
-                    ClientWeightBarData.getTotalQueuedWeight()));
-
-
-            for(int i=0;i<info.size();i++)
-            {
-                guiGraphics.drawCenteredString( font,info.get(i)
-                        ,screenWidth/2,20+10*i, Color.RED.hashCode());
-            }
-
+            drawDebug(gui,guiGraphics,screenWidth/2,20);
         }
 
     });
@@ -304,11 +249,49 @@ public class HudOverlay {
     }
 
 
-    public static void renderStomachIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack) {
+    public static void renderWeightIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack,int x, int y)
+    {
+        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.getMinWeight())/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.getMinWeight()))*100);
+        if(outOf100/20==5)
+        {
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],x,y,24,24);
+        }
+        else
+        {
+            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],x,y,24,24);
+        }
 
-        int x=10;
-        int y=10;
-        AbstractDraw(gui,guiGraphics,STOMACH_ICON_ONE,x,y,18,18);
+        //Number Logic;
+        int lastStage=ClientWeightBarData.getLastWeightStage();
+        Stack<Integer> order=new Stack<Integer>();
+        while(lastStage/10!=0)
+        {
+            order.add(lastStage%10);
+        }
+        order.add(lastStage%10);
+        poseStack.pushPose();
+        poseStack.scale(0.33f,0.33f,0.33f);
+        for(int i=0;i<order.size();i++)
+        {
+            AbstractDraw(gui,guiGraphics,NUMBER_SPRITES[order.pop()],(x+20+9*i)*3,(y+14)*3,24,24);
+
+        }
+        poseStack.popPose();
+
+
+    }
+
+
+    public static void renderStomachIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack,int x, int y)
+    {
+
+        int totalIcons=5;
+
+        //because commands can force the maximum higher
+        int higherMax=Math.min(OverstuffedWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
+
+        int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
+        AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);
 
         GL11.glEnable(GL11.GL_STENCIL_TEST); // Turn on da test
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); // Flush old data
@@ -318,14 +301,15 @@ public class HudOverlay {
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE); // Replace on success
         RenderSystem.colorMask(false, false, false, false);
 
-        drawMaskShape(guiGraphics);
+        AbstractDraw(gui,guiGraphics,STOMACH_MASKS[currentIconIndex],x,y,18,18);
+
 
         GL11.glStencilMask(0x00); // Writing = OFF
         GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF); // Anything that wasn't defined above will not be rendered.
         RenderSystem.colorMask(true, true, true, true);
 
         //Anything rendered here will be cut if goes beyond frame defined before.
-        drawContent(guiGraphics);
+        drawAcid(gui,guiGraphics,x,y);
 
         GL11.glDisable(GL11.GL_STENCIL_TEST); // Turn this shit off!
         //drawContent(guiGraphics);
@@ -335,20 +319,18 @@ public class HudOverlay {
 
 
 
-    private static void drawMaskShape(GuiGraphics guiGraphics) {
-        // Draw the mask shape - this defines the area where content will be visible
-        // The mask texture should have transparent areas (where content won't show)
-        // and opaque areas (where content will show through)
 
-        // Set up rendering for the mask
-        //RenderSystem.setShaderTexture(0, STOMACH_ONE_MASK);
-        guiGraphics.blit(STOMACH_ONE_MASK, 10, 10, 0, 0, 18, 18, 18, 18);
-    }
 
-    private static void drawContent(GuiGraphics guiGraphics) {
+    private static void drawAcid(ForgeGui gui,GuiGraphics guiGraphics,int x, int y) {
 
         int acidWidth=42;
         int acidHeight=17;
+
+        //int currentCalories=100;
+
+        int acidOffset=18-(int)((double)ClientCalorieMeter.getCurrentCalories()/ClientCalorieMeter.getMax()*18);
+
+
         // Draw the content that will be masked
         // This content will only be visible where the mask is opaque
 
@@ -369,8 +351,45 @@ public class HudOverlay {
             }
         }
 
-        guiGraphics.blit(ACID_SPRITES[currentAcid], 10, 15, 0, 0, acidWidth, acidHeight, acidWidth, acidHeight);
+        AbstractDraw(gui, guiGraphics,ACID_SPRITES[currentAcid], x, y+acidOffset, acidWidth, acidHeight, acidWidth, acidHeight );
 
     }
+
+    public static void drawDebug(ForgeGui gui,GuiGraphics guiGraphics,int x, int y)
+    {
+
+        ArrayList<Component> info= new ArrayList<Component>();
+        info.add(Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight()));
+        info.add(Component.translatable("message.overstuffed.debugmaxweight",""+ OverstuffedClientConfig.getMaxWeight()));
+        info.add(Component.translatable("message.overstuffed.debugminweight",""+ OverstuffedClientConfig.getMinWeight()));
+        info.add(Component.translatable("message.overstuffed.debugcurrentcalories",""+ ClientCalorieMeter.getCurrentCalories()));
+        info.add(Component.translatable("message.overstuffed.debugmaxcalories",""+
+             (ClientCalorieMeter.getMax())));
+        info.add(Component.translatable("message.overstuffed.debugnextmax",""+
+                ClientCalorieMeter.getCurrentLost()+"/"+ ClientCalorieMeter.getInterval()));
+
+        if(gui.getMinecraft().player!=null)
+        {   long countdown=0;
+            if(ClientCalorieMeter.getCurrentSavedTick()!=-1)
+            {
+                 countdown= ClientCalorieMeter.getCurrentDelay()-(gui.getMinecraft().player.tickCount-ClientCalorieMeter.getCurrentSavedTick());
+            }
+            info.add(Component.translatable("message.overstuffed.debugcalorieclear",""+
+                    countdown));
+        }
+
+        info.add(Component.translatable("message.overstuffed.debugqueueweight",""+
+                ClientWeightBarData.getQueuedWeight()));
+        info.add(Component.translatable("message.overstuffed.debugtotalqueueweight",""+
+                ClientWeightBarData.getTotalQueuedWeight()));
+
+
+        for(int i=0;i<info.size();i++)
+        {
+            guiGraphics.drawCenteredString( font,info.get(i)
+                    ,x,y+10*i, Color.RED.hashCode());
+        }
+    }
+
 
 }

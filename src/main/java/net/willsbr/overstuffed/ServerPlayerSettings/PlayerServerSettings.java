@@ -1,6 +1,7 @@
 package net.willsbr.overstuffed.ServerPlayerSettings;
 
 import net.minecraft.nbt.CompoundTag;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 
 public class PlayerServerSettings {
 
@@ -9,12 +10,16 @@ public class PlayerServerSettings {
 
     private int burpFrequency=0;
     private int gurgleFrequency=0;
+
+    private float maxHitboxWidth=1.0f;
+
     public void copyFrom(PlayerServerSettings source)
     {
         this.weightEffects =source.weightEffects;
         this.stageBased=source.stageBased;
         this.burpFrequency=source.burpFrequency;
         this.gurgleFrequency=source.gurgleFrequency;
+        this.maxHitboxWidth=source.maxHitboxWidth;
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -23,7 +28,7 @@ public class PlayerServerSettings {
         nbt.putBoolean("stagebased", stageBased);
         nbt.putInt("burpFrequency", burpFrequency);
         nbt.putInt("gurgleFrequency", gurgleFrequency);
-
+        nbt.putFloat("maxhitboxwidth",maxHitboxWidth);
 
     }
     public void loadNBTData(CompoundTag nbt)
@@ -32,6 +37,7 @@ public class PlayerServerSettings {
         stageBased = nbt.getBoolean("stagebased");
         burpFrequency = nbt.getInt("burpFrequency");
         gurgleFrequency = nbt.getInt("gurgleFrequency");
+        maxHitboxWidth=nbt.getFloat("maxhitboxwidth");
     }
 
     public CompoundTag updateNBTData()
@@ -42,6 +48,7 @@ public class PlayerServerSettings {
         nbt.putBoolean("stagebased", stageBased);
         nbt.putInt("burpFrequency", burpFrequency);
         nbt.putInt("gurgleFrequency", gurgleFrequency);
+        nbt.putFloat("maxhitboxwidth",maxHitboxWidth);
 
         return nbt;
     }
@@ -78,5 +85,12 @@ public class PlayerServerSettings {
 
     public void setGurgleFrequency(int gurgleFrequency) {
         this.gurgleFrequency = gurgleFrequency;
+    }
+    public void setMaxHitboxWidth(float width){
+        this.maxHitboxWidth=width;
+
+    }
+    public float getMaxHitboxWidth(){
+        return maxHitboxWidth;
     }
 }

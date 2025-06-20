@@ -4,26 +4,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.client.ClientStuffedBarData;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
+import net.willsbr.overstuffed.client.ClientCalorieMeter;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class stuffedIntervalUpdateS2CPacket {
+public class calIntervalUpdateS2CPacket {
     private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.WeightBar";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
     private static  int currentLost;
     private static  int interval;
 
-    public stuffedIntervalUpdateS2CPacket(int currentL, int intervl){
+    public calIntervalUpdateS2CPacket(int currentL, int intervl){
         currentLost = currentL;
         interval = intervl;
 
     }
 
-    public stuffedIntervalUpdateS2CPacket(FriendlyByteBuf buf){
+    public calIntervalUpdateS2CPacket(FriendlyByteBuf buf){
         currentLost =buf.readInt();
         interval = buf.readInt();
 
@@ -41,12 +41,12 @@ public class stuffedIntervalUpdateS2CPacket {
                     //here we are on the client
                     LocalPlayer player= Minecraft.getInstance().player;
 
-                    Objects.requireNonNull(player).getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+                    Objects.requireNonNull(player).getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
                         stuffedBar.setInterval(interval);
-                        stuffedBar.setStuffedLossed(currentLost);
+                        stuffedBar.setCalLost(currentLost);
                     });
-                    ClientStuffedBarData.setInterval(interval);
-                    ClientStuffedBarData.setCurrentLost(currentLost);
+                    ClientCalorieMeter.setInterval(interval);
+                    ClientCalorieMeter.setCurrentLost(currentLost);
                 }
         );
         return true;

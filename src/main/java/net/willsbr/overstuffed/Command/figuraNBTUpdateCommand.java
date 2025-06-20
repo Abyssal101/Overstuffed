@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.*;
@@ -46,7 +46,7 @@ public class figuraNBTUpdateCommand {
             cpmData.saveNBTData(cpmNBT);
         });
 
-        player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
             stuffedBar.saveNBTData(stuffedNBT);
         });
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {

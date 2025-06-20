@@ -2,6 +2,8 @@ package net.willsbr.overstuffed.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.lang.reflect.Field;
+
 public class OverstuffedWorldConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
 
@@ -15,7 +17,7 @@ public class OverstuffedWorldConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> amountStuffedLost;
     public static ForgeConfigSpec.ConfigValue<Double> stuffedLostMultiplier;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> foodFill;
+    public static ForgeConfigSpec.ConfigValue<Integer> calToHungerRate;
 
     public static ForgeConfigSpec.ConfigValue<Integer> maxHearts;
     public static ForgeConfigSpec.ConfigValue<Double> maxSpeedDecrease;
@@ -23,12 +25,35 @@ public class OverstuffedWorldConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> multiplierForWGDelay;
     public static ForgeConfigSpec.ConfigValue<Integer> maxWGTickDelay;
 
-
     public static ForgeConfigSpec.ConfigValue<Integer> thresholdLoseWeight;
     public static ForgeConfigSpec.ConfigValue<Integer> goldenDietTickDelay;
     public static ForgeConfigSpec.ConfigValue<Integer> maxWeightLossTime;
 
+    public static ForgeConfigSpec.ConfigValue<Integer> baseCalCap;
+    public static ForgeConfigSpec.ConfigValue<Integer> absCalCap;
+    public static ForgeConfigSpec.ConfigValue<Integer> calCapIncrement;
 
+
+    public static ForgeConfigSpec.ConfigValue<Double> calorieGainMultipler;
+    public static ForgeConfigSpec.ConfigValue<Integer> calToWeightRate;
+
+
+
+    public static ForgeConfigSpec.ConfigValue<Double> modMetabolismThres;
+    public static ForgeConfigSpec.ConfigValue<Double> slowMetabolismThres;
+
+    public static ForgeConfigSpec.ConfigValue<Double> modMetabolismMultiplier;
+    public static ForgeConfigSpec.ConfigValue<Double> slowMetabolismMultiplier;
+
+
+    public static ForgeConfigSpec.ConfigValue<Integer> minCalClearDelay;
+    public static ForgeConfigSpec.ConfigValue<Integer> maxCalClearDelay;
+
+
+    public static ForgeConfigSpec.ConfigValue<Integer> capacityIncreaseInterval;
+
+    public static ForgeConfigSpec.ConfigValue<Double> blocksPerHeart;
+    public static ForgeConfigSpec.ConfigValue<Double> absMaxHitboxIncrease;
 
 
 
@@ -48,9 +73,9 @@ public class OverstuffedWorldConfig {
                 .comment("Multiplier for how quickly players stuffed bar will deplete when hunger isn't full.")
                 .define("amount_stuffed_lost", 1.0);
 
-        foodFill = builder
-                .comment("How much of your hunger bar do you get back per x stuffed point you lose")
-                .define("food_fill", 1);
+        calToHungerRate = builder
+                .comment("How many calories converts into a hunger point")
+                .define("food_fill", 6);
 
 
         maxHearts=builder
@@ -76,14 +101,95 @@ public class OverstuffedWorldConfig {
                 .define("golden_diet_delay", 20);
         maxWeightLossTime=builder
                 .comment("This effects all weight loss(except golden diet) as the time a player takes to lose weight is subtracted from this number based off their exhaustion level and a multipler. Effectively, higher number means all players lose weight slower")
-                .define("max_weight_loss_time", 200)
+                .define("max_weight_loss_time", 200);
+        baseCalCap=builder
+                .comment("The calorie capacity a player will spawn with")
+                .define("base_cal_cap", 40);
+        absCalCap=builder
+                .comment("The absolute maximum calorie capacity a player can obtain through growing their capacity")
+                .define("abs_cal_cap", 300);
+        calCapIncrement=builder
+                .comment("The amount a players cal cap increments when they reach their next calorie lost interval")
+                .define("cal_cap_increment", 10);
+       calorieGainMultipler=builder
+               .comment("The base calorie multiplier a player spawns with")
+               .define("base_cal_gain_multiplier", 1.0);
 
-        ;
+        calToWeightRate=builder
+                .comment("The amount of calories that equates to one weight")
+                .define("cal_weight_rate", 7);
+
+        modMetabolismThres=builder
+                .comment("The percentage threshold that determines when moderate metabolism when a player spawns in")
+                .define("moderate_metabolism_threshold", 0.3);
+        slowMetabolismThres=builder
+                .comment("The percentage threshold that determines when slow metabolism when a player spawns in")
+                .define("slow_metabolism_threshold", 0.6);
+        modMetabolismMultiplier=builder
+                .comment("The percentage of the calories a player has that is added ontop of their current calories for being " +
+                        "past this threshold")
+                .define("moderate_metabolism_multipler", 1.2);
+        slowMetabolismMultiplier=builder
+                .comment("The percentage of the calories a player has that is added ontop of their current calories for being " +
+                        "past this threshold")
+                .define("slow_metabolism_multipler", 1.5);
+
+
+        minCalClearDelay=builder
+                .comment("The min delay in ticks for how long it takes for the players calories to clear")
+                .define("min_cal_clear_delay", 20*10);
+        maxCalClearDelay=builder
+                .comment("The max delay in ticks for how long it takes for the players calories to clear")
+                .define("max_cal_clear_delay", 20*60*2);
+
+        capacityIncreaseInterval=builder
+                .comment("The base interval for losing calories between increases to a players capacity")
+                .define("cap_increases_interval", 30);
+
+        blocksPerHeart=builder
+                .comment("The size of a hitbox increase to add half a heart to a player")
+                .define("blocks_per_heart", 0.5);
+        absMaxHitboxIncrease=builder
+                .comment("Absolute max increase of hitbox size that players can set to occur")
+                .define("abs_max_hitbox_increase", 3.0);
 
     }
 
     public static void saveConfig()
     {
+        for(Field f :OverstuffedWorldConfig.class.getDeclaredFields()){
+            try {
+                // Check if the field is a ConfigValue
+                if (ForgeConfigSpec.ConfigValue.class.isAssignableFrom(f.getType())) {
+                    // Make the field accessible if it's not already
+                    boolean wasAccessible = f.isAccessible();
+                    if (!wasAccessible) {
+                        f.setAccessible(true);
+                    }
+
+                    // Get the field value
+                    Object value = f.get(null); // null because these are static fields
+
+                    // Call save() on the ConfigValue
+                    if (value instanceof ForgeConfigSpec.ConfigValue) {
+                        ((ForgeConfigSpec.ConfigValue<?>) value).save();
+                    }
+
+                    // Restore accessibility
+                    if (!wasAccessible) {
+                        f.setAccessible(false);
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                // Handle exception - you might want to log this
+                System.err.println("Error saving config value for field: " + f.getName());
+                e.printStackTrace();
+            }
+
+
+        }
+
+
 
     }
 

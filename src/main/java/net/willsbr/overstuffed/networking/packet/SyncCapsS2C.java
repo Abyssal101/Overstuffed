@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 
 import java.util.function.Supplier;
@@ -60,7 +60,7 @@ public class SyncCapsS2C {
                 cpmData.loadNBTData(this.cpmData);
             });
 
-            Minecraft.getInstance().player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar -> {
+            Minecraft.getInstance().player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
                 stuffedBar.loadNBTData(this.stuffedBar);
             });
             Minecraft.getInstance().player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {

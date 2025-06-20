@@ -46,9 +46,13 @@
   "message.overstuffed.debugmaxweight": "Max Weight: %1$s",
   "message.overstuffed.debugminweight": "Min Weight: %1$s",
 
-  "message.overstuffed.debugcurrentstuffed": "Current Stuffed: %1$s",
-  "message.overstuffed.debugmaxstuffed": "Max Stuffed: %1$s",
-  "message.overstuffed.debugnextmax": "# of stuffed points to next max: %1$s",
+  "message.overstuffed.debugcurrentcalories": "Current Calories: %1$s",
+  "message.overstuffed.debugmaxcalories": "Max Calories: %1$s",
+  "message.overstuffed.debugnextmax": "# of of calorie to next upgrade: %1$s",
+  "message.overstuffed.debugcalorieclear": "Time till calories clear: %1$s",
+
+
+
   "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
   "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
 
