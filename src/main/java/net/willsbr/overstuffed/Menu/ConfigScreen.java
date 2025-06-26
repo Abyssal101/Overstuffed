@@ -1,29 +1,33 @@
 package net.willsbr.overstuffed.Menu;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.fml.ModList;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
-import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
-import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
+import net.willsbr.overstuffed.Menu.Buttons.*;
 import net.willsbr.overstuffed.client.ClientCPMData;
-import net.willsbr.overstuffed.client.ClientWeightBarData;
+import net.willsbr.overstuffed.client.ClientCalorieMeter;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
-import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsC2S;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
-import net.willsbr.overstuffed.networking.packet.WeightPackets.setWeightC2SPacket;
+import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncMainSettingsC2S;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.ArrayList;
 
 import static net.willsbr.overstuffed.client.ClientCPMData.getPlayersAPI;
 
@@ -48,34 +52,22 @@ public class ConfigScreen extends Screen {
     /** List of options shown on the screen */
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
-
-    private ToggleButton stageBasedWeight;
-
-    private ToggleButton weightEffect;
-
-    private OptionSlider burpFrequency;
-
-    private OptionSlider gurgleFrequency;
-
-    private EditBox maxWeight;
-    private EditBox minWeight;
-
-
-
-
-
-    // ## CPM Value Layers
-    // - Stuffed: `____`
-    // - Weight: `____`
-    // ## Toggles
-    // - `[ ]` Stage Based Weight
-    // - `[ ]` `<icon>` Weight Based Momentum
-    // - `[ ]` `<icon>` Weight Effects
+    private StateButton stageBasedWeight;
 
     private EditBox weightLayerEditBox;
-    private EditBox stuffedLayerEditBox;
+    private EditBox calorieLayerEditBox;
 
-    private PortProofButton toGraphicsConfig;
+    private EditBox weightPreviewEditBox;
+    private EditBox caloriePreviewEditBox;
+
+    private EditBox totalStagesEditBox;
+
+
+    private ArrayList<EditBox> allEditBoxes;
+
+    private PortProofButton scaleUp;
+    private PortProofButton scaleDown;
+
     private PortProofButton done;
 
 
@@ -86,15 +78,33 @@ public class ConfigScreen extends Screen {
     private int leftBackX;
     private int leftBackY;
 
+    private int playerDisplayX;
+    private int playerDisplayY;
+    private int playerDisplayWidth;
+    private int playerDisplayHeight;
+    private int playerOutlineWidth;
+
+    //draws from the bottom left corner
+    //TODO add a Client config that modifies this width
+    private int playerWidth;
+
+    private int headingY;
+    private int calorieHeadingX;
+    private int weightHeadingX;
+
+
     private Window curWindow;
     private Font font;
+
+
+    private ArrayList<Component> errors;
+    private ArrayList<Component> warnings;
+
 
     private int lastGuiScale;
 
     public ConfigScreen() {
-        super(Component
-                .literal("Overstuffed Config Menu")
-                .withStyle(ChatFormatting.BLUE));
+        super(ModMenus.mainTitle);
     }
 
     // this should initialize most things, gets ercalled on screen change.
@@ -114,103 +124,125 @@ public class ConfigScreen extends Screen {
         leftBackY = (int) (this.height / 7 * (1 / curWindow.getGuiScale()));
 
 
+        playerDisplayWidth=100;
+        playerDisplayHeight=150;
+        playerOutlineWidth=2;
+        playerDisplayX=centerW-playerDisplayWidth/2;
+        playerDisplayY=50;
+        playerWidth=OverstuffedClientConfig.playerDisplayScale.get();
 
+        headingY=playerDisplayY;
+        calorieHeadingX=centerW-100;
+        weightHeadingX=centerW+100;
 
-
+        errors=new ArrayList<Component>();
+        warnings=new ArrayList<Component>();
 
         // Create the options list
         // It must be created in this method instead of in the constructor,
         // or it will not be displayed properly
 
         //buttons
-        //TODO MAKE LOCKED BUTTONS ACTUAL TIE TO PLAYER UNLOCK
-        this.stageBasedWeight= new ToggleButton(centerW-160,70,150,20,Component.translatable("menu.overstuffed.stagebasedweightbutton"), OverstuffedClientConfig.stageGain.get());
-        this.stageBasedWeight.setLocked(false);
-        this.stageBasedWeight.setTooltipText("False: Weight visually udates with every tick. \n True: Weight visually updates once you reach every 20% weight interval.");
-
-
-        //this.momentum= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weightmomentumbutton"),OverstuffedConfig.returnSetting(1), true);
-
-        //TODO Fixed lock
-        this.weightEffect= new ToggleButton(centerW+10,70,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"), OverstuffedClientConfig.weightEffects.get(),true);
-        this.weightEffect.setLocked(false);
-        this.weightEffect.setTooltipText("Enables/Disables effects related to gaining and losing weight");
-
-        //TODO MAKE the Sliders have translateable components
-
-        this.burpFrequency = new OptionSlider(centerW+10,100,150,20,Component.literal("Burp Frequency"), OverstuffedClientConfig.burpFrequency.get()*0.1);
-        this.gurgleFrequency = new OptionSlider(centerW+10,130,150,20,Component.literal("Gurgle Frequency"), OverstuffedClientConfig.gurgleFrequency.get()*0.1);
-
+        this.stageBasedWeight= new StateButton(weightHeadingX+12,headingY+20*3-5,50,20,Component.translatable("menu.overstuffed.stage"),Component.translatable("menu.overstuffed.granular"),OverstuffedClientConfig.stageGain.get());
+        this.stageBasedWeight.setTooltipText(Component.translatable("menu.overstuffed.gaintypetooltip"));
 
         //ALL editbox sizes are based off this first editbox.
+        this.allEditBoxes=new ArrayList<EditBox>();
         this.weightLayerEditBox = new EditBox(
                 font,
-                centerW - (width / 60)-150,
-                160,
-                130,
-                25,
-                Component.literal("Weight Layer"));
+                weightHeadingX+25,
+                headingY+18,
+                70,
+                15,
+                Component.translatable("menu.overstuffed.weightlayerbox"));
         this.weightLayerEditBox.setValue(OverstuffedClientConfig.weightLayerConfigEntry.get());
+        this.allEditBoxes.add(this.weightLayerEditBox);
 
-        this.stuffedLayerEditBox = new EditBox(
+        this.calorieLayerEditBox = new EditBox(
                 font,
-                weightLayerEditBox.getX(),
-                weightLayerEditBox.getY()+weightLayerEditBox.getHeight()+15*2,
+                calorieHeadingX-34,
+                headingY+18,
                 weightLayerEditBox.getWidth(),
                 weightLayerEditBox.getHeight(),
-                Component.literal("Stuffed Layer"));
-        this.stuffedLayerEditBox.setValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get());
+                Component.translatable("menu.overstuffed.callayerbox"));
+        this.calorieLayerEditBox.setValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get());
+        this.allEditBoxes.add(this.calorieLayerEditBox);
 
-        this.maxWeight= new EditBox(
+        //ALL editbox sizes are based off this first editbox.
+        this.caloriePreviewEditBox = new EditBox(
                 font,
-                this.centerW+105-50,
-                stuffedLayerEditBox.getY()+65,
+                calorieHeadingX-55,
+                headingY+19*2,
                 50,
-                weightLayerEditBox.getHeight(),
-                Component.literal("Max Weight"));
-        this.maxWeight.setValue(OverstuffedClientConfig.maxWeight.get()+"");
-        //So you can't go above 9999 because of this
-        this.maxWeight.setMaxLength(4);
+                15,
+                Component.translatable("menu.overstuffed.weightlayerbox"));
+        //todo make it so that you send the abs cal cap to the client to make this more reliable.
+        this.caloriePreviewEditBox.setHint(Component.translatable("menu.overstuffed.calorierange",""+ OverstuffedWorldConfig.absCalCap.get()).withStyle(ChatFormatting.GRAY));
+        this.allEditBoxes.add(this.caloriePreviewEditBox);
 
-        this.minWeight= new EditBox(
+        this.weightPreviewEditBox = new EditBox(font,
+                weightHeadingX+2,
+                headingY+19*2,
+                50,
+                15,
+                Component.translatable("menu.overstuffed.weightlayerbox"));
+        this.weightPreviewEditBox.setHint(Component.translatable("menu.overstuffed.weightrange",OverstuffedClientConfig.getMinWeight(),OverstuffedClientConfig.getMaxWeight()).withStyle(ChatFormatting.GRAY));
+        this.allEditBoxes.add(this.weightPreviewEditBox);
+
+        this.totalStagesEditBox = new EditBox(
                 font,
-                this.centerW-105,
-                stuffedLayerEditBox.getY()+65,
-                50,
-                weightLayerEditBox.getHeight(),
-                Component.literal("Min Weight"));
-        this.minWeight.setValue(OverstuffedClientConfig.minWeight.get()+"");
-        //So you can't go above 9999 because of this
-        this.minWeight.setMaxLength(4);
+                weightHeadingX+25,
+                headingY+20*4-3,
+                20,
+                15,
+                Component.translatable("menu.overstuffed.stages"));
+        this.totalStagesEditBox.setValue(OverstuffedClientConfig.totalStages.get()+"");
+        this.allEditBoxes.add(this.totalStagesEditBox);
 
 
-        toGraphicsConfig=new PortProofButton(screenW - 120, 8, BUTTON_WIDTH / 2, BUTTON_HEIGHT,
-                Component.literal("Graphics Config"),
+        ArrayList<SwapScreenButton> menuButtons= ModMenus.returnScreenButtons(centerW,25);
+        for(SwapScreenButton button:menuButtons)
+        {
+            this.addRenderableWidget(button);
+        }
+        this.addRenderableWidget(stageBasedWeight);
+
+        for(EditBox editBox:allEditBoxes)
+        {
+            this.addRenderableWidget(editBox);
+        }
+
+        this.scaleUp=new PortProofButton(
+                playerDisplayX+playerDisplayWidth-20,
+                playerDisplayY+playerDisplayHeight-20,
+                20, 20,
+                Component.literal("+"),
                 new Runnable() {
                     @Override
                     public void run() {
-                        swapScreen("graphics");
+                        playerWidth=playerWidth+10;
                     }
-                });
-//        PortProofButton test= new PortProofButton(0,600,
-//                BUTTON_WIDTH-20,BUTTON_HEIGHT,Component.literal("Test"), this::onClose);
+                }
+        );
+        this.addRenderableWidget(scaleUp);
 
+        this.scaleDown=new PortProofButton(
+                playerDisplayX,
+                playerDisplayY+playerDisplayHeight-20,
+                20, 20,
+                Component.literal("-"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if(playerWidth>=10)
+                        {
+                            playerWidth=playerWidth-10;
+                        }
+                    }
+                }
+        );
+        this.addRenderableWidget(scaleDown);
 
-        // Add the options list as this screen's child
-        // If this is not done, users cannot click on items in the list
-       //this.addRenderableWidget(this.optionsList);
-        this.addRenderableWidget(stageBasedWeight);
-        this.addRenderableWidget(weightEffect);
-        this.addRenderableWidget(burpFrequency);
-        this.addRenderableWidget(gurgleFrequency);
-        this.addRenderableWidget(maxWeight);
-        this.addRenderableWidget(minWeight);
-
-        this.addRenderableWidget(this.weightLayerEditBox);
-        this.addRenderableWidget(this.stuffedLayerEditBox);
-
-        this.addRenderableWidget(this.toGraphicsConfig);
-        //TODO ERROR FOR AN BAD ANIMATION DOESN'T WORK(Might be because you had no animation loaded)
 
         // Add the "Done" button
         this.done= new PortProofButton(
@@ -234,8 +266,40 @@ public class ConfigScreen extends Screen {
     public void tick() {
         super.tick();
         // Add ticking logic for EditBox in editBox
-        this.weightLayerEditBox.tick();
-        this.stuffedLayerEditBox.tick();
+        for(EditBox editBox:allEditBoxes)
+        {
+            editBox.tick();
+        }
+        if(!weightPreviewEditBox.getValue().isEmpty())
+        {
+            try
+            {
+                int previewWeight=Integer.parseInt(weightPreviewEditBox.getValue());
+                previewWeight=Math.max(previewWeight,OverstuffedClientConfig.getMinWeight());
+                previewWeight=Math.min(previewWeight,OverstuffedClientConfig.getMaxWeight());
+                ClientCPMData.previewWeight(previewWeight);
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+        if(!caloriePreviewEditBox.getValue().isEmpty())
+        {
+            try
+            {
+                int previewCal=Integer.parseInt(caloriePreviewEditBox.getValue());
+                previewCal=Math.max(previewCal,0);
+                previewCal=Math.min(previewCal, OverstuffedWorldConfig.absCalCap.get());
+                System.out.println("preview cal: "+previewCal);
+                ClientCPMData.previewStuffed(previewCal);
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+
     }
 
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
@@ -247,69 +311,45 @@ public class ConfigScreen extends Screen {
         // Then the widgets if this is a direct child of the Screen
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         // Draw the title
+
        guiGraphics.drawCenteredString(font, this.getTitle().getString(), this.width / 2, TITLE_HEIGHT, Color.WHITE.hashCode());
         //drawing the edit box's title
 
-       guiGraphics.drawCenteredString(font, "Weight Layer", this.width/ 2+25,weightLayerEditBox.getY(),Color.white.hashCode());
-       guiGraphics.drawCenteredString(font, "Name of value layer for weight animations", this.width/2+100,weightLayerEditBox.getY()+10,Color.GRAY.hashCode());
+        drawWeightSection(guiGraphics,weightHeadingX,headingY);
+        drawCalorieSection(guiGraphics,calorieHeadingX,headingY);
 
        //Error Handling
-        if(ModList.get().isLoaded("cpm") && ClientCPMData.CPMUpdated()==-1)
-        {
-            guiGraphics.drawCenteredString(font, Component.translatable("message.overstuffed.cpmversion",Component.literal(ClientCPMData.minCPMVersion)), this.width/2,30,Color.RED.hashCode());
 
+        if(!ModList.get().isLoaded("cpm"))
+        {
+            warnings.add(Component.translatable("error.overstuffed.nocpm"));
+        }
+        else if(ModList.get().isLoaded("cpm") && ClientCPMData.CPMUpdated()==-1)
+        {
+            warnings.add(Component.translatable("message.overstuffed.cpmversion",Component.literal(ClientCPMData.minCPMVersion)));
         }
         else{
             if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1
                     &&  Minecraft.getInstance().player!=null)
             {
-                guiGraphics.drawCenteredString(font, "Error: Weight Layer inputted was not found", this.width/ 2+100,weightLayerEditBox.getY()+20,Color.RED.hashCode());
+                warnings.add(Component.translatable("error.overstuffed.foundweightlayer"));
             }
-            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.stuffedLayerEditBox.getValue())==-1
+            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.calorieLayerEditBox.getValue())==-1
                     && Minecraft.getInstance().player!=null)
             {
-                guiGraphics.drawCenteredString(font, "Error: Stuffed Layer inputted was not found", this.width/ 2+100,stuffedLayerEditBox.getY()+20,Color.RED.hashCode());
+                warnings.add(Component.translatable("error.overstuffed.foundcalorielayer"));
+            }
 
+            if(calorieLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
+            {
+                errors.add(Component.translatable("error.overstuffed.samelayer"));
             }
         }
 
-
-
-       guiGraphics.drawCenteredString(font, "Stuffed Layer", this.width/ 2+25,stuffedLayerEditBox.getY(),Color.white.hashCode());
-       guiGraphics.drawCenteredString(font, "Name of value layer for stuffed animations", this.width/ 2+100,stuffedLayerEditBox.getY()+10,Color.GRAY.hashCode());
-
-       guiGraphics.drawCenteredString(font, "Max Weight", centerW+80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
-       guiGraphics.drawCenteredString(font, "Range:0-9999", centerW+80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
-
-       guiGraphics.drawCenteredString(font, "Min Weight", centerW-80,stuffedLayerEditBox.getY()+40,Color.WHITE.hashCode());
-       guiGraphics.drawCenteredString(font, "Range:0-9999", centerW-80,stuffedLayerEditBox.getY()+50,Color.GRAY.hashCode());
-
-        if(stuffedLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
-        {
-           guiGraphics.drawCenteredString(font, "Error: Stuffed and Weight Layer Same", this.width/ 2-40,stuffedLayerEditBox.getY()-20,Color.RED.hashCode());
-        }
-
-        if(minWeight.getValue().contentEquals(maxWeight.getValue()))
-        {
-           guiGraphics.drawCenteredString(font, "Error: Min and Max weight are the same", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
-        }
-        int max=1;
-        int min=0;
-        try{
-             max=Integer.parseInt(maxWeight.getValue());
-             min=Integer.parseInt(minWeight.getValue());
-        }
-        catch (NumberFormatException e){
-           guiGraphics.drawCenteredString(font, "Error: Non-number character in the min/max box", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
-
-        }
-
-        if(max<min)
-        {
-           guiGraphics.drawCenteredString(font, "Error: Min weight is greater than max weight", this.width/ 2,minWeight.getY()+40,Color.RED.hashCode());
-
-        }
-
+        ModMenus.drawIssues(guiGraphics,font,centerW,playerDisplayY+playerDisplayHeight+10,errors,warnings);
+        guiGraphics.fill(playerDisplayX-playerOutlineWidth,playerDisplayY-playerOutlineWidth,playerDisplayX+playerDisplayWidth+playerOutlineWidth,playerDisplayY+playerDisplayHeight+playerOutlineWidth,Color.GRAY.hashCode());
+        guiGraphics.fill(playerDisplayX,playerDisplayY,playerDisplayX+playerDisplayWidth,playerDisplayY+playerDisplayHeight,Color.BLACK.hashCode());
+        renderEntityInInventoryFollowsMouse(guiGraphics, playerDisplayX+playerDisplayWidth/2, playerDisplayY+playerDisplayHeight-10, playerWidth, (float)(playerDisplayX+51)-mouseX,(float)(playerDisplayY+ 75 - 50)-mouseY, Minecraft.getInstance().player);
         // pose.popPose();
         // Render things after widgets (tooltips)
     }
@@ -325,9 +365,9 @@ public class ConfigScreen extends Screen {
         {
             OverstuffedClientConfig.setWeightLayer(this.weightLayerEditBox.getValue());
         }
-        if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayerEditBox.getValue()))
+        if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.calorieLayerEditBox.getValue()))
         {
-            OverstuffedClientConfig.setStuffedLayer((this.stuffedLayerEditBox.getValue()));
+            OverstuffedClientConfig.setStuffedLayer((this.calorieLayerEditBox.getValue()));
         }
         if(ModList.get().isLoaded("cpm") && Minecraft.getInstance().player!=null && ClientCPMData.getPlayersAPI()!=null)
         {
@@ -336,90 +376,25 @@ public class ConfigScreen extends Screen {
                     ClientCPMData.getTotalStuffedFrames(),ClientCPMData.getTotalWeightFrames()));
         }
         OverstuffedClientConfig.stageGain.set(stageBasedWeight.getSetting());
+        OverstuffedClientConfig.totalStages.set(Integer.parseInt(totalStagesEditBox.getValue()));
+        OverstuffedClientConfig.playerDisplayScale.set(playerWidth);
 
         //OverstuffedConfig.setSetting(1, momentum.getSetting());
-        OverstuffedClientConfig.weightEffects.set(weightEffect.getSetting());
-        OverstuffedClientConfig.burpFrequency.set(burpFrequency.getValue());
-        OverstuffedClientConfig.gurgleFrequency.set(gurgleFrequency.getValue());
+        OverstuffedClientConfig.saveConfig();
+
         if(Minecraft.getInstance().player!=null)
         {
-            ModMessages.sendToServer(new PlayerSyncAllSettingsC2S(OverstuffedClientConfig.stageGain.get(),
-                    OverstuffedClientConfig.weightEffects.get(), OverstuffedClientConfig.burpFrequency.get(), OverstuffedClientConfig.gurgleFrequency.get()));
+            ModMessages.sendToServer(new PlayerSyncMainSettingsC2S(OverstuffedClientConfig.stageGain.get(),
+                    OverstuffedClientConfig.weightEffects.get()));
         }
 
-
-
-        int max;
-        int min;
-        try{
-            max=Integer.parseInt(maxWeight.getValue());
-            min=Integer.parseInt(minWeight.getValue());
-            if(minWeight.getValue()!=maxWeight.getValue() && max>min)
-            {
-                if(max-min>100)
-                {
-                    if(Minecraft.getInstance().player != null)
-                    {
-                        //Normalizing old weight to new min and max
-                        double weightRatio=((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.minWeight.get());
-                        weightRatio=weightRatio/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.minWeight.get());
-                        //System.out.println("Ratio"+weightRatio);
-                        int newRange=max-min;
-
-                        int relativeWeight=(int)Math.round(weightRatio*newRange)+min;
-                        ClientWeightBarData.setCurrentWeight(relativeWeight);
-                        //System.out.println(ClientWeightBarData.getPlayerWeight());
-                        ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
-
-                        OverstuffedClientConfig.maxWeight.set(max);
-                        OverstuffedClientConfig.minWeight.set(min);
-                        ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
-                        ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
-                    }
-
-                    //System.out.println("CLient Weight:"+ClientWeightBarData.getPlayerWeight());
-                    //System.out.println("CLient Min Weight:"+min);
-
-
-                }
-                else {
-                    if(Minecraft.getInstance().player!=null)
-                    {
-                        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: The range between your max and min " +
-                                "weight is too low. Must be at least 100"));
-                    }
-
-                }
-
-
-            }
-
-        }
-        catch (Exception e)
-        {
-            //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
-        }
-
-        OverstuffedClientConfig.saveConfig();
-        if(CPMData.checkIfUpdateCPM("weight")==false && Minecraft.getInstance().player!=null)
-        {
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: CPM is not loaded. No visual changes can occur"));
-        }
-
+        CPMData.checkIfUpdateCPM("weight");
         CPMData.checkIfUpdateCPM("stuffed");
-
 
         // Call last in case it interferes with the override
         super.onClose();
     }
-    public void swapScreen(String screenName)
-    {
-        this.onClose();
-        if(screenName.contentEquals("graphics"))
-        {
-            Minecraft.getInstance().setScreen(new GraphicsConfigScreen());
-        }
-    }
+
 
 
     @Override
@@ -428,4 +403,100 @@ public class ConfigScreen extends Screen {
         // Call last in case it interferes with the override
         super.removed();
     }
+
+    public static void renderEntityInInventoryFollowsMouse(GuiGraphics pGuiGraphics, int pX, int pY, int pScale, float pMouseX, float pMouseY, LivingEntity pEntity) {
+        float f = (float)Math.atan((double)(pMouseX / 40.0F));
+        float f1 = (float)Math.atan((double)(pMouseY / 40.0F));
+        // Forge: Allow passing in direct angle components instead of mouse position
+        renderEntityInInventoryFollowsAngle(pGuiGraphics, pX, pY, pScale, f, f1, pEntity);
+    }
+
+    public static void renderEntityInInventoryFollowsAngle(GuiGraphics pGuiGraphics, int pX, int pY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pEntity) {
+        float f = angleXComponent;
+        float f1 = angleYComponent;
+        Quaternionf quaternionf = (new Quaternionf()).rotateZ((float)Math.PI);
+        Quaternionf quaternionf1 = (new Quaternionf()).rotateX(f1 * 20.0F * ((float)Math.PI / 180F));
+        quaternionf.mul(quaternionf1);
+        float f2 = pEntity.yBodyRot;
+        float f3 = pEntity.getYRot();
+        float f4 = pEntity.getXRot();
+        float f5 = pEntity.yHeadRotO;
+        float f6 = pEntity.yHeadRot;
+        pEntity.yBodyRot = 180.0F + f * 20.0F;
+        pEntity.setYRot(180.0F + f * 40.0F);
+        pEntity.setXRot(-f1 * 20.0F);
+        pEntity.yHeadRot = pEntity.getYRot();
+        pEntity.yHeadRotO = pEntity.getYRot();
+        renderEntityInInventory(pGuiGraphics, pX, pY, pScale, quaternionf, quaternionf1, pEntity);
+        pEntity.yBodyRot = f2;
+        pEntity.setYRot(f3);
+        pEntity.setXRot(f4);
+        pEntity.yHeadRotO = f5;
+        pEntity.yHeadRot = f6;
+    }
+
+    public static void renderEntityInInventory(GuiGraphics pGuiGraphics, int pX, int pY, int pScale, Quaternionf pPose, @Nullable Quaternionf pCameraOrientation, LivingEntity pEntity) {
+        pGuiGraphics.pose().pushPose();
+        pGuiGraphics.pose().translate((double)pX, (double)pY, 50.0D);
+        pGuiGraphics.pose().mulPoseMatrix((new Matrix4f()).scaling((float)pScale, (float)pScale, (float)(-pScale)));
+        pGuiGraphics.pose().mulPose(pPose);
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        if (pCameraOrientation != null) {
+            pCameraOrientation.conjugate();
+            entityrenderdispatcher.overrideCameraOrientation(pCameraOrientation);
+        }
+
+        entityrenderdispatcher.setRenderShadow(false);
+        RenderSystem.runAsFancy(() -> {
+            entityrenderdispatcher.render(pEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, pGuiGraphics.pose(), pGuiGraphics.bufferSource(), 15728880);
+        });
+        pGuiGraphics.flush();
+        entityrenderdispatcher.setRenderShadow(true);
+        pGuiGraphics.pose().popPose();
+        Lighting.setupFor3DItems();
+    }
+
+    public void drawWeightSection(GuiGraphics guiGraphics,int x, int y)
+    {
+        guiGraphics.drawCenteredString(font, Component.translatable("menu.overstuffed.weightheading"),x,y,Color.white.hashCode());
+        x=x-40;
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.layname"),x,y,Color.white.hashCode());
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.preview"),x,y,Color.white.hashCode());
+        //This should also show up when stage based gainig is selected
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stage"),x+100,y,Color.white.hashCode());
+
+
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.gaintype"),x,y,Color.white.hashCode());
+
+        //TODO Make these show up only when stage based gaining is selected
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stages"),x,y,Color.white.hashCode());
+
+
+
+
+
+    }
+    public void drawCalorieSection(GuiGraphics guiGraphics,int x, int y)
+    {
+        guiGraphics.drawCenteredString(font, Component.translatable("menu.overstuffed.calorieheading"), x,y,Color.white.hashCode());
+        x=x-100;
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.layname"),x,y,Color.white.hashCode());
+        y=y+20;
+        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.preview"),x,y,Color.white.hashCode());
+    }
+
+
+
+
+
+
+
+
+
 }

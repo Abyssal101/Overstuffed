@@ -148,8 +148,9 @@ public class HudOverlay {
         int rightHeight = 49;
         int leftHeight = 10;
 
-        int left = screenWidth / 2 + leftHeight ;
-        int top = screenHeight - rightHeight ;
+        int left = screenWidth / 2 + leftHeight;
+        int top = screenHeight - rightHeight;
+
         rightHeight += 10;
 
         font = Minecraft.getInstance().font;
@@ -160,7 +161,7 @@ public class HudOverlay {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         //New stuffed bar
         int barLeft=left+OverstuffedClientConfig.stuffedHudXOffset.get()+80;
-        int barTop=top- OverstuffedClientConfig.stuffedHudYOffset.get();
+        int barTop=top-OverstuffedClientConfig.stuffedHudYOffset.get();
 
         renderStomachIcon(gui,guiGraphics,poseStack,barLeft,barTop);
         renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get());
@@ -171,83 +172,6 @@ public class HudOverlay {
         }
 
     });
-
-
-    static private void renderPlayerModel(PoseStack poseStack) {
-//        int x = width / 2;
-//        int y = height / 2;
-
-        // Player rendering area size
-        int size = 30;
-
-        drawEntity(poseStack, 100, 100, size,
-                10, 10,
-                Minecraft.getInstance().player);
-    }
-
-    /**
-     * This method handles drawing the player entity
-     */
-    public static void drawEntity(PoseStack poseStack, int x, int y, int size,
-                                  float mouseX, float mouseY, LivingEntity entity) {
-        float f = (float)Math.atan(mouseX / 40.0F);
-        float f1 = (float)Math.atan(mouseY / 40.0F);
-
-        PoseStack posestack = RenderSystem.getModelViewStack();
-        posestack.pushPose();
-        posestack.translate(x, y, 1050.0D);
-        posestack.scale(1.0F, 1.0F, -1.0F);
-
-        RenderSystem.applyModelViewMatrix();
-
-        PoseStack posestack1 = new PoseStack();
-        posestack1.translate(0.0D, 0.0D, 1000.0D);
-        posestack1.scale((float)size, (float)size, (float)size);
-
-        Axis Vector3f = null;
-        Quaternionf quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternionf quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
-        quaternion.mul(quaternion1);
-        posestack1.mulPose(quaternion);
-
-        float f2 = entity.yBodyRot;
-        float f3 = entity.getYRot();
-        float f4 = entity.getXRot();
-        float f5 = entity.yHeadRotO;
-        float f6 = entity.yHeadRot;
-
-        entity.yBodyRot = 180.0F + f * 20.0F;
-        entity.setYRot(180.0F + f * 40.0F);
-        entity.setXRot(-f1 * 20.0F);
-        entity.yHeadRot = entity.getYRot();
-        entity.yHeadRotO = entity.getYRot();
-
-        EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        //quaternion1.conj();
-        dispatcher.overrideCameraOrientation(quaternion1);
-        dispatcher.setRenderShadow(false);
-
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance()
-                .renderBuffers().bufferSource();
-
-        RenderSystem.runAsFancy(() -> {
-            dispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F,
-                    posestack1, bufferSource, 15728880);
-        });
-
-        bufferSource.endBatch();
-        dispatcher.setRenderShadow(true);
-
-        entity.yBodyRot = f2;
-        entity.setYRot(f3);
-        entity.setXRot(f4);
-        entity.yHeadRotO = f5;
-        entity.yHeadRot = f6;
-
-        posestack.popPose();
-        RenderSystem.applyModelViewMatrix();
-    }
-
 
     public static void renderWeightIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack,int x, int y)
     {
@@ -262,21 +186,28 @@ public class HudOverlay {
         }
 
         //Number Logic;
-        int lastStage=ClientWeightBarData.getLastWeightStage();
-        Stack<Integer> order=new Stack<Integer>();
-        while(lastStage/10!=0)
+        if(OverstuffedClientConfig.stageGain.get())
         {
+            int lastStage=ClientWeightBarData.getLastWeightStage();
+            Stack<Integer> order=new Stack<Integer>();
+            while(lastStage/10!=0)
+            {
+                order.add(lastStage%10);
+                lastStage/=10;
+
+            }
             order.add(lastStage%10);
-        }
-        order.add(lastStage%10);
-        poseStack.pushPose();
-        poseStack.scale(0.33f,0.33f,0.33f);
-        for(int i=0;i<order.size();i++)
-        {
-            AbstractDraw(gui,guiGraphics,NUMBER_SPRITES[order.pop()],(x+20+9*i)*3,(y+14)*3,24,24);
+            poseStack.pushPose();
+            poseStack.scale(0.33f,0.33f,0.33f);
+            for(int i=0;i<order.size();i++)
+            {
+                AbstractDraw(gui,guiGraphics,NUMBER_SPRITES[order.pop()],(x+20+9*i)*3,(y+14)*3,24,24);
+
+            }
+            poseStack.popPose();
 
         }
-        poseStack.popPose();
+
 
 
     }

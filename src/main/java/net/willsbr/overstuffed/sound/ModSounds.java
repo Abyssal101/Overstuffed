@@ -1,7 +1,12 @@
 package net.willsbr.overstuffed.sound;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -11,8 +16,11 @@ import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.AudioPackets.FilteredSoundS2C;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModSounds {
 
@@ -63,7 +71,6 @@ public class ModSounds {
 
         //1.19.2 Version
         //return SOUND_EVENTS.register(name, () -> new SoundEvent.createVariableRangeEvent(id));
-
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
 
     }
@@ -71,66 +78,61 @@ public class ModSounds {
 
     //TODO make a setting that dictates the volume of these
     //TODO Improve them with better variation and whatnot
+
+    //ONLY CALL ON SERVER
     public static void playBurp(Player player)
     {
-        if(player.level().isClientSide)
-        {
-            //effectively if the random number is LOWER than the set frequency,
-            // it works! 0 should disable,a and 10 should be max
-
-            if(player.getRandom().nextIntBetweenInclusive(0,10)<OverstuffedClientConfig.burpFrequency.get())
+            if(!player.level().isClientSide)
             {
-                player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
-                                player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
-                        player.getSoundSource(), 1f, 1f);
-
+                player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                    if(player.getRandom().nextIntBetweenInclusive(0,10)<serverSettings.getBurpFrequency())
+                    {
+                        int soundIndex=player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1);
+                        if(player.level().getServer().getPlayerList()!=null)
+                        {
+                            List< ServerPlayer> players = player.level().getServer().getPlayerList().getPlayers();
+                            for(ServerPlayer eachPlayer : players)
+                            {
+                                if(eachPlayer.level().dimension() == player.level().dimension())
+                                {
+                                    ModMessages.sendToPlayer(new FilteredSoundS2C(soundIndex,player.blockPosition(),"burp"), eachPlayer);
+                                }
+                            }
+                        }
+                    }
+                });
             }
-        }
-        else
-        {
-            player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
-                if(player.getRandom().nextIntBetweenInclusive(0,10)<serverSettings.getBurpFrequency())
-                {
-                    player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
-                                    player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
-                            player.getSoundSource(), 1f, 1f);
-
-                }
-            });
-
-        }
-
     }
     public static void playGurgle(Player player)
     {
 
-        if(player.level().isClientSide)
-        {
-            if(player.getRandom().nextIntBetweenInclusive(0,10)<OverstuffedClientConfig.burpFrequency.get())
-            {
-                player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
-                                player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
-                        player.getSoundSource(), 1f, 1f);
-
-            }
-        }
-        else
+        if(!player.level().isClientSide)
         {
             player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                     if (serverSettings.getGurgleFrequency() > 0 & weightBar.getLastWeightStage() >= 1 &&
                             player.getRandom().nextFloat() < (0.001f * Math.sqrt(serverSettings.getGurgleFrequency() * weightBar.getLastWeightStage())))
                     {
-                        player.level().playSound(null, player.blockPosition(), ModSounds.GURGLE_SOUNDS.get(
-                                        player.getRandom().nextIntBetweenInclusive(1, ModSounds.GURGLE_SOUNDS.size()) - 1).get(),
-                                player.getSoundSource(), 0.5f, 1f);
+                        int soundIndex=player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size()-1);
+                        if(player.level().getServer().getPlayerList()!=null)
+                        {
+                            List<ServerPlayer> players = player.level().getServer().getPlayerList().getPlayers();
+                            for(ServerPlayer eachPlayer : players)
+                            {
+                                if(eachPlayer.level().dimension() == player.level().dimension())
+                                {
+                                    ModMessages.sendToPlayer(new FilteredSoundS2C(soundIndex,player.blockPosition(),"gurgle"), eachPlayer);
+                                }
+                            }
+                        }
                     }
                 });
             });
-
         }
-
     }
+
+
+
 
     public static void register(IEventBus eventBus){
         SOUND_EVENTS.register(eventBus);

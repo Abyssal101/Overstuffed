@@ -51,16 +51,74 @@
   "message.overstuffed.debugnextmax": "# of of calorie to next upgrade: %1$s",
   "message.overstuffed.debugcalorieclear": "Time till calories clear: %1$s",
 
-
-
   "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
   "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
+
+  "menu.overstuffed.main":"Overstuffed",
+  "menu.overstuffed.client":"Client",
+  "menu.overstuffed.advanced":"Advanced",
+
+  "menu.overstuffed.maintooltip":"Tooltip",
+  "menu.overstuffed.clienttooltip":"Tooltip 2",
+  "menu.overstuffed.advancedtooltip":"Tooltip 3",
+
+  "menu.overstuffed.weightheading":"Weight",
+  "menu.overstuffed.calorieheading":"Calories",
+  "menu.overstuffed.layname":"Layer Name",
+  "menu.overstuffed.preview":"Preview",
+
+  "menu.overstuffed.calorierange":"0-%1$s",
+  "menu.overstuffed.weightrange":"%1$s-%2$s",
+
+  "menu.overstuffed.gaintype":"Gain Type",
+  "menu.overstuffed.granular":"Granular",
+  "menu.overstuffed.stage":"Stage",
+  "menu.overstuffed.stages":"Total Stages",
+  "menu.overstuffed.weighteffects":"Enables/Disables effects related to gaining and losing weight",
+  "menu.overstuffed.maxscaling":"Max hitbox scaling",
+  "menu.overstuffed.scalingenabled":"Hitbox scaling:",
+  "menu.overstuffed.scalingtooltip": "When enabled, your hitbox will scale with your weight.\n Bonus health will also be given based off how much bigger you are from your base size",
+
+
+  "menu.overstuffed.weightlayerbox":"Weight Layer",
+  "menu.overstuffed.weightxoffset":"Weight Display X Offset",
+  "menu.overstuffed.weightyoffset":"Weight Display Y Offset",
+  "menu.overstuffed.minweight":"Min Weight",
+  "menu.overstuffed.maxweight":"Max Weight",
+  "menu.overstuffed.minmaxrange":"Range:0-9999",
+  "menu.overstuffed.rangesmall":"The range between your max and min \" +\n  \"weight is too low. Must be at least 100",
+
+
+
+
+  "menu.overstuffed.callayerbox":"Calorie Layer",
+  "menu.overstuffed.calxoffset":"Calorie Meter X Offset",
+  "menu.overstuffed.calyoffset":"Calorie Meter Y Offset",
+
+
+  "menu.overstuffed.gaintypetooltip":"Granular: Weight updates are always calculated. \n Stages: Weight visually updates once you reach every threshold set by your stage amount",
+
+
+  "menu.overstuffed.errorstitle": "Errors: Things that need to be fixed",
+  "menu.overstuffed.warningstitle": "Warnings: Things you should know b/c certain features won't work",
+
+  "error.overstuffed.nocpm": "CPM is not installed",
+
+  "error.overstuffed.foundweightlayer": "Weight layer inputted was not found",
+  "error.overstuffed.foundcalorielayer": " Calorie layer inputted was not found",
+  "error.overstuffed.samelayer": "Calorie and Weight Layer same",
+  "error.overstuffed.samemaxmin": "Min and Max weight are the same",
+  "error.overstuffed.badinterval": "Min is higher than Max",
+  "error.overstuffed.nonnumber": "Non-number character detected",
+
 
 
   "menu.overstuffed.stagebasedweightbutton":"Stage Based Weight:",
   "menu.overstuffed.weightmomentumbutton":"Weight Momentum:",
-  "menu.overstuffed.weighteffectsbutton":"Weight Effects:"
+  "menu.overstuffed.weighteffectsbutton":"Weight Effects:",
 
-
+  "menu.overstuffed.digestvolume":"Digestive Sound Volume",
+  "menu.overstuffed.gurglefreq":"Gurgle Frequency",
+  "menu.overstuffed.burpfreq":"Burp Frequency"
 
 }

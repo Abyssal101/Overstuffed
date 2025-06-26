@@ -49,10 +49,11 @@ public class PlayerWeightBar {
 
     private int amountThroughStage;
     private AttributeModifier WEIGHT_HEALTH_MODIFIER =
-            new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
+            new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.ADDITION);
     private AttributeModifier WEIGHT_SPEED_MODIFIER =
             new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"), "speed decrease per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
-
+    private AttributeModifier SCALING_HEALTH_MODIFIER =
+            new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"), "health increase from hitbox increase", 0, AttributeModifier.Operation.ADDITION);
     private float currentHitboxIncrease=0;
 
 
@@ -183,6 +184,7 @@ public class PlayerWeightBar {
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
        this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
+       this.totalStages=source.totalStages;
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -204,7 +206,7 @@ public class PlayerWeightBar {
         nbt.putDouble("weightupdatedelaymodifier", this.weightUpdateDelayModifier);
         //Probably not important because it'll just reset, max a few extra seconds for someone to change.
         //nbt.putBoolean("updateweight", this.readyToUpdateWeight);
-
+        nbt.putInt("totalweightstages",this.totalStages);
 
     }
     public void loadNBTData(CompoundTag nbt)
@@ -220,6 +222,7 @@ public class PlayerWeightBar {
 
         this.lastWeightStage=nbt.getInt("weightstage");
         this.weightUpdateDelayModifier=nbt.getDouble("weightupdatedelaymodifier");
+        this.totalStages=nbt.getInt("totalweightstages");
     }
 
     public int getWeightUpdateDelay() {
@@ -308,6 +311,13 @@ public class PlayerWeightBar {
         this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
                 "speed increase from OS",
                 -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+
+
+        this.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
+                "hitbox health increase from OS",
+                (int)(this.currentHitboxIncrease/OverstuffedWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
+
+
     }
 
 
@@ -321,8 +331,11 @@ public class PlayerWeightBar {
             {
                 player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(weightBar.WEIGHT_SPEED_MODIFIER);
             }
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(weightBar.SCALING_HEALTH_MODIFIER))
+            {
+                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(weightBar.SCALING_HEALTH_MODIFIER);
+            }
     }
-
 
     public static void addCorrectModifier(ServerPlayer player)
     {
@@ -333,7 +346,7 @@ public class PlayerWeightBar {
         int newWeightStage=weightBar.calculateCurrentWeightStage();
 
             //This clears the weight modifiers and sets it correctly when you join
-        if(newWeightStage!=0)
+        if(newWeightStage!=0 || !OverstuffedClientConfig.stageGain.get())
         {
             //TODO add setting if it's granualar versus staged
             weightBar.setNewModifiers(newWeightStage);
@@ -346,6 +359,17 @@ public class PlayerWeightBar {
         }
         });
     }
+
+    public static void clearScaling(Player player,PlayerWeightBar weightBar)
+    {
+            if (ModList.get().isLoaded("pehkui")) {
+                ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
+                //removes anything added by Overstuffed
+                hitboxWidthData.setScale(hitboxWidthData.getScale() - weightBar.getCurrentHitboxIncrease());
+                weightBar.setCurrentHitboxIncrease(0);
+            }
+    }
+
     public static void addCorrectScaling(ServerPlayer player)
     {
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
@@ -357,11 +381,17 @@ public class PlayerWeightBar {
                 hitboxWidthData.setScale(hitboxWidthData.getScale()- weightBar.getCurrentHitboxIncrease());
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                     //recalculates what your supposed to have
-                    float percentage=(float)weightBar.getCurrentWeight()/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
+                    float percentage=(float)(weightBar.getCurrentWeight()-weightBar.getMinWeight())/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
                     percentage=(float)(percentage*serverSettings.getMaxHitboxWidth());
                     weightBar.setCurrentHitboxIncrease(percentage);
                     hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
                 });
+
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.SCALING_HEALTH_MODIFIER);
+                if(player.getHealth()>player.getMaxHealth())
+                {
+                    player.setHealth(player.getMaxHealth());
+                }
 
             }
         });

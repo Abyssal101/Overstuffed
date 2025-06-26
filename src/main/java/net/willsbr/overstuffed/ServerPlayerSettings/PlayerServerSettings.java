@@ -11,7 +11,9 @@ public class PlayerServerSettings {
     private int burpFrequency=0;
     private int gurgleFrequency=0;
 
+    private boolean hitboxScalingEnabled;
     private float maxHitboxWidth=1.0f;
+
 
     public void copyFrom(PlayerServerSettings source)
     {
@@ -19,6 +21,7 @@ public class PlayerServerSettings {
         this.stageBased=source.stageBased;
         this.burpFrequency=source.burpFrequency;
         this.gurgleFrequency=source.gurgleFrequency;
+        this.hitboxScalingEnabled=source.hitboxScalingEnabled;
         this.maxHitboxWidth=source.maxHitboxWidth;
     }
 
@@ -28,6 +31,7 @@ public class PlayerServerSettings {
         nbt.putBoolean("stagebased", stageBased);
         nbt.putInt("burpFrequency", burpFrequency);
         nbt.putInt("gurgleFrequency", gurgleFrequency);
+        nbt.putBoolean("hitboxscaling",hitboxScalingEnabled);
         nbt.putFloat("maxhitboxwidth",maxHitboxWidth);
 
     }
@@ -37,13 +41,13 @@ public class PlayerServerSettings {
         stageBased = nbt.getBoolean("stagebased");
         burpFrequency = nbt.getInt("burpFrequency");
         gurgleFrequency = nbt.getInt("gurgleFrequency");
+        hitboxScalingEnabled=nbt.getBoolean("hitboxscaling");
         maxHitboxWidth=nbt.getFloat("maxhitboxwidth");
     }
 
     public CompoundTag updateNBTData()
     {
         CompoundTag nbt= new CompoundTag();
-
         nbt.putBoolean("weighteffects", weightEffects);
         nbt.putBoolean("stagebased", stageBased);
         nbt.putInt("burpFrequency", burpFrequency);
@@ -93,4 +97,13 @@ public class PlayerServerSettings {
     public float getMaxHitboxWidth(){
         return maxHitboxWidth;
     }
+    public boolean isHitboxScalingEnabled() {
+        return hitboxScalingEnabled;
+    }
+    public void setHitboxScalingEnabled(boolean hitboxScalingEnabled) {
+        this.hitboxScalingEnabled = hitboxScalingEnabled;
+    }
+
+
+
 }

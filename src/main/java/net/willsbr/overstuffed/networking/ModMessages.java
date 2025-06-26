@@ -8,6 +8,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.AudioPackets.FilteredSoundS2C;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.*;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.*;
@@ -163,10 +164,10 @@ public class ModMessages {
                 .add();
 
         //Server Sync Settings
-        net.messageBuilder(PlayerSyncAllSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PlayerSyncAllSettingsC2S::new)
-                .encoder(PlayerSyncAllSettingsC2S::toBytes)
-                .consumerMainThread(PlayerSyncAllSettingsC2S::handle)
+        net.messageBuilder(PlayerSyncMainSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerSyncMainSettingsC2S::new)
+                .encoder(PlayerSyncMainSettingsC2S::toBytes)
+                .consumerMainThread(PlayerSyncMainSettingsC2S::handle)
                 .add();
         net.messageBuilder(PlayerSyncAllSettingsPollS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PlayerSyncAllSettingsPollS2C::new)
@@ -210,6 +211,15 @@ public class ModMessages {
                 .encoder(CalorieMeterDelaySyncPacketS2C::toBytes)
                 .consumerMainThread(CalorieMeterDelaySyncPacketS2C::handle)
                 .add();
+
+        net.messageBuilder(FilteredSoundS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(FilteredSoundS2C::new)
+                .encoder(FilteredSoundS2C::toBytes)
+                .consumerMainThread(FilteredSoundS2C::handle)
+                .add();
+
+
+
 
     }
 

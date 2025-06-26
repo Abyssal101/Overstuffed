@@ -44,7 +44,7 @@ public class PlayerCalorieMeter {
         nbt.putInt("maxcalories", this.maxCalories);
         nbt.putDouble("modmetabolismthreshold", this.modMetabolismThres);
         nbt.putDouble("slowmetabolismthreshold", this.slowMetabolismThres);
-        nbt.putInt("stuffedlost", this.calLost);
+        nbt.putInt("callost", this.calLost);
         nbt.putInt("addstate",this.addState);
 
         nbt.putInt("calcleardelay",this.calClearDelay);
@@ -78,11 +78,7 @@ public class PlayerCalorieMeter {
 
     public boolean checkClearCalories(long tick)
     {
-//        double percentageDelay=(double)this.currentCalories/this.maxCalories;
-//        int delay=(int)((OverstuffedWorldConfig.maxCalClearDelay.get()-OverstuffedWorldConfig.minCalClearDelay.get())*percentageDelay);
-//        delay+=OverstuffedWorldConfig.minCalClearDelay.get();
-//        this.calClearDelay=delay;
-        System.out.println(""+(tick - foodEatenTick));
+
         return foodEatenTick != -1 && tick - foodEatenTick > calClearDelay;
     }
 

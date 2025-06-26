@@ -139,15 +139,6 @@ public class ToggleButton extends AbstractButton {
                 }
 
             }
-            //1.19.2 Tooltip Logic
-//            boolean flag = this.isHovered && !tooltipText.contentEquals("");
-//
-//            if (flag) {
-//                Minecraft.getInstance().screen.renderWithTooltip();
-//                Minecraft.getInstance().screen.renderTooltip(pose, Component.literal(this.tooltipText), mouseX, mouseY);
-//
-//
-//            }
         }
 
     }
@@ -161,6 +152,12 @@ public class ToggleButton extends AbstractButton {
         //this.tooltipText = tooltipText;
         //Remove this in the
         this.setTooltip(Tooltip.create(Component.literal(tooltipText)));
+    }
+    public void setTooltipText(Component tooltipText) {
+        //1.19.2 version is this.tooltip
+        //this.tooltipText = tooltipText;
+        //Remove this in the
+        this.setTooltip(Tooltip.create(tooltipText));
     }
 
     @Override

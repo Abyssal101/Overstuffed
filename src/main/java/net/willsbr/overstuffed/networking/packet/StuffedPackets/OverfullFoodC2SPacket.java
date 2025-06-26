@@ -62,9 +62,7 @@ public class OverfullFoodC2SPacket {
                                 calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
                             }
 
-                            player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
-                                ModSounds.playBurp(player);
-                            });
+                            ModSounds.playBurp(player);
                             ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
                                     calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
                                     calorieMeter.getSlowMetabolismThres()),player);

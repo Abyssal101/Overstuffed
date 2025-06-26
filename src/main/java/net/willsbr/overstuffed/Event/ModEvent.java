@@ -154,6 +154,7 @@ public class ModEvent {
         {
             if(curWeightStage!=weightBar.getLastWeightStage())
             {
+
                 //Come back to if really jarring
                 if((event.player.tickCount&5)==0)
                 {
@@ -206,13 +207,12 @@ public class ModEvent {
                 {
                     burstGain(weightBar,serverSettings, event, curWeightStage);
                 }
+                //Adding and removing health modifiers
+                weightBarEffects(event,serverSettings, weightBar, curWeightStage, lastWeightStage);
                 if(!serverSettings.stageBasedGain())
                 {
                     weightBar.setLastWeightStage(curWeightStage);
                 }
-
-                //Adding and removing health modifiers
-                weightBarEffects(event,serverSettings, weightBar, curWeightStage, lastWeightStage);
 
                 ModSounds.playGurgle(event.player);
 
@@ -282,7 +282,7 @@ public class ModEvent {
                         weightBar.setSavedTickforWeightLoss(-1);
                     }
                 }
-            });
+                });
             });
         });
     }
@@ -358,22 +358,35 @@ public class ModEvent {
             if(!serverSettings.weightEffects())
             {
                 PlayerWeightBar.clearModifiers(event.player,weightBar);
+                PlayerWeightBar.clearScaling(event.player,weightBar);
             }
             else
             {
-                if(xOf5!=lastWeightStage)
+                if(serverSettings.stageBasedGain())
                 {
-                    //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
-                    //Maybe could make it just this, but slightly more effcient I think?
+                    if(xOf5!=lastWeightStage)
+                    {
 
-                    PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
+                        //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
+                        //Maybe could make it just this, but slightly more effcient I think?
 
-                    //handles adding the correct hitbox changes
-                    PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+                        PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
 
-
-
+                        //handles adding the correct hitbox changes
+                        PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+                    }
                 }
+                else
+                {
+                    PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
+                    //handles adding the correct hitbox changes
+                    if(serverSettings.isHitboxScalingEnabled())
+                    {
+                        PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+
+                    }
+                }
+
             }
     }
 

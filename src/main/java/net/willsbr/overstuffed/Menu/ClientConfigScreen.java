@@ -2,7 +2,6 @@ package net.willsbr.overstuffed.Menu;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,15 +9,18 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
+import net.willsbr.overstuffed.Menu.Buttons.SwapScreenButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class GraphicsConfigScreen extends Screen {
+public class ClientConfigScreen extends Screen {
     /** Distance from top of the screen to this GUI's title */
     private static final int TITLE_HEIGHT = 8;
 
@@ -39,6 +41,11 @@ public class GraphicsConfigScreen extends Screen {
     /** List of options shown on the screen */
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
+
+    private OptionSlider digestiveSoundVolume;
+    private OptionSlider burpFrequency;
+    private OptionSlider gurgleFrequency;
+
     private EditBox weightDisplayX;
     private EditBox weightDisplayY;
 
@@ -46,8 +53,6 @@ public class GraphicsConfigScreen extends Screen {
     private EditBox stuffedHudYOffset;
 
     private ToggleButton debugView;
-
-    private PortProofButton toConfigScreen;
 
     private int centerW;
     private int centerH;
@@ -64,11 +69,9 @@ public class GraphicsConfigScreen extends Screen {
     private boolean nonNumFlag;
     private static final ResourceLocation WEIGHTPLACEHOLDER = new ResourceLocation(OverStuffed.MODID, "textures/hud/placeholder.png");
 
-
-    public GraphicsConfigScreen() {
-        super(Component
-                .literal("Overstuffed Graphics Config Menu")
-                .withStyle(ChatFormatting.BLUE));
+    public ClientConfigScreen()
+    {
+        super(ModMenus.clientTitle);
     }
 
     // this should initialize most things, gets ercalled on screen change.
@@ -89,66 +92,64 @@ public class GraphicsConfigScreen extends Screen {
 
         nonNumFlag=false;
 
-
-
-
-
-        // Create the options list
-        // It must be created in this method instead of in the constructor,
-        // or it will not be displayed properly
-
-
         //buttons
+        //TODO MAKE the Sliders have translateable components
+        this.digestiveSoundVolume=new OptionSlider(centerW-152,170,150,20,Component.translatable("menu.overstuffed.digestvolume"), OverstuffedClientConfig.digestiveSoundsVolume.get()*0.1);
+        this.burpFrequency = new OptionSlider(centerW+2,170,150,20,Component.translatable("menu.overstuffed.burpfreq"), OverstuffedClientConfig.burpFrequency.get()*0.1);
+        this.gurgleFrequency = new OptionSlider(centerW,190,150,20,Component.translatable("menu.overstuffed.gurglefreq"), OverstuffedClientConfig.gurgleFrequency.get()*0.1);
+
 
 
         //ALL editbox sizes are based off this first editbox.
         this.weightDisplayX = new EditBox(
                 font,
                 centerW - 40-35,
-                50,
+                60,
                 35,
                 25,
-                Component.literal("Weight Display X Coord"));
+                Component.translatable("menu.overstuffed.weightxoffset"));
         this.weightDisplayX.setValue(OverstuffedClientConfig.weightDisplayXOffset.get()+"");
 
         this.weightDisplayY = new EditBox(
                 font,
                 centerW +40,
-                50,
+                60,
                 35,
                 25,
-                Component.literal("Weight Display Y Coord"));
+                Component.translatable("menu.overstuffed.weightyoffset"));
         this.weightDisplayY.setValue(OverstuffedClientConfig.weightDisplayYOffSet.get()+"");
 
         this.stuffedHudXOffset=new EditBox(
                 font,
                 centerW - 40-35,
-                110,
+                108,
                 35,
                 25,
-                Component.literal("Stuffed Hud X Offset"));
+                Component.translatable("menu.overstuffed.calxoffset"));
         this.stuffedHudXOffset.setValue(OverstuffedClientConfig.stuffedHudXOffset.get()+"");
 
         this.stuffedHudYOffset = new EditBox(
                 font,
                 centerW +40,
-                110,
+                108,
                 35,
                 25,
-                Component.literal("Stuffed Hud Y Offset"));
+                Component.translatable("menu.overstuffed.calyoffset"));
         this.stuffedHudYOffset.setValue(OverstuffedClientConfig.stuffedHudYOffset.get()+"");
 
-        this.debugView= new ToggleButton(screenW/2-50,150,100,20,
+        this.debugView= new ToggleButton(screenW/2-50,140,100,20,
                 Component.translatable("message.overstuffed.debugbutton"), OverstuffedClientConfig.debugView.get());
         this.debugView.setLocked(false);
 
-        this.toConfigScreen= new PortProofButton(screenW - 120, 8, 100, 20,
-                Component.literal("Gameplay Config"), new Runnable() {
-            @Override
-            public void run() {
-                swapScreen("gameplay");
-            }
-        });
+        ArrayList<SwapScreenButton> menuButtons= ModMenus.returnScreenButtons(centerW,25);
+        for(SwapScreenButton button:menuButtons)
+        {
+            this.addRenderableWidget(button);
+        }
+
+        this.addRenderableWidget(this.digestiveSoundVolume);
+        this.addRenderableWidget(this.burpFrequency);
+        this.addRenderableWidget(this.gurgleFrequency);
 
         this.addRenderableWidget(this.weightDisplayX);
         this.addRenderableWidget(this.weightDisplayY);
@@ -157,9 +158,6 @@ public class GraphicsConfigScreen extends Screen {
         this.addRenderableWidget(this.stuffedHudYOffset);
 
         this.addRenderableWidget(debugView);
-
-        this.addRenderableWidget(toConfigScreen);
-
 
         // Add the "Done" button
         this.addRenderableWidget(new PortProofButton(
@@ -212,14 +210,13 @@ public class GraphicsConfigScreen extends Screen {
 
         pose.pushPose();
         pose.scale(.8f,0.8f,1);
-        guiGraphics.drawCenteredString(  font, "Weight Display X Offset",(int)(this.weightDisplayX.getX()*1.2+20*1.2),50,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(  font, Component.translatable("menu.overstuffed.weightxoffset"),(int)(this.weightDisplayX.getX()*1.2+24*1.2),60,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(  font, "Weight Display Y Offset",(int)(this.weightDisplayY.getX()*1.2+30*1.2),50,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(  font, Component.translatable("menu.overstuffed.weightyoffset"),(int)(this.weightDisplayY.getX()*1.2+30*1.2),60,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(  font, "Stuffed Hud X Offset",(int)(this.stuffedHudXOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
+        guiGraphics.drawCenteredString(  font, Component.translatable("menu.overstuffed.calxoffset"),(int)(this.stuffedHudXOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
 
-        guiGraphics.drawCenteredString(  font, "Stuffed Hud Y Offset",(int)(this.stuffedHudYOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
-
+        guiGraphics.drawCenteredString(  font, Component.translatable("menu.overstuffed.calyoffset"),(int)(this.stuffedHudYOffset.getX()*1.2+20*1.2),120,Color.WHITE.hashCode());
 
         pose.popPose();
 
@@ -236,8 +233,8 @@ public class GraphicsConfigScreen extends Screen {
         {
             //RenderSystem.setShaderTexture(0,WEIGHTPLACEHOLDER);
 
-            guiGraphics.blit(WEIGHTPLACEHOLDER,screenW/2+10+this.getEditBoxInt("stuffed",true),
-                    screenH-47-this.getEditBoxInt("stuffed",false),0,0,70,6,34,34);
+            guiGraphics.blit(WEIGHTPLACEHOLDER,left+80+this.getEditBoxInt("stuffed",true),
+                    top-this.getEditBoxInt("stuffed",false),0,0,20,20,34,34);
         }
 
 
@@ -274,6 +271,9 @@ public class GraphicsConfigScreen extends Screen {
 
         }
 
+        OverstuffedClientConfig.digestiveSoundsVolume.set(digestiveSoundVolume.getValue());
+        OverstuffedClientConfig.burpFrequency.set(burpFrequency.getValue());
+        OverstuffedClientConfig.gurgleFrequency.set(gurgleFrequency.getValue());
         OverstuffedClientConfig.debugView.set(debugView.getSetting());
 
 

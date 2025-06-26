@@ -3,6 +3,7 @@ package net.willsbr.overstuffed.client;
 import com.tom.cpm.api.IClientAPI;
 import net.minecraftforge.fml.ModList;
 import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 
 public class ClientCPMData {
 
@@ -98,15 +99,15 @@ public class ClientCPMData {
                     double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedClientConfig.minWeight.get());
                     weightRatio = weightRatio / (OverstuffedClientConfig.maxWeight.get() - OverstuffedClientConfig.minWeight.get());
                     int calculatedPercentage = (int) ((weightRatio * 100));
-                    int xOf5 = calculatedPercentage / 20;
+                    int currentStage = calculatedPercentage / (100/OverstuffedClientConfig.totalStages.get());
 
-                    ClientWeightBarData.setLastWeightStage(xOf5);
+                    ClientWeightBarData.setLastWeightStage(currentStage);
                 }
                 String layerName= OverstuffedClientConfig.weightLayerConfigEntry.get();
                 //this is the starting point, the stage if you will
                 playersAPI.playAnimation(OverstuffedClientConfig.lastWeightLayer, 0);
 
-                int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * 0.2 * playersAPI.getAnimationMaxValue(layerName));
+                int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * (1.0/OverstuffedClientConfig.totalStages.get()) * playersAPI.getAnimationMaxValue(layerName));
                 //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
                 if(outOfMax!=-1)
                 {
@@ -118,6 +119,25 @@ public class ClientCPMData {
 
         }
         return false;
+      }
+
+      //Will only work if you saved your last weight
+      public static void previewWeight(int inputWeight)
+      {
+          if (ModList.get().isLoaded("cpm") && getPlayersAPI() != null)
+          {
+              double weightRatio = ((double) inputWeight - OverstuffedClientConfig.minWeight.get());
+              weightRatio = weightRatio / (OverstuffedClientConfig.maxWeight.get() - OverstuffedClientConfig.minWeight.get());
+              int calculatedPercentage = (int) ((weightRatio * 100));
+              int outofMax = (int) (weightRatio * playersAPI.getAnimationMaxValue(OverstuffedClientConfig.weightLayerConfigEntry.get()));
+              playersAPI.playAnimation(OverstuffedClientConfig.weightLayerConfigEntry.get(), outofMax);
+          }
+      }
+      public static void previewStuffed(int inputCalories)
+      {
+          Double percentFull= ((double) inputCalories/OverstuffedWorldConfig.absCalCap.get());
+          int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get()));
+          playersAPI.playAnimation(OverstuffedClientConfig.stuffedLayerConfigEntry.get(),outOfMax);
       }
 
     public static int getTotalWeightFrames() {
