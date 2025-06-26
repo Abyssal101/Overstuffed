@@ -5,43 +5,39 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.client.ClientStuffedBarData;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
+import net.willsbr.overstuffed.client.ClientCalorieMeter;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class OverfullFoodDataSyncPacketS2C {
 
-   private final int stuffed_bar;
-   private final int currentSoftLimit;
-
-   private final int currentFirmLimit;
-   private final int currentHardLimit;
-   //sending data from server to client here
+   private int currentCalories;
+   private int currentMaxCalories;
+   private double modThreshold;
+   private double slowThreshold;
 
 
-    public OverfullFoodDataSyncPacketS2C(int stuffed_bar, int soft, int firm, int hard){
-        this.stuffed_bar = stuffed_bar;
-        this.currentSoftLimit=soft;
-        this.currentFirmLimit=firm;
-        this.currentHardLimit=hard;
 
+    public OverfullFoodDataSyncPacketS2C(int currentCalories, int curMax, double modThreshold, double slowThreshold){
+        this.currentCalories = currentCalories;
+        this.currentMaxCalories =curMax;
+        this.modThreshold = modThreshold;
+        this.slowThreshold = slowThreshold;
     }
 
     public OverfullFoodDataSyncPacketS2C(FriendlyByteBuf buf){
-        this.stuffed_bar =buf.readInt();
-        this.currentSoftLimit=buf.readInt();
-        this.currentFirmLimit=buf.readInt();
-        this.currentHardLimit=buf.readInt();
-
+        this.currentCalories =buf.readInt();
+        this.currentMaxCalories =buf.readInt();
+        this.modThreshold = buf.readDouble();
+        this.slowThreshold = buf.readDouble();
     }
 
     public void toBytes(FriendlyByteBuf buf){
-        buf.writeInt(stuffed_bar);
-        buf.writeInt(currentSoftLimit);
-        buf.writeInt(currentFirmLimit);
-        buf.writeInt(currentHardLimit);
+        buf.writeInt(currentCalories);
+        buf.writeInt(currentMaxCalories);
+        buf.writeDouble(modThreshold);
+        buf.writeDouble(slowThreshold);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
@@ -50,17 +46,17 @@ public class OverfullFoodDataSyncPacketS2C {
         {
             //here we are on the client!
            // ClientThirstData.set(stuffed_bar);
-            ClientStuffedBarData.set(stuffed_bar,currentSoftLimit,currentFirmLimit,currentHardLimit);
+            ClientCalorieMeter.set(currentCalories, currentMaxCalories);
+            ClientCalorieMeter.setThresholds(modThreshold, slowThreshold);
 
             LocalPlayer player= Minecraft.getInstance().player;
-            player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR)
-                    .ifPresent(stuffedBar -> {
-                        stuffedBar.setCurrentStuffedLevel(this.stuffed_bar);
-                        stuffedBar.setFullLevel(this.currentSoftLimit);
-                        stuffedBar.setStuffedLevel(this.currentFirmLimit);
-                        stuffedBar.setOverstuffedLevel(this.currentHardLimit);
+            player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER)
+                    .ifPresent(calorieMeter -> {
+                       calorieMeter.setCurrentCalories(currentCalories);
+                       calorieMeter.setMaxCalories(currentMaxCalories);
+                       calorieMeter.setModMetabolismThres(modThreshold);
+                       calorieMeter.setSlowMetabolismThres(slowThreshold);
                     });
-
 
             CPMData.checkIfUpdateCPM("stuffed");
 

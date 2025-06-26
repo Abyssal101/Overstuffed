@@ -11,24 +11,24 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerStuffedBarProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerCalorieMeterProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<PlayerStuffedBar> PLAYER_STUFFED_BAR = CapabilityManager.get(
-            new CapabilityToken<PlayerStuffedBar>() {});
-    private PlayerStuffedBar stuffedBar =null;
-    private final LazyOptional<PlayerStuffedBar> optional=LazyOptional.of(this::createPlayerStuffedBar);
+    public static Capability<PlayerCalorieMeter> PLAYER_CALORIE_METER = CapabilityManager.get(
+            new CapabilityToken<PlayerCalorieMeter>() {});
+    private PlayerCalorieMeter calorieMeter =null;
+    private final LazyOptional<PlayerCalorieMeter> optional=LazyOptional.of(this::createPlayerCalorieMeter);
 
-    private PlayerStuffedBar createPlayerStuffedBar() {
-        if(this.stuffedBar ==null)
+    private PlayerCalorieMeter createPlayerCalorieMeter() {
+        if(this.calorieMeter ==null)
         {
-            this.stuffedBar =new PlayerStuffedBar();
+            this.calorieMeter =new PlayerCalorieMeter();
         }
-        return this.stuffedBar;
+        return this.calorieMeter;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap== PLAYER_STUFFED_BAR)
+        if(cap== PLAYER_CALORIE_METER)
         {
             return optional.cast();
         }
@@ -38,12 +38,12 @@ public class PlayerStuffedBarProvider implements ICapabilityProvider, INBTSerial
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt= new CompoundTag();
-        createPlayerStuffedBar().saveNBTData(nbt);
+        createPlayerCalorieMeter().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerStuffedBar().loadNBTData(nbt);
+        createPlayerCalorieMeter().loadNBTData(nbt);
     }
 }

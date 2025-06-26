@@ -8,6 +8,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.networking.packet.*;
+import net.willsbr.overstuffed.networking.packet.AudioPackets.FilteredSoundS2C;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.*;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.*;
@@ -56,10 +57,10 @@ public class ModMessages {
                 .encoder(ClientCPMStuffedSyncS2CPacket::toBytes)
                 .consumerMainThread(ClientCPMStuffedSyncS2CPacket::handle)
                 .add();
-        net.messageBuilder(setMaxStuffedS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(setMaxStuffedS2CPacket::new)
-                .encoder(setMaxStuffedS2CPacket::toBytes)
-                .consumerMainThread(setMaxStuffedS2CPacket::handle)
+        net.messageBuilder(setMaxCaloriesPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(setMaxCaloriesPacketS2C::new)
+                .encoder(setMaxCaloriesPacketS2C::toBytes)
+                .consumerMainThread(setMaxCaloriesPacketS2C::handle)
                 .add();
 
         net.messageBuilder(ClientCPMWeightSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -156,17 +157,17 @@ public class ModMessages {
                 .encoder(WeightMaxMinPollS2C::toBytes)
                 .consumerMainThread(WeightMaxMinPollS2C::handle)
                 .add();
-        net.messageBuilder(stuffedIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(stuffedIntervalUpdateS2CPacket::new)
-                .encoder(stuffedIntervalUpdateS2CPacket::toBytes)
-                .consumerMainThread(stuffedIntervalUpdateS2CPacket::handle)
+        net.messageBuilder(calIntervalUpdateS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(calIntervalUpdateS2CPacket::new)
+                .encoder(calIntervalUpdateS2CPacket::toBytes)
+                .consumerMainThread(calIntervalUpdateS2CPacket::handle)
                 .add();
 
         //Server Sync Settings
-        net.messageBuilder(PlayerSyncAllSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PlayerSyncAllSettingsC2S::new)
-                .encoder(PlayerSyncAllSettingsC2S::toBytes)
-                .consumerMainThread(PlayerSyncAllSettingsC2S::handle)
+        net.messageBuilder(PlayerSyncMainSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerSyncMainSettingsC2S::new)
+                .encoder(PlayerSyncMainSettingsC2S::toBytes)
+                .consumerMainThread(PlayerSyncMainSettingsC2S::handle)
                 .add();
         net.messageBuilder(PlayerSyncAllSettingsPollS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PlayerSyncAllSettingsPollS2C::new)
@@ -188,6 +189,12 @@ public class ModMessages {
                 .encoder(SyncServerSettingCapS2C::toBytes)
                 .consumerMainThread(SyncServerSettingCapS2C::handle)
                 .add();
+        net.messageBuilder(SyncClientSettingsC2S.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SyncClientSettingsC2S::new)
+                .encoder(SyncClientSettingsC2S::toBytes)
+                .consumerMainThread(SyncClientSettingsC2S::handle)
+                .add();
+
         net.messageBuilder(SyncStuffedCapS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SyncStuffedCapS2C::new)
                 .encoder(SyncStuffedCapS2C::toBytes)
@@ -198,6 +205,21 @@ public class ModMessages {
                 .encoder(SyncWeightCapS2C::toBytes)
                 .consumerMainThread(SyncWeightCapS2C::handle)
                 .add();
+
+        net.messageBuilder(CalorieMeterDelaySyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(CalorieMeterDelaySyncPacketS2C::new)
+                .encoder(CalorieMeterDelaySyncPacketS2C::toBytes)
+                .consumerMainThread(CalorieMeterDelaySyncPacketS2C::handle)
+                .add();
+
+        net.messageBuilder(FilteredSoundS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(FilteredSoundS2C::new)
+                .encoder(FilteredSoundS2C::toBytes)
+                .consumerMainThread(FilteredSoundS2C::handle)
+                .add();
+
+
+
 
     }
 

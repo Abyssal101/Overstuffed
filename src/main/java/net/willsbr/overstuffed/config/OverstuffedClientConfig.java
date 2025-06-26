@@ -1,8 +1,12 @@
 package net.willsbr.overstuffed.config;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.willsbr.overstuffed.networking.ModMessages;
+import net.willsbr.overstuffed.networking.packet.SyncClientSettingsC2S;
 
-public class OverstuffedConfig {
+public class OverstuffedClientConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
 
     static {
@@ -18,9 +22,13 @@ public class OverstuffedConfig {
     public static String lastStuffedLayer="";
 
     public static ForgeConfigSpec.ConfigValue<Boolean> stageGain;
+    public static ForgeConfigSpec.ConfigValue<Integer> totalStages;
+
 
     public static ForgeConfigSpec.ConfigValue<Boolean> weightEffects;
+    public static ForgeConfigSpec.ConfigValue<Boolean> granularEffects;
 
+    public static ForgeConfigSpec.ConfigValue<Integer> digestiveSoundsVolume;
     public static ForgeConfigSpec.ConfigValue<Integer> burpFrequency;
     public static ForgeConfigSpec.ConfigValue<Integer> gurgleFrequency;
 
@@ -34,8 +42,10 @@ public class OverstuffedConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudXOffset;
     public static ForgeConfigSpec.ConfigValue<Integer> stuffedHudYOffset;
     public static ForgeConfigSpec.ConfigValue<Boolean> debugView;
+    public static ForgeConfigSpec.ConfigValue<Integer> playerDisplayScale;
 
-
+    public static ForgeConfigSpec.ConfigValue<Float> maxHitboxWidth;
+    public static ForgeConfigSpec.ConfigValue<Boolean> hitBoxScalingEnabled;
 
 
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
@@ -45,20 +55,14 @@ public class OverstuffedConfig {
                 .comment(" Name of CPM Value Layer for Weight.")
                 .define("weight_layer_config_entry", "weight");
 
-
         stuffedLayerConfigEntry = builder
                 .comment(" Name of CPM Value Layer for Stuffed.")
                 .define("stuffed_layer_config_entry", "stuffed");
 
         stageGain=builder.comment("Stage based gaining for those who want more a more sudden change")
                 .define("config_stage_gain",false);
-        weightEffects=builder.comment("Currently enables/disables all forms of weight effects")
-                .define("config_weight_effects",true);
-
-        burpFrequency=builder.comment("1-10, the frequency that burps occur")
-                .define("config_burp_frequency,",5);
-        gurgleFrequency=builder.comment("1-10, the frequency that gurgles occur")
-                .define("config_gurgle_frequency,",3);
+        totalStages=builder.comment("Amount of stages the player can go through")
+                .define("config_stages",5);
 
         maxWeight=builder.comment("The maximum displayable weight.")
                 .define("max_weight,",300);
@@ -66,6 +70,33 @@ public class OverstuffedConfig {
                 .define("min_weight,",100);
 
         builder.pop();
+        builder.push("Gameplay Options");
+
+        weightEffects=builder.comment("Currently enables/disables all forms of weight effects")
+                .define("config_weight_effects",true);
+        granularEffects=builder.comment("Do effects get calculated by the immediate current weight versus when a new stage is reached")
+                .define("config_granular",false);
+        hitBoxScalingEnabled=builder.comment("Does your hitbox increase in size")
+                .define("hitbox_scaling,",true);
+        maxHitboxWidth=builder.comment("Max multipler to your hitbox being at max weight should effect")
+                .define("max_hitbox_width,",2.0f);
+
+
+
+        builder.pop();
+
+        builder.push("Audio Options");
+        digestiveSoundsVolume=builder.comment("Volume which digestive sounds play")
+                .define("digestive_sound_volume,",10);
+
+        burpFrequency=builder.comment("1-10, the frequency that burps occur")
+                .define("config_burp_frequency,",5);
+        gurgleFrequency=builder.comment("1-10, the frequency that gurgles occur")
+                .define("config_gurgle_frequency,",3);
+        builder.pop();
+
+
+
         builder.comment("This section is for graphics related settings");
         builder.push("Overstuffed Graphics Options");
 
@@ -84,11 +115,17 @@ public class OverstuffedConfig {
         debugView =builder.comment("Boolean to determine if the debug view should be on ")
                 .define("debugview,",false);
 
+        playerDisplayScale=builder.comment("The saved scale for a player in the GUI")
+                .define("displayscale,",30);
+
     }
 
     public static void saveConfig() {
         weightLayerConfigEntry.save();
         stuffedLayerConfigEntry.save();
+        totalStages.save();
+
+        digestiveSoundsVolume.save();
         burpFrequency.save();
         gurgleFrequency.save();
 
@@ -100,7 +137,23 @@ public class OverstuffedConfig {
 
         stuffedHudYOffset.save();
         stuffedHudXOffset.save();
+
+        playerDisplayScale.save();
+
         debugView.save();
+        maxHitboxWidth.save();
+        hitBoxScalingEnabled.save();
+
+        weightEffects.save();
+        granularEffects.save();
+        stageGain.save();
+        totalStages.save();
+
+
+        if(Minecraft.getInstance().player!=null)
+        {
+            ModMessages.sendToServer(new SyncClientSettingsC2S());
+        }
 
 
 

@@ -6,7 +6,7 @@ import com.tom.cpm.api.ICommonAPI;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.client.ClientCPMData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 public class CPMCompat implements ICPMPlugin {
     public void initClient(IClientAPI api) {
@@ -28,9 +28,9 @@ public class CPMCompat implements ICPMPlugin {
                 (player, message) -> {
                     //this plays the new animation
                     int temp=message.getInteger("currentweight");
-                    api.playAnimation(OverstuffedConfig.weightLayerConfigEntry.get(),temp);
+                    api.playAnimation(OverstuffedClientConfig.weightLayerConfigEntry.get(),temp);
                     //this resets the old one if any
-                    api.playAnimation(OverstuffedConfig.lastWeightLayer,0);
+                    api.playAnimation(OverstuffedClientConfig.lastWeightLayer,0);
                 }, true));
     }
 

@@ -6,8 +6,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
-import net.willsbr.overstuffed.StuffedBar.PlayerStuffedBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.sound.ModSounds;
 
@@ -39,20 +39,34 @@ public class OverfullFoodC2SPacket {
                     Level level=player.level();
                     if(!level.isClientSide)
                     {
-                        player.getCapability(PlayerStuffedBarProvider.PLAYER_STUFFED_BAR).ifPresent(stuffedBar ->
+                        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter ->
                         {
                             ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
-                            stuffedBar.addStuffedLevel(1, level.getGameTime(), lastFood.getUseDuration());
-                            player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerToggles -> {
-                                //effectively if the random number is LOWER than the set frequency, it works! 0 should disable,a and 10 should be max
-                                if(player.getRandom().nextIntBetweenInclusive(0,10)< OverstuffedConfig.burpFrequency.get())
-                                {
-                                    player.level().playSound(null, player.blockPosition(), ModSounds.BURP_SOUNDS.get(
-                                                    player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1)).get(),
-                                            player.getSoundSource(), 1f, 1f);
-                                }
-                            });
-                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(stuffedBar.getCurrentStuffedLevel(), stuffedBar.getFullLevel(),stuffedBar.getStuffedLevel() ,stuffedBar.getOverstuffedLevel()),player);
+                            //This packet should NEVER be sent when the food isn't edible.
+
+                            int calculatedCalories=lastFood.getItem().getFoodProperties().getNutrition();
+                            calculatedCalories=calculatedCalories+(int)(calculatedCalories*lastFood.getItem().getFoodProperties().getSaturationModifier());
+                            calculatedCalories=(int)(calculatedCalories*calorieMeter.getCalorieGainMultipler());
+                            calorieMeter.addCalories(calculatedCalories);
+
+                            //only does it on the first time it's been cosnumed
+                             if(calorieMeter.getFoodEatenTick()==-1)
+                            {
+                                calorieMeter.setFoodEatenTick(player.tickCount);
+                                calorieMeter.setCalClearDelay(OverstuffedWorldConfig.minCalClearDelay.get());
+                            }
+                            else
+                            {
+                                int timeToAdd=(int)(((double)calculatedCalories/calorieMeter.getMaxCalories()
+                                *(OverstuffedWorldConfig.maxCalClearDelay.get()-OverstuffedWorldConfig.minCalClearDelay.get())));
+                                calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
+                            }
+
+                            ModSounds.playBurp(player);
+                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
+                                    calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
+                                    calorieMeter.getSlowMetabolismThres()),player);
+                            ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),player);
                         });
                     }
                 }

@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import java.util.function.Supplier;
 
@@ -46,9 +46,9 @@ public class ClientCPMStuffedSyncS2CPacket {
         {
             //here we are on the client!
             // ClientThirstData.set(stuffed_bar);
-            OverstuffedConfig.setStuffedLayer(this.stuffedLayer);
+            OverstuffedClientConfig.setStuffedLayer(this.stuffedLayer);
             CPMData.checkIfUpdateCPM("stuffed");
-            if(OverstuffedConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayer))
+            if(OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.stuffedLayer))
             {
                 Minecraft.getInstance().player.sendSystemMessage(Component.translatable("commands.overstuffed.stuffedupdatesuccess"));
             }

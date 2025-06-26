@@ -1,15 +1,11 @@
 package net.willsbr.overstuffed.networking.packet.WeightPackets;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class ClientCPMWeightSyncS2CPacket {
@@ -47,9 +43,9 @@ public class ClientCPMWeightSyncS2CPacket {
         context.enqueueWork(() ->
         {
             //here we are on the client!
-            OverstuffedConfig.setWeightLayer(this.weightLayer);
+            OverstuffedClientConfig.setWeightLayer(this.weightLayer);
             CPMData.checkIfUpdateCPM("weight");
-            if(OverstuffedConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayer))
+            if(OverstuffedClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayer))
             {
                 context.getSender().sendSystemMessage(Component.translatable("commands.overstuffed.weightupdatesuccess"));
             }

@@ -1,13 +1,10 @@
 package net.willsbr.overstuffed.client;
 
-import net.willsbr.overstuffed.config.OverstuffedConfig;
-
-import java.util.ArrayList;
-import java.util.Queue;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 public class ClientWeightBarData {
 
-    public static int currentWeight = OverstuffedConfig.minWeight.get();
+    public static int currentWeight = OverstuffedClientConfig.minWeight.get();
     //this is the percent for burstGain
     private static int lastWeightStage = 0;
     private static int amountThroughStage;

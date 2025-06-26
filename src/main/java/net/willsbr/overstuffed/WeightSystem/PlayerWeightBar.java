@@ -2,15 +2,19 @@ package net.willsbr.overstuffed.WeightSystem;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.RegistryObject;
-import net.willsbr.overstuffed.config.OverstuffedConfig;
+import net.minecraftforge.fml.ModList;
+import net.willsbr.overstuffed.Command.ActiveCommands.setHitbox;
+import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
+import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
+import virtuoel.pehkui.api.ScaleData;
+import virtuoel.pehkui.api.ScaleType;
+import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -18,17 +22,17 @@ import java.util.UUID;
 public class PlayerWeightBar {
     //
 
-    private int minWeight= OverstuffedConfig.minWeight.get();
+    private int minWeight= OverstuffedClientConfig.minWeight.get();
     private int currentWeight;
 
     //this is what options will determine for display
-    private int curMaxWeight=OverstuffedConfig.getMaxWeight();
+    private int curMaxWeight= OverstuffedClientConfig.getMaxWeight();
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
     //food queue situation so you slowly gain weight
     private int queuedWeight;
 
-    private ArrayList<Integer> weightChanges= new ArrayList<Integer>();
+    private ArrayList<Integer> weightChanges= new ArrayList<>();
 
     private boolean readyToUpdateWeight=true;
     private long savedTickForWeight;
@@ -44,22 +48,28 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_1 = new AttributeModifier(UUID.fromString("31580520-a812-447f-89d6-8bd82cf790ed"), "health from stage 1 weight", 2, AttributeModifier.Operation.ADDITION);
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_2 = new AttributeModifier(UUID.fromString("28571767-3553-459f-82bd-4ac9dc94378a"), "health from stage 2 weight", 4, AttributeModifier.Operation.ADDITION);
+    private AttributeModifier WEIGHT_HEALTH_MODIFIER =
+            new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.ADDITION);
+    private AttributeModifier WEIGHT_SPEED_MODIFIER =
+            new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"), "speed decrease per percentage", 0, AttributeModifier.Operation.MULTIPLY_BASE);
+    private AttributeModifier SCALING_HEALTH_MODIFIER =
+            new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"), "health increase from hitbox increase", 0, AttributeModifier.Operation.ADDITION);
+    private float currentHitboxIncrease=0;
 
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_3 = new AttributeModifier(UUID.fromString("fc0e7b27-2e4f-4add-a0a8-e87b4efcfbbf"), "health from stage 3 weight", 6, AttributeModifier.Operation.ADDITION);
 
-    private static final AttributeModifier WEIGHT_HEALTH_MODIFIER_4 = new AttributeModifier(UUID.fromString("3c6abd60-0939-4fac-9d84-c280edc5c409"), "health from stage 4 weight", 10, AttributeModifier.Operation.ADDITION);
 
-    public static AttributeModifier[] WEIGHT_HEALTH_MODIFIERS= {WEIGHT_HEALTH_MODIFIER_1,WEIGHT_HEALTH_MODIFIER_2,WEIGHT_HEALTH_MODIFIER_3,WEIGHT_HEALTH_MODIFIER_4};
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_1 = new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "speed decrease from stage 1 weight", -0.05, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_2 = new AttributeModifier(UUID.fromString("9d8bf167-b018-4600-ad9e-4f66fcfdb8b2"), "speed decrease from stage 2 weight", -0.15, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_3 = new AttributeModifier(UUID.fromString("8372c521-ee15-4ae3-af15-32ba797272d1"), "speed decrease from stage 3 weight", -0.20, AttributeModifier.Operation.MULTIPLY_BASE);
-    private static final AttributeModifier WEIGHT_SPEED_MODIFIER_4 = new AttributeModifier(UUID.fromString("0f7a44e8-340b-4285-b25b-25493524eff2"), "speed decrease from stage 4 weight", -0.30, AttributeModifier.Operation.MULTIPLY_BASE);
+    //TODO make this save to NBT when your done
+    private int totalStages = 5;
 
-    public static AttributeModifier[] WEIGHT_SPEED_MODIFIERS= {WEIGHT_SPEED_MODIFIER_1,WEIGHT_SPEED_MODIFIER_2,WEIGHT_SPEED_MODIFIER_3,WEIGHT_SPEED_MODIFIER_4};
 
-    private static int doorwayWedgeCheck=0;
+    public int getTotalStages() {
+        return totalStages;
+    }
+
+    public void setTotalStages(int totalStages) {
+        this.totalStages = totalStages;
+    }
+
 
     public int getCurrentWeight()
     {
@@ -119,9 +129,8 @@ public class PlayerWeightBar {
     public int getTotalWeightChanges()
     {
         int sum=0;
-        for(int i=0; i<weightChanges.size(); i++)
-        {
-            sum+=weightChanges.get(i);
+        for (Integer weightChange : weightChanges) {
+            sum += weightChange;
         }
         return sum;
     }
@@ -162,6 +171,7 @@ public class PlayerWeightBar {
     }
 
 
+
     public void copyFrom(PlayerWeightBar source)
     {
        this.currentWeight=source.getCurrentWeight();
@@ -174,6 +184,7 @@ public class PlayerWeightBar {
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
        this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
+       this.totalStages=source.totalStages;
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -195,7 +206,7 @@ public class PlayerWeightBar {
         nbt.putDouble("weightupdatedelaymodifier", this.weightUpdateDelayModifier);
         //Probably not important because it'll just reset, max a few extra seconds for someone to change.
         //nbt.putBoolean("updateweight", this.readyToUpdateWeight);
-
+        nbt.putInt("totalweightstages",this.totalStages);
 
     }
     public void loadNBTData(CompoundTag nbt)
@@ -205,13 +216,13 @@ public class PlayerWeightBar {
         this.minWeight=nbt.getInt("minweight");
         this.queuedWeight =nbt.getInt("stackweight");
         int[] savingArray= nbt.getIntArray("changestack");
-        for(int i=0;i<savingArray.length;i++)
-        {
-            this.weightChanges.add(savingArray[i]);
+        for (int j : savingArray) {
+            this.weightChanges.add(j);
         }
 
         this.lastWeightStage=nbt.getInt("weightstage");
         this.weightUpdateDelayModifier=nbt.getDouble("weightupdatedelaymodifier");
+        this.totalStages=nbt.getInt("totalweightstages");
     }
 
     public int getWeightUpdateDelay() {
@@ -251,7 +262,7 @@ public class PlayerWeightBar {
     {
         int calculatedPercentage=(int)((((double)(this.getCurrentWeight()-this.getMinWeight()))/(this.getCurMaxWeight()- this.getMinWeight()))*100);
         //TODO make it so it's max is clamped when you set the total levels of weight
-        return calculatedPercentage/20;
+        return calculatedPercentage/(100/this.getTotalStages());
     }
 
 
@@ -278,62 +289,120 @@ public class PlayerWeightBar {
         this.weightUpdateDelayModifier = weightUpdateDelayModifier;
     }
 
-    public int incrementWedgeCheck()
+
+    public void setNewModifiers()
     {
-        ++doorwayWedgeCheck;
-        if(doorwayWedgeCheck>=4)
-        {
-            doorwayWedgeCheck=0;
-            return 4;
-        }
-        return doorwayWedgeCheck;
+        double percentageEffect= (double)this.currentWeight/(this.getCurMaxWeight()-this.getMinWeight());
+        this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
+                "health increase from OS",
+                (int)(percentageEffect*OverstuffedWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
+
+        this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
+                "speed increase from OS",
+                -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+    }
+    public void setNewModifiers(int currentStage)
+    {
+        double percentageEffect= (double)currentStage/this.getTotalStages();
+        this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
+                "health increase from OS",
+                (int)(percentageEffect*OverstuffedWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
+
+        this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
+                "speed increase from OS",
+                -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+
+
+        this.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
+                "hitbox health increase from OS",
+                (int)(this.currentHitboxIncrease/OverstuffedWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
+
+
     }
 
-    public static void clearModifiers(Player player)
+
+    public static void clearModifiers(Player player, PlayerWeightBar weightBar)
     {
-        for(int i=0;i<PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS.length;i++)
-        {
-            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[i]))
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(weightBar.WEIGHT_HEALTH_MODIFIER))
             {
-                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[i]);
+                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
             }
-            if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[i]))
+            if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(weightBar.WEIGHT_SPEED_MODIFIER))
             {
-                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[i]);
+                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(weightBar.WEIGHT_SPEED_MODIFIER);
             }
-        }
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(weightBar.SCALING_HEALTH_MODIFIER))
+            {
+                player.getAttribute(Attributes.MAX_HEALTH).removeModifier(weightBar.SCALING_HEALTH_MODIFIER);
+            }
     }
 
     public static void addCorrectModifier(ServerPlayer player)
     {
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
-            PlayerWeightBar.clearModifiers(player);
-        int newWeightStage=weightBar.calculateCurrentWeightStage();
+        PlayerWeightBar.clearModifiers(player, weightBar);
         ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
+        int newWeightStage=weightBar.calculateCurrentWeightStage();
 
-        //This clears the weight modifiers and sets it correctly when you join
-
-        if(newWeightStage!=0)
+            //This clears the weight modifiers and sets it correctly when you join
+        if(newWeightStage!=0 || !OverstuffedClientConfig.stageGain.get())
         {
-            if(newWeightStage==5)
-            {
-                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[3]);
-                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[3]);
-
-            }
-            else
-            {
-                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(PlayerWeightBar.WEIGHT_HEALTH_MODIFIERS[newWeightStage-1]);
-                player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(PlayerWeightBar.WEIGHT_SPEED_MODIFIERS[newWeightStage-1]);
-
-            }
+            //TODO add setting if it's granualar versus staged
+            weightBar.setNewModifiers(newWeightStage);
+            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
+            player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(weightBar.WEIGHT_SPEED_MODIFIER);
         }
-            if(player.getHealth()>player.getMaxHealth())
+        if(player.getHealth()>player.getMaxHealth())
+        {
+            player.setHealth(player.getMaxHealth());
+        }
+        });
+    }
+
+    public static void clearScaling(Player player,PlayerWeightBar weightBar)
+    {
+            if (ModList.get().isLoaded("pehkui")) {
+                ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
+                //removes anything added by Overstuffed
+                hitboxWidthData.setScale(hitboxWidthData.getScale() - weightBar.getCurrentHitboxIncrease());
+                weightBar.setCurrentHitboxIncrease(0);
+            }
+    }
+
+    public static void addCorrectScaling(ServerPlayer player)
+    {
+        player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar ->
+        {
+            if(ModList.get().isLoaded("pehkui"))
             {
-                player.setHealth(player.getMaxHealth());
+                ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
+                //removes anything added by Overstuffed
+                hitboxWidthData.setScale(hitboxWidthData.getScale()- weightBar.getCurrentHitboxIncrease());
+                player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                    //recalculates what your supposed to have
+                    float percentage=(float)(weightBar.getCurrentWeight()-weightBar.getMinWeight())/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
+                    percentage=(float)(percentage*serverSettings.getMaxHitboxWidth());
+                    weightBar.setCurrentHitboxIncrease(percentage);
+                    hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
+                });
+
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.SCALING_HEALTH_MODIFIER);
+                if(player.getHealth()>player.getMaxHealth())
+                {
+                    player.setHealth(player.getMaxHealth());
+                }
+
             }
         });
     }
 
+
+    public float getCurrentHitboxIncrease() {
+        return currentHitboxIncrease;
+    }
+
+    public void setCurrentHitboxIncrease(float currentHitboxIncrease) {
+        this.currentHitboxIncrease = currentHitboxIncrease;
+    }
 }
