@@ -1,32 +1,23 @@
 package net.willsbr.overstuffed.Entity.BlockEntity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.SoundOptionsScreen;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.willsbr.overstuffed.Entity.ModEntities;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.sound.ModSounds;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -115,13 +106,13 @@ public class ScaleBlockEntity extends BlockEntity {
 
         CompoundTag scaleData=new CompoundTag();
         scaleData.putInt("displayweight",this.displayWeight);
-        pTag.put(OverStuffed.MODID+"scaledata",scaleData);
+        pTag.put(GluttonousGrowth.MODID+"scaledata",scaleData);
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        CompoundTag scaleData=pTag.getCompound(OverStuffed.MODID+"scaledata");
+        CompoundTag scaleData=pTag.getCompound(GluttonousGrowth.MODID+"scaledata");
         this.displayWeight=scaleData.getInt("displayweight");
     }
 

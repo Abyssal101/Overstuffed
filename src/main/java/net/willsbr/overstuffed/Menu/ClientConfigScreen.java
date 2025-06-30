@@ -13,8 +13,8 @@ import net.willsbr.overstuffed.Menu.Buttons.OptionSlider;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.SwapScreenButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
-import net.willsbr.overstuffed.OverStuffed;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.GluttonousGrowth;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -67,7 +67,7 @@ public class ClientConfigScreen extends Screen {
     private int lastGuiScale;
 
     private boolean nonNumFlag;
-    private static final ResourceLocation WEIGHTPLACEHOLDER = new ResourceLocation(OverStuffed.MODID, "textures/hud/placeholder.png");
+    private static final ResourceLocation WEIGHTPLACEHOLDER = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/placeholder.png");
 
     public ClientConfigScreen()
     {
@@ -94,9 +94,9 @@ public class ClientConfigScreen extends Screen {
 
         //buttons
         //TODO MAKE the Sliders have translateable components
-        this.digestiveSoundVolume=new OptionSlider(centerW-152,170,150,20,Component.translatable("menu.overstuffed.digestvolume"), OverstuffedClientConfig.digestiveSoundsVolume.get()*0.1);
-        this.burpFrequency = new OptionSlider(centerW+2,170,150,20,Component.translatable("menu.overstuffed.burpfreq"), OverstuffedClientConfig.burpFrequency.get()*0.1);
-        this.gurgleFrequency = new OptionSlider(centerW,190,150,20,Component.translatable("menu.overstuffed.gurglefreq"), OverstuffedClientConfig.gurgleFrequency.get()*0.1);
+        this.digestiveSoundVolume=new OptionSlider(centerW-152,170,150,20,Component.translatable("menu.overstuffed.digestvolume"), GluttonousClientConfig.digestiveSoundsVolume.get()*0.1);
+        this.burpFrequency = new OptionSlider(centerW+2,170,150,20,Component.translatable("menu.overstuffed.burpfreq"), GluttonousClientConfig.burpFrequency.get()*0.1);
+        this.gurgleFrequency = new OptionSlider(centerW,190,150,20,Component.translatable("menu.overstuffed.gurglefreq"), GluttonousClientConfig.gurgleFrequency.get()*0.1);
 
 
 
@@ -108,7 +108,7 @@ public class ClientConfigScreen extends Screen {
                 35,
                 25,
                 Component.translatable("menu.overstuffed.weightxoffset"));
-        this.weightDisplayX.setValue(OverstuffedClientConfig.weightDisplayXOffset.get()+"");
+        this.weightDisplayX.setValue(GluttonousClientConfig.weightDisplayXOffset.get()+"");
 
         this.weightDisplayY = new EditBox(
                 font,
@@ -117,7 +117,7 @@ public class ClientConfigScreen extends Screen {
                 35,
                 25,
                 Component.translatable("menu.overstuffed.weightyoffset"));
-        this.weightDisplayY.setValue(OverstuffedClientConfig.weightDisplayYOffSet.get()+"");
+        this.weightDisplayY.setValue(GluttonousClientConfig.weightDisplayYOffSet.get()+"");
 
         this.stuffedHudXOffset=new EditBox(
                 font,
@@ -126,7 +126,7 @@ public class ClientConfigScreen extends Screen {
                 35,
                 25,
                 Component.translatable("menu.overstuffed.calxoffset"));
-        this.stuffedHudXOffset.setValue(OverstuffedClientConfig.stuffedHudXOffset.get()+"");
+        this.stuffedHudXOffset.setValue(GluttonousClientConfig.stuffedHudXOffset.get()+"");
 
         this.stuffedHudYOffset = new EditBox(
                 font,
@@ -135,10 +135,13 @@ public class ClientConfigScreen extends Screen {
                 35,
                 25,
                 Component.translatable("menu.overstuffed.calyoffset"));
-        this.stuffedHudYOffset.setValue(OverstuffedClientConfig.stuffedHudYOffset.get()+"");
+        this.stuffedHudYOffset.setValue(GluttonousClientConfig.stuffedHudYOffset.get()+"");
+
+        this.stuffedHudXOffset.setHint(Component.translatable("menu.gluttonousgrowth.calmovementwarning"));
+        this.stuffedHudYOffset.setHint(Component.translatable("menu.gluttonousgrowth.calmovementwarning"));
 
         this.debugView= new ToggleButton(screenW/2-50,140,100,20,
-                Component.translatable("message.overstuffed.debugbutton"), OverstuffedClientConfig.debugView.get());
+                Component.translatable("message.overstuffed.debugbutton"), GluttonousClientConfig.debugView.get());
         this.debugView.setLocked(false);
 
         ArrayList<SwapScreenButton> menuButtons= ModMenus.returnScreenButtons(centerW,25);
@@ -262,23 +265,23 @@ public class ClientConfigScreen extends Screen {
         else{
             if(Minecraft.getInstance().player!=null)
             {
-                OverstuffedClientConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
-                OverstuffedClientConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
+                GluttonousClientConfig.weightDisplayXOffset.set(this.getEditBoxInt("weight", true));
+                GluttonousClientConfig.weightDisplayYOffSet.set(this.getEditBoxInt("weight", false));
 
-                OverstuffedClientConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
-                OverstuffedClientConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
+                GluttonousClientConfig.stuffedHudXOffset.set(this.getEditBoxInt("stuffed",true));
+                GluttonousClientConfig.stuffedHudYOffset.set(this.getEditBoxInt("stuffed",false));
             }
 
         }
 
-        OverstuffedClientConfig.digestiveSoundsVolume.set(digestiveSoundVolume.getValue());
-        OverstuffedClientConfig.burpFrequency.set(burpFrequency.getValue());
-        OverstuffedClientConfig.gurgleFrequency.set(gurgleFrequency.getValue());
-        OverstuffedClientConfig.debugView.set(debugView.getSetting());
+        GluttonousClientConfig.digestiveSoundsVolume.set(digestiveSoundVolume.getValue());
+        GluttonousClientConfig.burpFrequency.set(burpFrequency.getValue());
+        GluttonousClientConfig.gurgleFrequency.set(gurgleFrequency.getValue());
+        GluttonousClientConfig.debugView.set(debugView.getSetting());
 
 
 
-        OverstuffedClientConfig.saveConfig();
+        GluttonousClientConfig.saveConfig();
 
         // Call last in case it interferes with the override
         super.onClose();

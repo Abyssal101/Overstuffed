@@ -40,7 +40,7 @@ public class setHitbox {
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
         // First create the base command
-        LiteralArgumentBuilder<CommandSourceStack> baseCommand = Commands.literal("overstuffed");
+        LiteralArgumentBuilder<CommandSourceStack> baseCommand = Commands.literal("ggconfig");
 
         // Then create the setHitbox subcommand
         LiteralArgumentBuilder<CommandSourceStack> hitboxCommand = Commands.literal("setScale");

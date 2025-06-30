@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.lang.reflect.Field;
 
-public class OverstuffedWorldConfig {
+public class GluttonousWorldConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
 
     static {
@@ -33,7 +33,7 @@ public class OverstuffedWorldConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> absCalCap;
     public static ForgeConfigSpec.ConfigValue<Integer> calCapIncrement;
 
-
+    public static ForgeConfigSpec.ConfigValue<Double> calConvertedPercentage;
     public static ForgeConfigSpec.ConfigValue<Double> calorieGainMultipler;
     public static ForgeConfigSpec.ConfigValue<Integer> calToWeightRate;
 
@@ -51,6 +51,8 @@ public class OverstuffedWorldConfig {
 
 
     public static ForgeConfigSpec.ConfigValue<Integer> capacityIncreaseInterval;
+    public static ForgeConfigSpec.ConfigValue<Integer> intervalIncrease;
+
 
     public static ForgeConfigSpec.ConfigValue<Double> blocksPerHeart;
     public static ForgeConfigSpec.ConfigValue<Double> absMaxHitboxIncrease;
@@ -101,7 +103,7 @@ public class OverstuffedWorldConfig {
                 .define("golden_diet_delay", 20);
         maxWeightLossTime=builder
                 .comment("This effects all weight loss(except golden diet) as the time a player takes to lose weight is subtracted from this number based off their exhaustion level and a multipler. Effectively, higher number means all players lose weight slower")
-                .define("max_weight_loss_time", 200);
+                .define("max_weight_loss_time", 600);
         baseCalCap=builder
                 .comment("The calorie capacity a player will spawn with")
                 .define("base_cal_cap", 40);
@@ -111,13 +113,17 @@ public class OverstuffedWorldConfig {
         calCapIncrement=builder
                 .comment("The amount a players cal cap increments when they reach their next calorie lost interval")
                 .define("cal_cap_increment", 10);
+        calConvertedPercentage=builder
+                .comment("The percentage of a players calories that convert to weight every conversion event")
+                .define("cal_convert_percent", 0.25);
+
        calorieGainMultipler=builder
                .comment("The base calorie multiplier a player spawns with")
                .define("base_cal_gain_multiplier", 1.0);
 
         calToWeightRate=builder
                 .comment("The amount of calories that equates to one weight")
-                .define("cal_weight_rate", 7);
+                .define("cal_weight_rate", 3);
 
         modMetabolismThres=builder
                 .comment("The percentage threshold that determines when moderate metabolism when a player spawns in")
@@ -137,14 +143,17 @@ public class OverstuffedWorldConfig {
 
         minCalClearDelay=builder
                 .comment("The min delay in ticks for how long it takes for the players calories to clear")
-                .define("min_cal_clear_delay", 20*10);
+                .define("min_cal_clear_delay", 20*5);
         maxCalClearDelay=builder
-                .comment("The max delay in ticks for how long it takes for the players calories to clear")
-                .define("max_cal_clear_delay", 20*60*2);
+                .comment("The max delay in ticks for how long it takes for the players calories to clear. Adjusting this effects the time gained from all food items")
+                .define("max_cal_clear_delay", 20*30);
 
         capacityIncreaseInterval=builder
                 .comment("The base interval for losing calories between increases to a players capacity")
                 .define("cap_increases_interval", 30);
+        intervalIncrease=builder
+                .comment("The amount the threshold of increasing a players calorie capacity is increased by")
+                .define("interval_increase", 30);
 
         blocksPerHeart=builder
                 .comment("The size of a hitbox increase to add half a heart to a player")
@@ -157,7 +166,7 @@ public class OverstuffedWorldConfig {
 
     public static void saveConfig()
     {
-        for(Field f :OverstuffedWorldConfig.class.getDeclaredFields()){
+        for(Field f : GluttonousWorldConfig.class.getDeclaredFields()){
             try {
                 // Check if the field is a ConfigValue
                 if (ForgeConfigSpec.ConfigValue.class.isAssignableFrom(f.getType())) {

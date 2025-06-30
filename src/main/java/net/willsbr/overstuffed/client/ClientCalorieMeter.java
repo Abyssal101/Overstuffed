@@ -1,13 +1,13 @@
 package net.willsbr.overstuffed.client;
 
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 
 public class ClientCalorieMeter {
 
     //Each player HAS THIS DATA ON A SERVER
     private static int currentCalories;
 
-    private static int currentMax= OverstuffedWorldConfig.baseCalCap.get();
+    private static int currentMax= GluttonousWorldConfig.baseCalCap.get();
 
     private static int currentLost;
     private static int interval;

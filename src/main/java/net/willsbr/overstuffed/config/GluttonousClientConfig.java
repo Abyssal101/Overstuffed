@@ -1,12 +1,11 @@
 package net.willsbr.overstuffed.config;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.SyncClientSettingsC2S;
 
-public class OverstuffedClientConfig {
+public class GluttonousClientConfig {
     public static final ForgeConfigSpec GENERAL_SPEC;
 
     static {

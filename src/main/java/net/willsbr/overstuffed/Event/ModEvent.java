@@ -21,14 +21,14 @@ import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.Command.figuraNBTUpdateCommand;
 import net.willsbr.overstuffed.Effects.ModEffects;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettings;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeter;
 import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBar;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncAllSettingsPollS2C;
 import net.willsbr.overstuffed.networking.packet.StuffedPackets.CalorieMeterDelaySyncPacketS2C;
@@ -41,7 +41,7 @@ import net.willsbr.overstuffed.sound.ModSounds;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Mod.EventBusSubscriber(modid= OverStuffed.MODID)
+@Mod.EventBusSubscriber(modid= GluttonousGrowth.MODID)
 public class ModEvent {
 
     @SubscribeEvent
@@ -58,20 +58,20 @@ public class ModEvent {
         if(event.getObject() instanceof Player)
         {
             if(!event.getObject().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "properties"), new PlayerCalorieMeterProvider());
+                event.addCapability(new ResourceLocation(GluttonousGrowth.MODID, "calmeter"), new PlayerCalorieMeterProvider());
             }
             if(!event.getObject().getCapability(CPMDataProvider.PLAYER_CPM_DATA).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "configsettings"), new CPMDataProvider());
+                event.addCapability(new ResourceLocation(GluttonousGrowth.MODID, "configsettings"), new CPMDataProvider());
             }
             if(!event.getObject().getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "playerserversettings"), new PlayerServerSettingsProvider());
+                event.addCapability(new ResourceLocation(GluttonousGrowth.MODID, "playerserversettings"), new PlayerServerSettingsProvider());
             }
             if(!event.getObject().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "weightbar"), new PlayerWeightBarProvider());
+                event.addCapability(new ResourceLocation(GluttonousGrowth.MODID, "weightbar"), new PlayerWeightBarProvider());
 
             }
             if(!event.getObject().getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).isPresent()) {
-                event.addCapability(new ResourceLocation(OverStuffed.MODID, "overstuffedtoggles"), new PlayerUnlocksProvider());
+                event.addCapability(new ResourceLocation(GluttonousGrowth.MODID, "unlocks"), new PlayerUnlocksProvider());
             }
         }
     }
@@ -224,9 +224,9 @@ public class ModEvent {
                         if (foodCals != 0)
                         {
                             weightBar.addChangetoQueue(foodCals);
-                            int checkDelay = foodCals * OverstuffedWorldConfig.multiplierForWGDelay.get();
-                            if (checkDelay > OverstuffedWorldConfig.maxWGTickDelay.get()) {
-                                weightBar.setWeightUpdateDelay(OverstuffedWorldConfig.maxWGTickDelay.get());
+                            int checkDelay = foodCals * GluttonousWorldConfig.multiplierForWGDelay.get();
+                            if (checkDelay > GluttonousWorldConfig.maxWGTickDelay.get()) {
+                                weightBar.setWeightUpdateDelay(GluttonousWorldConfig.maxWGTickDelay.get());
                             } else {
                                 weightBar.setWeightUpdateDelay((int) (checkDelay * weightBar.getWeightUpdateDelayModifier()));
                                 //weightBar.setWeightUpdateDelay(foodCals);
@@ -251,7 +251,7 @@ public class ModEvent {
                 }
 
                 //THE DREADED LOSE WEIGHT FUNCTIONALITY!
-                if (event.player.getFoodData().getFoodLevel() < OverstuffedWorldConfig.thresholdLoseWeight.get()
+                if (event.player.getFoodData().getFoodLevel() < GluttonousWorldConfig.thresholdLoseWeight.get()
                         || event.player.hasEffect(ModEffects.GOLDEN_DIET.get())) {
 
                     if (weightBar.getSavedTickforWeightLoss() == -1)
@@ -259,12 +259,18 @@ public class ModEvent {
                         weightBar.setSavedTickforWeightLoss(event.player.tickCount);
                         if ((event.player.hasEffect(ModEffects.GOLDEN_DIET.get())))
                         {
-                            weightBar.setWeightLossDelay(OverstuffedWorldConfig.goldenDietTickDelay.get());
+                            weightBar.setWeightLossDelay(GluttonousWorldConfig.goldenDietTickDelay.get());
                         }
                         else
                         {
+                            //this calculation effectively asys that for your exhaustion at the moment you end up losing weight faster
                             int calculated = (int) ((event.player.getFoodData().getExhaustionLevel() * 5) * weightBar.getWeightUpdateDelayModifier());
-                            calculated = OverstuffedWorldConfig.maxWeightLossTime.get() - calculated;
+
+                            //Max weight loss is some constant, currently 400 ticks meaning that if you were idling and 1 one,
+                            //you would lose that 1 weight in 20 seconds
+                            calculated=(int)(calculated*(1.0+weightBar.calculateCurrentWeightPercentage()));
+
+                            calculated = GluttonousWorldConfig.maxWeightLossTime.get() - calculated;
                             calculated = Math.max(5, calculated);
                             weightBar.setWeightLossDelay(calculated);
                         }
@@ -274,7 +280,7 @@ public class ModEvent {
                         weightBar.loseWeight();
                         //this way you can lose more faster, maybe I should set that to some number that gets added.
                         if (event.player.hasEffect(ModEffects.GOLDEN_DIET.get()) &&
-                                event.player.getFoodData().getFoodLevel() < OverstuffedWorldConfig.thresholdLoseWeight.get())
+                                event.player.getFoodData().getFoodLevel() < GluttonousWorldConfig.thresholdLoseWeight.get())
                         {
                             weightBar.loseWeight();
                         }
@@ -293,18 +299,25 @@ public class ModEvent {
             if(calorieMeter.checkClearCalories(event.player.tickCount))
             {
 
-                int totalCalories=calorieMeter.getCurrentCalories();
+                double conversionPercentage=GluttonousWorldConfig.calConvertedPercentage.get();
+                conversionPercentage=Math.min(conversionPercentage,1);
+                conversionPercentage=Math.max(conversionPercentage,0);
+                int totalCalories=(int)(calorieMeter.getCurrentCalories()*conversionPercentage);
+
+                //Makes it so that at a minimum you gain 3 calories, however that won't do much for you because
+                //ofn the conversion rate.
+                totalCalories=Math.max(3,totalCalories);
                 double max=calorieMeter.getMaxCalories();
                 //20 is hardcoded in base, so it'll be hard-coded here too!
-                int caloriesLostToHunger=(20-event.player.getFoodData().getFoodLevel())*OverstuffedWorldConfig.calToHungerRate.get();
+                int caloriesLostToHunger=(20-event.player.getFoodData().getFoodLevel())* GluttonousWorldConfig.calToHungerRate.get();
 
                 if((totalCalories/max)>calorieMeter.getSlowMetabolismThres())
                 {
-                    totalCalories=(int)(totalCalories*OverstuffedWorldConfig.slowMetabolismMultiplier.get());
+                    totalCalories=(int)(totalCalories* GluttonousWorldConfig.slowMetabolismMultiplier.get());
                 }
                 else if((totalCalories/max)>calorieMeter.getModMetabolismThres())
                 {
-                    totalCalories=(int)(totalCalories*OverstuffedWorldConfig.modMetabolismMultiplier.get());
+                    totalCalories=(int)(totalCalories* GluttonousWorldConfig.modMetabolismMultiplier.get());
                 }
 
                 totalCalories=totalCalories-caloriesLostToHunger;
@@ -320,25 +333,38 @@ public class ModEvent {
                 //handles upgrading the max cap if you go past that interval
                 if(calorieMeter.getCalLost()>=calorieMeter.getInterval())
                 {
-                    calorieMeter.setMaxCalories(Math.min(calorieMeter.getMaxCalories()+OverstuffedWorldConfig.calCapIncrement.get()
-                    ,OverstuffedWorldConfig.absCalCap.get()));
+                    calorieMeter.setMaxCalories(Math.min(calorieMeter.getMaxCalories()+ GluttonousWorldConfig.calCapIncrement.get()
+                    , GluttonousWorldConfig.absCalCap.get()));
+                    calorieMeter.setInterval(calorieMeter.getInterval()+ GluttonousWorldConfig.intervalIncrease.get());
                     calorieMeter.setCalLost(0);
                 }
 
+                //This is the when we add our calories to the weightbar properly
                 if(totalCalories>0)
                 {
                     calorieMeter.addCalLost(totalCalories);
                     int finalTotalCalories = totalCalories;
                     event.player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                        weightBar.addWeightChanges(finalTotalCalories / OverstuffedWorldConfig.calToWeightRate.get());
+                        weightBar.addWeightChanges(finalTotalCalories / GluttonousWorldConfig.calToWeightRate.get());
                     });
                 }
+                //All previous code modified totalCalories, this is bringing the removal to
+                //mimic the minimum of 3 calories being removed, basically I dont want you to be stuck at 1 weight
+                //because the percentage removed is so small.
+                int calRemoved=(int)(calorieMeter.getCurrentCalories()*conversionPercentage);
+                if(calRemoved<=3)
+                {
+                    calRemoved=3;
+                }
 
-                calorieMeter.setCurrentCalories(0);
-                calorieMeter.setFoodEatenTick(-1);
-                calorieMeter.setCalClearDelay(-1);
+                calorieMeter.setCurrentCalories(calorieMeter.getCurrentCalories()-calRemoved);
+                calorieMeter.setFoodEatenTick((calorieMeter.getCurrentCalories()!=0) ? event.player.tickCount : 0);
 
-                ModMessages.sendToPlayer(new calIntervalUpdateS2CPacket(calorieMeter.getCalLost(),calorieMeter.getInterval()),(ServerPlayer)event.player);
+                int newDelay=Math.max(GluttonousWorldConfig.minCalClearDelay.get(),
+                        (int)(((double)calorieMeter.getCurrentCalories()/calorieMeter.getMaxCalories())*GluttonousWorldConfig.maxCalClearDelay.get()));
+                calorieMeter.setCalClearDelay(newDelay);
+
+                ModMessages.sendToPlayer(new calIntervalUpdateS2CPacket(calorieMeter.getCalLost(),calorieMeter.getInterval(),calorieMeter.getMaxCalories()),(ServerPlayer)event.player);
 
                 ModSounds.playBurp(event.player);
 
@@ -355,10 +381,11 @@ public class ModEvent {
 
     public static void weightBarEffects(TickEvent.PlayerTickEvent event,PlayerServerSettings serverSettings, PlayerWeightBar weightBar, int xOf5, int lastWeightStage)
     {
+            ServerPlayer player = (ServerPlayer) event.player;
             if(!serverSettings.weightEffects())
             {
-                PlayerWeightBar.clearModifiers(event.player,weightBar);
-                PlayerWeightBar.clearScaling(event.player,weightBar);
+                PlayerWeightBar.clearModifiers(player,weightBar);
+                PlayerWeightBar.clearScaling(player,weightBar);
             }
             else
             {
@@ -370,21 +397,25 @@ public class ModEvent {
                         //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
                         //Maybe could make it just this, but slightly more effcient I think?
 
-                        PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
-
+                        PlayerWeightBar.addCorrectModifier(player);
                         //handles adding the correct hitbox changes
-                        PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+                        PlayerWeightBar.addCorrectScaling(player);
                     }
                 }
                 else
                 {
-                    PlayerWeightBar.addCorrectModifier((ServerPlayer)event.player);
+                    PlayerWeightBar.addCorrectModifier(player);
                     //handles adding the correct hitbox changes
                     if(serverSettings.isHitboxScalingEnabled())
                     {
-                        PlayerWeightBar.addCorrectScaling((ServerPlayer)event.player);
+                        PlayerWeightBar.addCorrectScaling(player);
 
                     }
+                }
+
+                if(player.getHealth()>player.getMaxHealth())
+                {
+                    player.setHealth(player.getMaxHealth());
                 }
 
             }
@@ -431,6 +462,7 @@ public class ModEvent {
             {
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                     PlayerWeightBar.clearModifiers(player,weightBar);
+
                 });
             }
         }

@@ -14,7 +14,7 @@ import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
 
@@ -42,7 +42,7 @@ public class setWGMethod {
                 else  if(input.toLowerCase().contentEquals("true"))
                 {
                     player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
-                        int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.minWeight.get())/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.minWeight.get())*100);
+                        int calculatedPercentage=(int)(((double) ClientWeightBarData.getPlayerWeight()- GluttonousClientConfig.minWeight.get())/(GluttonousClientConfig.maxWeight.get()- GluttonousClientConfig.minWeight.get())*100);
                         int xOf5=calculatedPercentage/20;
                         weightBar.setLastWeightStage(xOf5);
                         ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),(ServerPlayer) player);

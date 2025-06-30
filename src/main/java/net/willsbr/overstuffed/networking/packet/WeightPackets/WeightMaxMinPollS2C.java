@@ -5,7 +5,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 
 import java.util.function.Supplier;
@@ -33,8 +33,8 @@ public class WeightMaxMinPollS2C {
         context.enqueueWork(() ->
         {
             //here we are on the client!
-            int max= OverstuffedClientConfig.getMaxWeight();
-            int min= OverstuffedClientConfig.getMinWeight();
+            int max= GluttonousClientConfig.getMaxWeight();
+            int min= GluttonousClientConfig.getMinWeight();
             LocalPlayer player= Minecraft.getInstance().player;
             player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 weightBar.setMaxWeight(max);

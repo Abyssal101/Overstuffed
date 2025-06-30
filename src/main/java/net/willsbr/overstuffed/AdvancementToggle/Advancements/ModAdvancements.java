@@ -1,17 +1,5 @@
 package net.willsbr.overstuffed.AdvancementToggle.Advancements;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.KilledTrigger;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryManager;
-import net.willsbr.overstuffed.OverStuffed;
-
 public class ModAdvancements {
 
         //public static DeferredRegister<Advancement> ADVANCEMENTS = DeferredRegister.create(RegistryManager.VANILLA.getRegistry(), OverStuffed.MODID);

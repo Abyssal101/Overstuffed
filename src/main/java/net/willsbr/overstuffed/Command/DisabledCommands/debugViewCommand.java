@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMDataProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 public class debugViewCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
@@ -29,10 +29,10 @@ public class debugViewCommand {
         player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
 
             player.sendSystemMessage(Component.literal("Current Config CPM Layers"));
-            player.sendSystemMessage(Component.literal("Current Stuffed Layer: "+ OverstuffedClientConfig.stuffedLayerConfigEntry.get()));
-            player.sendSystemMessage(Component.literal("Last Stuffed Layer: "+ OverstuffedClientConfig.lastStuffedLayer));
-            player.sendSystemMessage(Component.literal("Current Weight Layer: "+ OverstuffedClientConfig.weightLayerConfigEntry.get()));
-            player.sendSystemMessage(Component.literal("Last Weight Layer: "+ OverstuffedClientConfig.lastWeightLayer));
+            player.sendSystemMessage(Component.literal("Current Stuffed Layer: "+ GluttonousClientConfig.stuffedLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Stuffed Layer: "+ GluttonousClientConfig.lastStuffedLayer));
+            player.sendSystemMessage(Component.literal("Current Weight Layer: "+ GluttonousClientConfig.weightLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Weight Layer: "+ GluttonousClientConfig.lastWeightLayer));
 
             player.sendSystemMessage(Component.literal("-------------------------------"));
         });

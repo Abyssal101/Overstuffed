@@ -5,12 +5,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
-import net.willsbr.overstuffed.AdvancementToggle.PlayerUnlocksProvider;
+import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.StuffedBar.PlayerCalorieMeterProvider;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.sound.ModSounds;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class OverfullFoodC2SPacket {
@@ -41,32 +43,58 @@ public class OverfullFoodC2SPacket {
                     {
                         player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter ->
                         {
-                            ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
-                            //This packet should NEVER be sent when the food isn't edible.
+                            player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
-                            int calculatedCalories=lastFood.getItem().getFoodProperties().getNutrition();
-                            calculatedCalories=calculatedCalories+(int)(calculatedCalories*lastFood.getItem().getFoodProperties().getSaturationModifier());
-                            calculatedCalories=(int)(calculatedCalories*calorieMeter.getCalorieGainMultipler());
-                            calorieMeter.addCalories(calculatedCalories);
+                                AtomicBoolean stageGain=new AtomicBoolean(false);
 
-                            //only does it on the first time it's been cosnumed
-                             if(calorieMeter.getFoodEatenTick()==-1)
-                            {
-                                calorieMeter.setFoodEatenTick(player.tickCount);
-                                calorieMeter.setCalClearDelay(OverstuffedWorldConfig.minCalClearDelay.get());
-                            }
-                            else
-                            {
-                                int timeToAdd=(int)(((double)calculatedCalories/calorieMeter.getMaxCalories()
-                                *(OverstuffedWorldConfig.maxCalClearDelay.get()-OverstuffedWorldConfig.minCalClearDelay.get())));
-                                calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
-                            }
+                                player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                                    stageGain.set(serverSettings.stageBasedGain());
+                                });
+                                ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
+                                //This packet should NEVER be sent when the food isn't edible.
 
-                            ModSounds.playBurp(player);
-                            ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
-                                    calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
-                                    calorieMeter.getSlowMetabolismThres()),player);
-                            ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),player);
+                                int calculatedCalories=lastFood.getItem().getFoodProperties().getNutrition();
+                                calculatedCalories=calculatedCalories+(int)(calculatedCalories*lastFood.getItem().getFoodProperties().getSaturationModifier());
+                                calculatedCalories=(int)(calculatedCalories*calorieMeter.getCalorieGainMultipler());
+
+                                double calReductionFromWeight=0;
+
+                                if(stageGain.get())
+                                {
+                                    double currentStagePercentage=weightBar.calculateCurrentWeightStage()*(100.0/weightBar.getTotalStages());
+                                    calReductionFromWeight=(1-currentStagePercentage*0.5);
+                                }
+                                else
+                                {
+                                    calReductionFromWeight=(1-weightBar.calculateCurrentWeightPercentage()*0.5);
+                                }
+
+
+                                calculatedCalories=(int)(calculatedCalories*calReductionFromWeight);
+                                calculatedCalories=Math.max(1,calculatedCalories);
+
+                                calorieMeter.addCalories(calculatedCalories);
+
+                                //only does it on the first time it's been cosnumed
+                                if(calorieMeter.getFoodEatenTick()==-1)
+                                {
+                                    calorieMeter.setFoodEatenTick(player.tickCount);
+                                    calorieMeter.setCalClearDelay(GluttonousWorldConfig.minCalClearDelay.get());
+                                }
+                                else
+                                {
+                                    int timeToAdd=(int)(((double)calculatedCalories/calorieMeter.getMaxCalories()
+                                            *(GluttonousWorldConfig.maxCalClearDelay.get()- GluttonousWorldConfig.minCalClearDelay.get())));
+                                    calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
+                                }
+
+                                ModSounds.playBurp(player);
+                                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
+                                        calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
+                                        calorieMeter.getSlowMetabolismThres()),player);
+                                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),player);
+                            });
+
                         });
                     }
                 }

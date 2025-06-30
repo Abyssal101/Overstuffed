@@ -1,21 +1,14 @@
 package net.willsbr.overstuffed.Menu.Buttons;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.willsbr.overstuffed.OverStuffed;
-import org.jetbrains.annotations.Nullable;
+import net.willsbr.overstuffed.GluttonousGrowth;
 
 import javax.annotation.Nonnull;
 
@@ -28,7 +21,7 @@ public class ToggleButton extends AbstractButton {
 
     private String tooltipText;
 
-    private static final ResourceLocation lockedIcon = new ResourceLocation(OverStuffed.MODID, "textures/config/lockedicon.png");
+    private static final ResourceLocation lockedIcon = new ResourceLocation(GluttonousGrowth.MODID, "textures/config/lockedicon.png");
 
     public ToggleButton(int pX, int pY, int pWidth, int pHeight, String pMessage, boolean startVal) {
         super(pX, pY, pWidth, pHeight, Component.literal(pMessage + ":"));

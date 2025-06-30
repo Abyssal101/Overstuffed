@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -38,7 +38,7 @@ public class setMinWeightDataSyncPacketS2C {
         NetworkEvent.Context context= supplier.get();
         context.enqueueWork(() ->
         {
-            OverstuffedClientConfig.minWeight.set(minWeight);
+            GluttonousClientConfig.minWeight.set(minWeight);
             LocalPlayer player= Minecraft.getInstance().player;
             Objects.requireNonNull(player).getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 weightBar.setMinWeight(minWeight);

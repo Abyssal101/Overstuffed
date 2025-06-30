@@ -19,7 +19,7 @@ public class setMinWeightCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed").then(Commands.literal("setMinWeight").then(Commands.argument("Minimum Weight", IntegerArgumentType.integer()).executes((p_138618_) -> {
+        pDispatcher.register(Commands.literal("ggconfig").then(Commands.literal("setMinWeight").then(Commands.argument("Minimum Weight", IntegerArgumentType.integer()).executes((p_138618_) -> {
             return setMinWeight(p_138618_.getSource(),p_138618_.getSource().getPlayer(), IntegerArgumentType.getInteger(p_138618_,"Minimum Weight"));
         }))));
     }

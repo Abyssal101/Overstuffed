@@ -30,7 +30,7 @@ import net.willsbr.overstuffed.Command.DisabledCommands.SetLayer;
 import net.willsbr.overstuffed.Command.DisabledCommands.debugViewCommand;
 import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.Renderer.ScaleBER;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.overstuffed.client.HudOverlay;
@@ -41,7 +41,7 @@ import net.willsbr.overstuffed.util.KeyBinding;
 import net.willsbr.overstuffed.util.ModTags;
 
 public class ClientEvents {
-    @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid= GluttonousGrowth.MODID,value= Dist.CLIENT)
     public static class ClientForgeEvents
     {
         @SubscribeEvent
@@ -414,7 +414,7 @@ public class ClientEvents {
             registerCommands(event);
         }
     }
-    @Mod.EventBusSubscriber(modid= OverStuffed.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid= GluttonousGrowth.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents
     {
         @SubscribeEvent
@@ -425,7 +425,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAbove(VanillaGuiOverlay.FOOD_LEVEL.id(), "stuffedbar", HudOverlay.HUD_STUFFEDBAR);
+            event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "stuffedbar", HudOverlay.HUD_STUFFEDBAR);
         }
 
         @SubscribeEvent

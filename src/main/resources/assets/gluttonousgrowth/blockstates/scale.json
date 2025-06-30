@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "gluttonousgrowth:block/scale"
+    },
+    "facing=south": {
+      "model": "gluttonousgrowth:block/scale",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gluttonousgrowth:block/scale",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "gluttonousgrowth:block/scale",
+      "y": 90
+    }
+  }
+}

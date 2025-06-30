@@ -18,7 +18,7 @@ public class setMaxWeightCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed").then(Commands.literal("setMaxWeight").then(Commands.argument("Max Weight", IntegerArgumentType.integer()).executes((p_138618_) -> {
+        pDispatcher.register(Commands.literal("ggconfig").then(Commands.literal("setMaxWeight").then(Commands.argument("Max Weight", IntegerArgumentType.integer()).executes((p_138618_) -> {
             return setMaxWeight(p_138618_.getSource(),p_138618_.getSource().getPlayer(), IntegerArgumentType.getInteger(p_138618_,"Max Weight"));
         }))));
     }

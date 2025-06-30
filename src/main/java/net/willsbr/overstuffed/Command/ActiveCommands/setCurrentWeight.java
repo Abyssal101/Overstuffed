@@ -21,7 +21,7 @@ public class setCurrentWeight {
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
         pDispatcher.register(
-                Commands.literal("overstuffed")
+                Commands.literal("ggconfig")
                 .then(Commands.literal("setCurrentWeight")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.argument("target", EntityArgument.players())

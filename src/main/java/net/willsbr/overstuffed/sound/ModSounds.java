@@ -1,21 +1,16 @@
 package net.willsbr.overstuffed.sound;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.AudioPackets.FilteredSoundS2C;
 
@@ -24,7 +19,7 @@ import java.util.List;
 
 public class ModSounds {
 
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS =DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, OverStuffed.MODID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS =DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, GluttonousGrowth.MODID);
 
     //registering individual sounds
     public static final RegistryObject<SoundEvent> BURP1 = registerSoundEvent("burp1");
@@ -67,7 +62,7 @@ public class ModSounds {
 
     public static RegistryObject<SoundEvent> registerSoundEvent(String name)
     {
-        ResourceLocation id = new ResourceLocation(OverStuffed.MODID, name);
+        ResourceLocation id = new ResourceLocation(GluttonousGrowth.MODID, name);
 
         //1.19.2 Version
         //return SOUND_EVENTS.register(name, () -> new SoundEvent.createVariableRangeEvent(id));

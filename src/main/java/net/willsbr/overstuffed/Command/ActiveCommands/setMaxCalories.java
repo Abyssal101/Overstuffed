@@ -18,7 +18,7 @@ public class setMaxCalories {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setWeight.failed"));
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
-        pDispatcher.register(Commands.literal("overstuffed")
+        pDispatcher.register(Commands.literal("ggconfig")
                 .then(Commands.literal("setMaxCalories")
                 .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("maxCal", IntegerArgumentType.integer())

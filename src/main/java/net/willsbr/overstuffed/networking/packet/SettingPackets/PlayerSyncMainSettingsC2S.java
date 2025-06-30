@@ -4,7 +4,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 
 import java.util.function.Supplier;
 

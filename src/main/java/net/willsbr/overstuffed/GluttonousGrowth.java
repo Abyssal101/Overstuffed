@@ -24,27 +24,27 @@ import net.willsbr.overstuffed.Entity.ModEntities;
 import net.willsbr.overstuffed.Item.ModCreativeModeTab;
 import net.willsbr.overstuffed.Item.ModItems;
 import net.willsbr.overstuffed.Menu.ConfigScreen;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.potion.ModPotions;
 import net.willsbr.overstuffed.sound.ModSounds;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
 import org.slf4j.Logger;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(OverStuffed.MODID)
-public class OverStuffed
+@Mod(GluttonousGrowth.MODID)
+public class GluttonousGrowth
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "overstuffed";
+    public static final String MODID = "gluttonousgrowth";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
 
 
-    public OverStuffed()
+    public GluttonousGrowth()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.register(modEventBus);
@@ -63,12 +63,12 @@ public class OverStuffed
         // generate/read config/overstuffed.toml
         ModLoadingContext.get().registerConfig(
                 ModConfig.Type.CLIENT,
-                OverstuffedClientConfig.GENERAL_SPEC,
-                "overstuffed_client.toml");
+                GluttonousClientConfig.GENERAL_SPEC,
+                "gluttonousgrowth_client.toml");
         ModLoadingContext.get().registerConfig(
                 ModConfig.Type.SERVER,
-                OverstuffedWorldConfig.GENERAL_SPEC,
-                "overstuffed_server.toml");
+                GluttonousWorldConfig.GENERAL_SPEC,
+                "gluttonousgrowth_server.toml");
 
         // register ConfigScreen as Config button in Mods list
         ModLoadingContext.get().registerExtensionPoint(

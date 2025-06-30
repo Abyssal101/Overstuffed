@@ -16,9 +16,8 @@ import net.minecraftforge.fml.ModList;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.Menu.Buttons.*;
 import net.willsbr.overstuffed.client.ClientCPMData;
-import net.willsbr.overstuffed.client.ClientCalorieMeter;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.CPMDataC2SPacket;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.PlayerSyncMainSettingsC2S;
@@ -129,7 +128,7 @@ public class ConfigScreen extends Screen {
         playerOutlineWidth=2;
         playerDisplayX=centerW-playerDisplayWidth/2;
         playerDisplayY=50;
-        playerWidth=OverstuffedClientConfig.playerDisplayScale.get();
+        playerWidth= GluttonousClientConfig.playerDisplayScale.get();
 
         headingY=playerDisplayY;
         calorieHeadingX=centerW-100;
@@ -143,7 +142,7 @@ public class ConfigScreen extends Screen {
         // or it will not be displayed properly
 
         //buttons
-        this.stageBasedWeight= new StateButton(weightHeadingX+12,headingY+20*3-5,50,20,Component.translatable("menu.overstuffed.stage"),Component.translatable("menu.overstuffed.granular"),OverstuffedClientConfig.stageGain.get());
+        this.stageBasedWeight= new StateButton(weightHeadingX+12,headingY+20*3-5,50,20,Component.translatable("menu.overstuffed.stage"),Component.translatable("menu.overstuffed.granular"), GluttonousClientConfig.stageGain.get());
         this.stageBasedWeight.setTooltipText(Component.translatable("menu.overstuffed.gaintypetooltip"));
 
         //ALL editbox sizes are based off this first editbox.
@@ -155,7 +154,7 @@ public class ConfigScreen extends Screen {
                 70,
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
-        this.weightLayerEditBox.setValue(OverstuffedClientConfig.weightLayerConfigEntry.get());
+        this.weightLayerEditBox.setValue(GluttonousClientConfig.weightLayerConfigEntry.get());
         this.allEditBoxes.add(this.weightLayerEditBox);
 
         this.calorieLayerEditBox = new EditBox(
@@ -165,7 +164,7 @@ public class ConfigScreen extends Screen {
                 weightLayerEditBox.getWidth(),
                 weightLayerEditBox.getHeight(),
                 Component.translatable("menu.overstuffed.callayerbox"));
-        this.calorieLayerEditBox.setValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get());
+        this.calorieLayerEditBox.setValue(GluttonousClientConfig.stuffedLayerConfigEntry.get());
         this.allEditBoxes.add(this.calorieLayerEditBox);
 
         //ALL editbox sizes are based off this first editbox.
@@ -177,7 +176,7 @@ public class ConfigScreen extends Screen {
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
         //todo make it so that you send the abs cal cap to the client to make this more reliable.
-        this.caloriePreviewEditBox.setHint(Component.translatable("menu.overstuffed.calorierange",""+ OverstuffedWorldConfig.absCalCap.get()).withStyle(ChatFormatting.GRAY));
+        this.caloriePreviewEditBox.setHint(Component.translatable("menu.overstuffed.calorierange",""+ GluttonousWorldConfig.absCalCap.get()).withStyle(ChatFormatting.GRAY));
         this.allEditBoxes.add(this.caloriePreviewEditBox);
 
         this.weightPreviewEditBox = new EditBox(font,
@@ -186,7 +185,7 @@ public class ConfigScreen extends Screen {
                 50,
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
-        this.weightPreviewEditBox.setHint(Component.translatable("menu.overstuffed.weightrange",OverstuffedClientConfig.getMinWeight(),OverstuffedClientConfig.getMaxWeight()).withStyle(ChatFormatting.GRAY));
+        this.weightPreviewEditBox.setHint(Component.translatable("menu.overstuffed.weightrange", GluttonousClientConfig.getMinWeight(), GluttonousClientConfig.getMaxWeight()).withStyle(ChatFormatting.GRAY));
         this.allEditBoxes.add(this.weightPreviewEditBox);
 
         this.totalStagesEditBox = new EditBox(
@@ -196,7 +195,7 @@ public class ConfigScreen extends Screen {
                 20,
                 15,
                 Component.translatable("menu.overstuffed.stages"));
-        this.totalStagesEditBox.setValue(OverstuffedClientConfig.totalStages.get()+"");
+        this.totalStagesEditBox.setValue(GluttonousClientConfig.totalStages.get()+"");
         this.allEditBoxes.add(this.totalStagesEditBox);
 
 
@@ -275,8 +274,8 @@ public class ConfigScreen extends Screen {
             try
             {
                 int previewWeight=Integer.parseInt(weightPreviewEditBox.getValue());
-                previewWeight=Math.max(previewWeight,OverstuffedClientConfig.getMinWeight());
-                previewWeight=Math.min(previewWeight,OverstuffedClientConfig.getMaxWeight());
+                previewWeight=Math.max(previewWeight, GluttonousClientConfig.getMinWeight());
+                previewWeight=Math.min(previewWeight, GluttonousClientConfig.getMaxWeight());
                 ClientCPMData.previewWeight(previewWeight);
             }
             catch(Exception e)
@@ -290,7 +289,7 @@ public class ConfigScreen extends Screen {
             {
                 int previewCal=Integer.parseInt(caloriePreviewEditBox.getValue());
                 previewCal=Math.max(previewCal,0);
-                previewCal=Math.min(previewCal, OverstuffedWorldConfig.absCalCap.get());
+                previewCal=Math.min(previewCal, GluttonousWorldConfig.absCalCap.get());
                 System.out.println("preview cal: "+previewCal);
                 ClientCPMData.previewStuffed(previewCal);
             }
@@ -361,31 +360,31 @@ public class ConfigScreen extends Screen {
     @Override
     public void onClose() {
         // Save mod configuration
-        if(!OverstuffedClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayerEditBox.getValue()))
+        if(!GluttonousClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayerEditBox.getValue()))
         {
-            OverstuffedClientConfig.setWeightLayer(this.weightLayerEditBox.getValue());
+            GluttonousClientConfig.setWeightLayer(this.weightLayerEditBox.getValue());
         }
-        if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.calorieLayerEditBox.getValue()))
+        if(!GluttonousClientConfig.stuffedLayerConfigEntry.get().contentEquals(this.calorieLayerEditBox.getValue()))
         {
-            OverstuffedClientConfig.setStuffedLayer((this.calorieLayerEditBox.getValue()));
+            GluttonousClientConfig.setStuffedLayer((this.calorieLayerEditBox.getValue()));
         }
         if(ModList.get().isLoaded("cpm") && Minecraft.getInstance().player!=null && ClientCPMData.getPlayersAPI()!=null)
         {
 
-            ModMessages.sendToServer(new CPMDataC2SPacket(OverstuffedClientConfig.stuffedLayerConfigEntry.get(), OverstuffedClientConfig.weightLayerConfigEntry.get(),
+            ModMessages.sendToServer(new CPMDataC2SPacket(GluttonousClientConfig.stuffedLayerConfigEntry.get(), GluttonousClientConfig.weightLayerConfigEntry.get(),
                     ClientCPMData.getTotalStuffedFrames(),ClientCPMData.getTotalWeightFrames()));
         }
-        OverstuffedClientConfig.stageGain.set(stageBasedWeight.getSetting());
-        OverstuffedClientConfig.totalStages.set(Integer.parseInt(totalStagesEditBox.getValue()));
-        OverstuffedClientConfig.playerDisplayScale.set(playerWidth);
+        GluttonousClientConfig.stageGain.set(stageBasedWeight.getSetting());
+        GluttonousClientConfig.totalStages.set(Integer.parseInt(totalStagesEditBox.getValue()));
+        GluttonousClientConfig.playerDisplayScale.set(playerWidth);
 
         //OverstuffedConfig.setSetting(1, momentum.getSetting());
-        OverstuffedClientConfig.saveConfig();
+        GluttonousClientConfig.saveConfig();
 
         if(Minecraft.getInstance().player!=null)
         {
-            ModMessages.sendToServer(new PlayerSyncMainSettingsC2S(OverstuffedClientConfig.stageGain.get(),
-                    OverstuffedClientConfig.weightEffects.get()));
+            ModMessages.sendToServer(new PlayerSyncMainSettingsC2S(GluttonousClientConfig.stageGain.get(),
+                    GluttonousClientConfig.weightEffects.get()));
         }
 
         CPMData.checkIfUpdateCPM("weight");

@@ -1,11 +1,10 @@
 package net.willsbr.overstuffed.networking.packet;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 import java.util.function.Supplier;
 
@@ -25,13 +24,13 @@ public class SyncClientSettingsC2S {
 
 
     public SyncClientSettingsC2S(){
-        this.weightEffects=OverstuffedClientConfig.weightEffects.get();
-        this.stageBased=OverstuffedClientConfig.stageGain.get();
-        this.burpFrequency=OverstuffedClientConfig.burpFrequency.get();
-        this.gurgleFrequency=OverstuffedClientConfig.gurgleFrequency.get();
-        this.maxHitboxWidth=OverstuffedClientConfig.maxHitboxWidth.get();
-        this.hitboxScaling=OverstuffedClientConfig.hitBoxScalingEnabled.get();
-        this.totalStages=OverstuffedClientConfig.totalStages.get();
+        this.weightEffects= GluttonousClientConfig.weightEffects.get();
+        this.stageBased= GluttonousClientConfig.stageGain.get();
+        this.burpFrequency= GluttonousClientConfig.burpFrequency.get();
+        this.gurgleFrequency= GluttonousClientConfig.gurgleFrequency.get();
+        this.maxHitboxWidth= GluttonousClientConfig.maxHitboxWidth.get();
+        this.hitboxScaling= GluttonousClientConfig.hitBoxScalingEnabled.get();
+        this.totalStages= GluttonousClientConfig.totalStages.get();
 
     }
 

@@ -1,7 +1,6 @@
 package net.willsbr.overstuffed.ServerPlayerSettings;
 
 import net.minecraft.nbt.CompoundTag;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
 
 public class PlayerServerSettings {
 

@@ -2,8 +2,8 @@ package net.willsbr.overstuffed.client;
 
 import com.tom.cpm.api.IClientAPI;
 import net.minecraftforge.fml.ModList;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 
 public class ClientCPMData {
 
@@ -20,22 +20,22 @@ public class ClientCPMData {
 
     public static void setStuffed(String inputStuffed)
     {
-        if(OverstuffedClientConfig.stuffedLayerConfigEntry !=null)
+        if(GluttonousClientConfig.stuffedLayerConfigEntry !=null)
         {
-            OverstuffedClientConfig.lastStuffedLayer= OverstuffedClientConfig.stuffedLayerConfigEntry.get();
+            GluttonousClientConfig.lastStuffedLayer= GluttonousClientConfig.stuffedLayerConfigEntry.get();
         }
-        OverstuffedClientConfig.setStuffedLayer(inputStuffed);
+        GluttonousClientConfig.setStuffedLayer(inputStuffed);
 
 
     }
 
     public static void setWeight(String inputWeight)
     {
-        if(OverstuffedClientConfig.weightLayerConfigEntry!=null && !inputWeight.contentEquals(OverstuffedClientConfig.weightLayerConfigEntry.get()))
+        if(GluttonousClientConfig.weightLayerConfigEntry!=null && !inputWeight.contentEquals(GluttonousClientConfig.weightLayerConfigEntry.get()))
         {
-            OverstuffedClientConfig.lastWeightLayer= OverstuffedClientConfig.weightLayerConfigEntry.get();
+            GluttonousClientConfig.lastWeightLayer= GluttonousClientConfig.weightLayerConfigEntry.get();
         }
-        OverstuffedClientConfig.setWeightLayer(inputWeight);
+        GluttonousClientConfig.setWeightLayer(inputWeight);
     }
 
     //checks to see if CPM is a high enough version
@@ -68,13 +68,13 @@ public class ClientCPMData {
     {
         if(ModList.get().isLoaded("cpm") && getPlayersAPI()!=null)
         {
-            if(!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals(""))
+            if(!GluttonousClientConfig.stuffedLayerConfigEntry.get().contentEquals(""))
             {
-                String layerName= OverstuffedClientConfig.stuffedLayerConfigEntry.get();
+                String layerName= GluttonousClientConfig.stuffedLayerConfigEntry.get();
                 Double percentFull= ((double) ClientCalorieMeter.getCurrentCalories()/ ClientCalorieMeter.getMax());
                 int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(layerName));
                 playersAPI.playAnimation(layerName,outOfMax);
-                playersAPI.playAnimation(OverstuffedClientConfig.lastStuffedLayer,0);
+                playersAPI.playAnimation(GluttonousClientConfig.lastStuffedLayer,0);
             }
             return true;
         }
@@ -86,32 +86,32 @@ public class ClientCPMData {
     public static boolean playWeight() {
         if (ModList.get().isLoaded("cpm") && getPlayersAPI() != null) {
 
-            if (!OverstuffedClientConfig.stageGain.get()) {
-                String layerName= OverstuffedClientConfig.weightLayerConfigEntry.get();
-                double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedClientConfig.minWeight.get());
-                weightRatio = weightRatio / (OverstuffedClientConfig.maxWeight.get() - OverstuffedClientConfig.minWeight.get());
+            if (!GluttonousClientConfig.stageGain.get()) {
+                String layerName= GluttonousClientConfig.weightLayerConfigEntry.get();
+                double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - GluttonousClientConfig.minWeight.get());
+                weightRatio = weightRatio / (GluttonousClientConfig.maxWeight.get() - GluttonousClientConfig.minWeight.get());
                 int outofMax = (int) (weightRatio * playersAPI.getAnimationMaxValue(layerName));
                 playersAPI.playAnimation(layerName, outofMax);
                 return true;
             } else {
                 //This is stage based gaining
                 if (ClientWeightBarData.getLastWeightStage() == -1) {
-                    double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - OverstuffedClientConfig.minWeight.get());
-                    weightRatio = weightRatio / (OverstuffedClientConfig.maxWeight.get() - OverstuffedClientConfig.minWeight.get());
+                    double weightRatio = ((double) ClientWeightBarData.getPlayerWeight() - GluttonousClientConfig.minWeight.get());
+                    weightRatio = weightRatio / (GluttonousClientConfig.maxWeight.get() - GluttonousClientConfig.minWeight.get());
                     int calculatedPercentage = (int) ((weightRatio * 100));
-                    int currentStage = calculatedPercentage / (100/OverstuffedClientConfig.totalStages.get());
+                    int currentStage = calculatedPercentage / (100/ GluttonousClientConfig.totalStages.get());
 
                     ClientWeightBarData.setLastWeightStage(currentStage);
                 }
-                String layerName= OverstuffedClientConfig.weightLayerConfigEntry.get();
+                String layerName= GluttonousClientConfig.weightLayerConfigEntry.get();
                 //this is the starting point, the stage if you will
-                playersAPI.playAnimation(OverstuffedClientConfig.lastWeightLayer, 0);
+                playersAPI.playAnimation(GluttonousClientConfig.lastWeightLayer, 0);
 
-                int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * (1.0/OverstuffedClientConfig.totalStages.get()) * playersAPI.getAnimationMaxValue(layerName));
+                int outOfMax = (int) (ClientWeightBarData.getLastWeightStage() * (1.0/ GluttonousClientConfig.totalStages.get()) * playersAPI.getAnimationMaxValue(layerName));
                 //System.out.println("Amount through stage "+ClientWeightBarData.getAmountThroughStage());
                 if(outOfMax!=-1)
                 {
-                    playersAPI.playAnimation(OverstuffedClientConfig.weightLayerConfigEntry.get(), outOfMax + ClientWeightBarData.getAmountThroughStage());
+                    playersAPI.playAnimation(GluttonousClientConfig.weightLayerConfigEntry.get(), outOfMax + ClientWeightBarData.getAmountThroughStage());
                 }
 
                 return true;
@@ -126,25 +126,25 @@ public class ClientCPMData {
       {
           if (ModList.get().isLoaded("cpm") && getPlayersAPI() != null)
           {
-              double weightRatio = ((double) inputWeight - OverstuffedClientConfig.minWeight.get());
-              weightRatio = weightRatio / (OverstuffedClientConfig.maxWeight.get() - OverstuffedClientConfig.minWeight.get());
+              double weightRatio = ((double) inputWeight - GluttonousClientConfig.minWeight.get());
+              weightRatio = weightRatio / (GluttonousClientConfig.maxWeight.get() - GluttonousClientConfig.minWeight.get());
               int calculatedPercentage = (int) ((weightRatio * 100));
-              int outofMax = (int) (weightRatio * playersAPI.getAnimationMaxValue(OverstuffedClientConfig.weightLayerConfigEntry.get()));
-              playersAPI.playAnimation(OverstuffedClientConfig.weightLayerConfigEntry.get(), outofMax);
+              int outofMax = (int) (weightRatio * playersAPI.getAnimationMaxValue(GluttonousClientConfig.weightLayerConfigEntry.get()));
+              playersAPI.playAnimation(GluttonousClientConfig.weightLayerConfigEntry.get(), outofMax);
           }
       }
       public static void previewStuffed(int inputCalories)
       {
-          Double percentFull= ((double) inputCalories/OverstuffedWorldConfig.absCalCap.get());
-          int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get()));
-          playersAPI.playAnimation(OverstuffedClientConfig.stuffedLayerConfigEntry.get(),outOfMax);
+          Double percentFull= ((double) inputCalories/ GluttonousWorldConfig.absCalCap.get());
+          int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(GluttonousClientConfig.stuffedLayerConfigEntry.get()));
+          playersAPI.playAnimation(GluttonousClientConfig.stuffedLayerConfigEntry.get(),outOfMax);
       }
 
     public static int getTotalWeightFrames() {
 
         if(ModList.get().isLoaded("cpm")) {
-            if (!OverstuffedClientConfig.weightLayerConfigEntry.get().contentEquals("")) {
-                totalWeightFrames=playersAPI.getAnimationMaxValue(OverstuffedClientConfig.weightLayerConfigEntry.get());
+            if (!GluttonousClientConfig.weightLayerConfigEntry.get().contentEquals("")) {
+                totalWeightFrames=playersAPI.getAnimationMaxValue(GluttonousClientConfig.weightLayerConfigEntry.get());
             }
         }
 
@@ -153,8 +153,8 @@ public class ClientCPMData {
 
     public static int getTotalStuffedFrames() {
         if(ModList.get().isLoaded("cpm")) {
-            if (!OverstuffedClientConfig.stuffedLayerConfigEntry.get().contentEquals("")) {
-                totalStuffedFrames=playersAPI.getAnimationMaxValue(OverstuffedClientConfig.stuffedLayerConfigEntry.get());
+            if (!GluttonousClientConfig.stuffedLayerConfigEntry.get().contentEquals("")) {
+                totalStuffedFrames=playersAPI.getAnimationMaxValue(GluttonousClientConfig.stuffedLayerConfigEntry.get());
             }
         }
         return totalStuffedFrames;

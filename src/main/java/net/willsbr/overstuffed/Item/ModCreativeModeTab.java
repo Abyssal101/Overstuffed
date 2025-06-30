@@ -5,16 +5,15 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.overstuffed.Block.ModBlocks;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 
 public class ModCreativeModeTab extends CreativeModeTab {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =DeferredRegister
-            .create(Registries.CREATIVE_MODE_TAB, OverStuffed.MODID);
+            .create(Registries.CREATIVE_MODE_TAB, GluttonousGrowth.MODID);
     public static final RegistryObject<CreativeModeTab> TUTORIAL_TAB = CREATIVE_MODE_TABS.register("overstuffed_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(Items.CAKE))
                     .title(Component.translatable("itemGroup.overstuffed"))

@@ -10,7 +10,7 @@ plugins {
 
 version = '1.3-1.20.1'
 group = 'com.github.Abyssal101' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'overstuffed'
+archivesBaseName = 'gluttonousgrowth'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -229,12 +229,12 @@ java {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "overstuffed",
-                "Specification-Vendor"    : "overstuffedsareus",
+                "Specification-Title"     : "gluttonousgrowth",
+                "Specification-Vendor"    : "abyssal010",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.version,
-                "Implementation-Vendor"   : "overstuffedsareus",
+                "Implementation-Vendor"   : "abyssal010",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

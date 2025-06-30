@@ -3,22 +3,17 @@ package net.willsbr.overstuffed.client;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.willsbr.overstuffed.OverStuffed;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
-import org.joml.Quaternionf;
+import net.willsbr.overstuffed.GluttonousGrowth;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -29,16 +24,16 @@ import static net.willsbr.overstuffed.client.AbstractClientMethods.AbstractDraw;
 
 
 public class HudOverlay {
-        private static final ResourceLocation STUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffedpoint.png");
-       private static final ResourceLocation OVERSTUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/hud/overstuffedpoint.png");
+        private static final ResourceLocation STUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffedpoint.png");
+       private static final ResourceLocation OVERSTUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/overstuffedpoint.png");
 
-    private static final ResourceLocation SUPERSTUFFED_POINT = new ResourceLocation(OverStuffed.MODID, "textures/hud/superstuffedpoint.png");
+    private static final ResourceLocation SUPERSTUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffedpoint.png");
 
-    private static final ResourceLocation WEIGHTSPRITE0 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon1.png");
-    private static final ResourceLocation WEIGHTSPRITE1 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon2.png");
-    private static final ResourceLocation WEIGHTSPRITE2 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon3.png");
-    private static final ResourceLocation WEIGHTSPRITE3 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon4.png");
-    private static final ResourceLocation WEIGHTSPRITE4 =new ResourceLocation(OverStuffed.MODID, "textures/hud/weightsprites/bellyicon5.png");
+    private static final ResourceLocation WEIGHTSPRITE0 =new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/weightsprites/bellyicon1.png");
+    private static final ResourceLocation WEIGHTSPRITE1 =new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/weightsprites/bellyicon2.png");
+    private static final ResourceLocation WEIGHTSPRITE2 =new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/weightsprites/bellyicon3.png");
+    private static final ResourceLocation WEIGHTSPRITE3 =new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/weightsprites/bellyicon4.png");
+    private static final ResourceLocation WEIGHTSPRITE4 =new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/weightsprites/bellyicon5.png");
 
     private static final ResourceLocation[] WEIGHTSTAGESPRITES = {
             WEIGHTSPRITE0,
@@ -48,37 +43,37 @@ public class HudOverlay {
             WEIGHTSPRITE4
     };
 
-    private static final ResourceLocation STUFFED_BAR_BEG = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_bar_beg.png");
-    private static final ResourceLocation STUFFED_BAR_MID = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_bar_mid.png");
-    private static final ResourceLocation STUFFED_BAR_END = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_bar_end.png");
+    private static final ResourceLocation STUFFED_BAR_BEG = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffed_bar_beg.png");
+    private static final ResourceLocation STUFFED_BAR_MID = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffed_bar_mid.png");
+    private static final ResourceLocation STUFFED_BAR_END = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffed_bar_end.png");
 
 
-    private static final ResourceLocation STUFFED_BAR_ICON_BACKGROUND = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffedbariconbackground.png");
+    private static final ResourceLocation STUFFED_BAR_ICON_BACKGROUND = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffedbariconbackground.png");
 
-    private static final ResourceLocation STUFFED_PART = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_part.png");
-    private static final ResourceLocation STUFFED_END = new ResourceLocation(OverStuffed.MODID, "textures/hud/stuffed_end.png");
+    private static final ResourceLocation STUFFED_PART = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffed_part.png");
+    private static final ResourceLocation STUFFED_END = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffed_end.png");
 
-    private static final ResourceLocation OVERSTUFFED_PART = new ResourceLocation(OverStuffed.MODID, "textures/hud/overstuffed_part.png");
-    private static final ResourceLocation OVERSTUFFED_END = new ResourceLocation(OverStuffed.MODID, "textures/hud/overstuffed_end.png");
+    private static final ResourceLocation OVERSTUFFED_PART = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/overstuffed_part.png");
+    private static final ResourceLocation OVERSTUFFED_END = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/overstuffed_end.png");
 
-    private static final ResourceLocation SUPERSTUFFED_PART = new ResourceLocation(OverStuffed.MODID, "textures/hud/superstuffed_part.png");
-    private static final ResourceLocation SUPERSTUFFED_END = new ResourceLocation(OverStuffed.MODID, "textures/hud/superstuffed_end.png");
+    private static final ResourceLocation SUPERSTUFFED_PART = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffed_part.png");
+    private static final ResourceLocation SUPERSTUFFED_END = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffed_end.png");
     private static Font font;
 
-    private static final ResourceLocation STOMACH_ICON_ONE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach4.png");
-    private static final ResourceLocation STOMACH_ONE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask4.png");
+    private static final ResourceLocation STOMACH_ICON_ONE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach4.png");
+    private static final ResourceLocation STOMACH_ONE_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask4.png");
 
-    private static final ResourceLocation STOMACH_ICON_TWO = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach5.png");
-    private static final ResourceLocation STOMACH_TWO_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask5.png");
+    private static final ResourceLocation STOMACH_ICON_TWO = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach5.png");
+    private static final ResourceLocation STOMACH_TWO_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask5.png");
 
-    private static final ResourceLocation STOMACH_ICON_THREE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach6.png");
-    private static final ResourceLocation STOMACH_THREE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask6.png");
+    private static final ResourceLocation STOMACH_ICON_THREE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach6.png");
+    private static final ResourceLocation STOMACH_THREE_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask6.png");
 
-    private static final ResourceLocation STOMACH_ICON_FOUR = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach7.png");
-    private static final ResourceLocation STOMACH_FOUR_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask7.png");
+    private static final ResourceLocation STOMACH_ICON_FOUR = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach7.png");
+    private static final ResourceLocation STOMACH_FOUR_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask7.png");
 
-    private static final ResourceLocation STOMACH_ICON_FIVE = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomach8.png");
-    private static final ResourceLocation STOMACH_FIVE_MASK = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/stomachmask8.png");
+    private static final ResourceLocation STOMACH_ICON_FIVE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach8.png");
+    private static final ResourceLocation STOMACH_FIVE_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask8.png");
     private static final ResourceLocation[] STOMACH_ICONS = {
             STOMACH_ICON_ONE,
             STOMACH_ICON_TWO,
@@ -96,11 +91,11 @@ public class HudOverlay {
     };
 
 
-    private static final ResourceLocation GREEN_ACID1 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green1.png");
-    private static final ResourceLocation GREEN_ACID2 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green2.png");
-    private static final ResourceLocation GREEN_ACID3 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green3.png");
-    private static final ResourceLocation GREEN_ACID4 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green4.png");
-    private static final ResourceLocation GREEN_ACID5 = new ResourceLocation(OverStuffed.MODID, "textures/hud/stomach/acid_green5.png");
+    private static final ResourceLocation GREEN_ACID1 = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/acid_green1.png");
+    private static final ResourceLocation GREEN_ACID2 = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/acid_green2.png");
+    private static final ResourceLocation GREEN_ACID3 = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/acid_green3.png");
+    private static final ResourceLocation GREEN_ACID4 = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/acid_green4.png");
+    private static final ResourceLocation GREEN_ACID5 = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/acid_green5.png");
 
     private static final ResourceLocation[] ACID_SPRITES = {
             GREEN_ACID1,
@@ -111,16 +106,16 @@ public class HudOverlay {
     };
 
 
-    private static final ResourceLocation NUMBER_ZERO = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number0.png");
-    private static final ResourceLocation NUMBER_ONE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number1.png");
-    private static final ResourceLocation NUMBER_TWO = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number2.png");
-    private static final ResourceLocation NUMBER_THREE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number3.png");
-    private static final ResourceLocation NUMBER_FOUR = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number4.png");
-    private static final ResourceLocation NUMBER_FIVE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number5.png");
-    private static final ResourceLocation NUMBER_SIX = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number6.png");
-    private static final ResourceLocation NUMBER_SEVEN = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number7.png");
-    private static final ResourceLocation NUMBER_EIGHT = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number8.png");
-    private static final ResourceLocation NUMBER_NINE = new ResourceLocation(OverStuffed.MODID, "textures/hud/numbers/number9.png");
+    private static final ResourceLocation NUMBER_ZERO = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number0.png");
+    private static final ResourceLocation NUMBER_ONE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number1.png");
+    private static final ResourceLocation NUMBER_TWO = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number2.png");
+    private static final ResourceLocation NUMBER_THREE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number3.png");
+    private static final ResourceLocation NUMBER_FOUR = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number4.png");
+    private static final ResourceLocation NUMBER_FIVE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number5.png");
+    private static final ResourceLocation NUMBER_SIX = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number6.png");
+    private static final ResourceLocation NUMBER_SEVEN = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number7.png");
+    private static final ResourceLocation NUMBER_EIGHT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number8.png");
+    private static final ResourceLocation NUMBER_NINE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/numbers/number9.png");
 
 
     private static final ResourceLocation[] NUMBER_SPRITES = {
@@ -160,13 +155,15 @@ public class HudOverlay {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         //New stuffed bar
-        int barLeft=left+OverstuffedClientConfig.stuffedHudXOffset.get()+80;
-        int barTop=top-OverstuffedClientConfig.stuffedHudYOffset.get();
+        int barLeft=left+ GluttonousClientConfig.stuffedHudXOffset.get()+80;
+        int barTop=top- GluttonousClientConfig.stuffedHudYOffset.get();
+        if(ClientCalorieMeter.getCurrentCalories()!=0)
+        {
+            renderStomachIcon(gui,guiGraphics,poseStack,barLeft,barTop);
+        }
+        renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ GluttonousClientConfig.weightDisplayXOffset.get(),top-5+ GluttonousClientConfig.weightDisplayYOffSet.get());
 
-        renderStomachIcon(gui,guiGraphics,poseStack,barLeft,barTop);
-        renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ OverstuffedClientConfig.weightDisplayXOffset.get(),top-5+ OverstuffedClientConfig.weightDisplayYOffSet.get());
-
-        if(OverstuffedClientConfig.debugView.get())
+        if(GluttonousClientConfig.debugView.get())
         {
             drawDebug(gui,guiGraphics,screenWidth/2,20);
         }
@@ -175,7 +172,7 @@ public class HudOverlay {
 
     public static void renderWeightIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack,int x, int y)
     {
-        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.getMinWeight())/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.getMinWeight()))*100);
+        int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- GluttonousClientConfig.getMinWeight())/(GluttonousClientConfig.maxWeight.get()- GluttonousClientConfig.getMinWeight()))*100);
         if(outOf100/20==5)
         {
             AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],x,y,24,24);
@@ -186,7 +183,7 @@ public class HudOverlay {
         }
 
         //Number Logic;
-        if(OverstuffedClientConfig.stageGain.get())
+        if(GluttonousClientConfig.stageGain.get())
         {
             int lastStage=ClientWeightBarData.getLastWeightStage();
             Stack<Integer> order=new Stack<Integer>();
@@ -219,13 +216,18 @@ public class HudOverlay {
         int totalIcons=5;
 
         //because commands can force the maximum higher
-        int higherMax=Math.min(OverstuffedWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
+        int higherMax=Math.min(GluttonousWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
 
         int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
         AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);
 
         GL11.glEnable(GL11.GL_STENCIL_TEST); // Turn on da test
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); // Flush old data
+        // Enable alpha blending for transparency
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glEnable(GL11.);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc(); // Sets up standard blend function for transparency
 
         GL11.glStencilMask(0xFF); // Writing = ON
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always "add" to frame
@@ -260,7 +262,7 @@ public class HudOverlay {
         //int currentCalories=100;
 
         int acidOffset=18-(int)((double)ClientCalorieMeter.getCurrentCalories()/ClientCalorieMeter.getMax()*18);
-
+        acidOffset=Math.max(acidOffset,0);
 
         // Draw the content that will be masked
         // This content will only be visible where the mask is opaque
@@ -291,8 +293,8 @@ public class HudOverlay {
 
         ArrayList<Component> info= new ArrayList<Component>();
         info.add(Component.translatable("message.overstuffed.debugcurrentweight",""+ClientWeightBarData.getPlayerWeight()));
-        info.add(Component.translatable("message.overstuffed.debugmaxweight",""+ OverstuffedClientConfig.getMaxWeight()));
-        info.add(Component.translatable("message.overstuffed.debugminweight",""+ OverstuffedClientConfig.getMinWeight()));
+        info.add(Component.translatable("message.overstuffed.debugmaxweight",""+ GluttonousClientConfig.getMaxWeight()));
+        info.add(Component.translatable("message.overstuffed.debugminweight",""+ GluttonousClientConfig.getMinWeight()));
         info.add(Component.translatable("message.overstuffed.debugcurrentcalories",""+ ClientCalorieMeter.getCurrentCalories()));
         info.add(Component.translatable("message.overstuffed.debugmaxcalories",""+
              (ClientCalorieMeter.getMax())));

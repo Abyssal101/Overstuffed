@@ -6,14 +6,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.ModList;
-import net.willsbr.overstuffed.Command.ActiveCommands.setHitbox;
 import net.willsbr.overstuffed.ServerPlayerSettings.PlayerServerSettingsProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.WeightMaxMinPollS2C;
 import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleType;
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
@@ -22,11 +20,11 @@ import java.util.UUID;
 public class PlayerWeightBar {
     //
 
-    private int minWeight= OverstuffedClientConfig.minWeight.get();
+    private int minWeight= GluttonousClientConfig.minWeight.get();
     private int currentWeight;
 
     //this is what options will determine for display
-    private int curMaxWeight= OverstuffedClientConfig.getMaxWeight();
+    private int curMaxWeight= GluttonousClientConfig.getMaxWeight();
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
     //food queue situation so you slowly gain weight
@@ -264,6 +262,11 @@ public class PlayerWeightBar {
         //TODO make it so it's max is clamped when you set the total levels of weight
         return calculatedPercentage/(100/this.getTotalStages());
     }
+    public double calculateCurrentWeightPercentage()
+    {
+        return (((double)(this.getCurrentWeight()-this.getMinWeight()))/(this.getCurMaxWeight()- this.getMinWeight()));
+    }
+
 
 
     public int getAmountThroughStage() {
@@ -295,27 +298,27 @@ public class PlayerWeightBar {
         double percentageEffect= (double)this.currentWeight/(this.getCurMaxWeight()-this.getMinWeight());
         this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
                 "health increase from OS",
-                (int)(percentageEffect*OverstuffedWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
+                (int)(percentageEffect* GluttonousWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
 
         this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
                 "speed increase from OS",
-                -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+                -(percentageEffect* GluttonousWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
     }
     public void setNewModifiers(int currentStage)
     {
         double percentageEffect= (double)currentStage/this.getTotalStages();
         this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
                 "health increase from OS",
-                (int)(percentageEffect*OverstuffedWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
+                (int)(percentageEffect* GluttonousWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
 
         this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
                 "speed increase from OS",
-                -(percentageEffect*OverstuffedWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+                -(percentageEffect* GluttonousWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
 
 
         this.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
                 "hitbox health increase from OS",
-                (int)(this.currentHitboxIncrease/OverstuffedWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
+                (int)(this.currentHitboxIncrease/ GluttonousWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
 
 
     }
@@ -339,6 +342,7 @@ public class PlayerWeightBar {
 
     public static void addCorrectModifier(ServerPlayer player)
     {
+
         player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
         PlayerWeightBar.clearModifiers(player, weightBar);
@@ -346,16 +350,12 @@ public class PlayerWeightBar {
         int newWeightStage=weightBar.calculateCurrentWeightStage();
 
             //This clears the weight modifiers and sets it correctly when you join
-        if(newWeightStage!=0 || !OverstuffedClientConfig.stageGain.get())
+        if(newWeightStage!=0 || !GluttonousClientConfig.stageGain.get())
         {
             //TODO add setting if it's granualar versus staged
             weightBar.setNewModifiers(newWeightStage);
-            player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
-            player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(weightBar.WEIGHT_SPEED_MODIFIER);
-        }
-        if(player.getHealth()>player.getMaxHealth())
-        {
-            player.setHealth(player.getMaxHealth());
+            player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
+            player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(weightBar.WEIGHT_SPEED_MODIFIER);
         }
         });
     }
@@ -387,12 +387,7 @@ public class PlayerWeightBar {
                     hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
                 });
 
-                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(weightBar.SCALING_HEALTH_MODIFIER);
-                if(player.getHealth()>player.getMaxHealth())
-                {
-                    player.setHealth(player.getMaxHealth());
-                }
-
+                player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.SCALING_HEALTH_MODIFIER);
             }
         });
     }

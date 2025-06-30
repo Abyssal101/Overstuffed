@@ -6,7 +6,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.networking.packet.*;
 import net.willsbr.overstuffed.networking.packet.AudioPackets.FilteredSoundS2C;
 import net.willsbr.overstuffed.networking.packet.SettingPackets.*;
@@ -23,7 +23,7 @@ public class ModMessages {
     public static void register()
     {
     SimpleChannel net= NetworkRegistry.ChannelBuilder.named(
-            new ResourceLocation(OverStuffed.MODID, "messages")).networkProtocolVersion(() -> "1.0")
+            new ResourceLocation(GluttonousGrowth.MODID, "messages")).networkProtocolVersion(() -> "1.0")
             .clientAcceptedVersions( s-> true)
             .serverAcceptedVersions(s->true)
             .simpleChannel();

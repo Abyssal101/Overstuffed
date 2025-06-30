@@ -4,9 +4,9 @@ import com.tom.cpm.api.ICPMPlugin;
 import com.tom.cpm.api.IClientAPI;
 import com.tom.cpm.api.ICommonAPI;
 import net.minecraft.world.entity.player.Player;
-import net.willsbr.overstuffed.OverStuffed;
+import net.willsbr.overstuffed.GluttonousGrowth;
 import net.willsbr.overstuffed.client.ClientCPMData;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 public class CPMCompat implements ICPMPlugin {
     public void initClient(IClientAPI api) {
@@ -28,9 +28,9 @@ public class CPMCompat implements ICPMPlugin {
                 (player, message) -> {
                     //this plays the new animation
                     int temp=message.getInteger("currentweight");
-                    api.playAnimation(OverstuffedClientConfig.weightLayerConfigEntry.get(),temp);
+                    api.playAnimation(GluttonousClientConfig.weightLayerConfigEntry.get(),temp);
                     //this resets the old one if any
-                    api.playAnimation(OverstuffedClientConfig.lastWeightLayer,0);
+                    api.playAnimation(GluttonousClientConfig.lastWeightLayer,0);
                 }, true));
     }
 
@@ -39,6 +39,6 @@ public class CPMCompat implements ICPMPlugin {
     }
 
     public String getOwnerModId() {
-        return OverStuffed.MODID;
+        return GluttonousGrowth.MODID;
     }
 }

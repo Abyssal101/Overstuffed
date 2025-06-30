@@ -8,13 +8,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.willsbr.overstuffed.Menu.Buttons.PortProofButton;
 import net.willsbr.overstuffed.Menu.Buttons.SwapScreenButton;
 import net.willsbr.overstuffed.Menu.Buttons.ToggleButton;
-import net.willsbr.overstuffed.OverStuffed;
 import net.willsbr.overstuffed.client.ClientWeightBarData;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 import net.willsbr.overstuffed.networking.ModMessages;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
 import net.willsbr.overstuffed.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
@@ -86,7 +84,7 @@ public class AdvancedConfigScreen extends Screen {
         errors=new ArrayList<Component>();
         warnings=new ArrayList<Component>();
 
-        this.weightEffect= new ToggleButton(centerW-75,50,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"), OverstuffedClientConfig.weightEffects.get(),true);
+        this.weightEffect= new ToggleButton(centerW-75,50,150,20,Component.translatable("menu.overstuffed.weighteffectsbutton"), GluttonousClientConfig.weightEffects.get(),true);
         this.weightEffect.setLocked(false);
         this.weightEffect.setTooltipText(Component.translatable("menu.overstuffed.weighteffects"));
         this.maxWeight= new EditBox(
@@ -96,7 +94,7 @@ public class AdvancedConfigScreen extends Screen {
                 50,
                 weightEffect.getHeight(),
                 Component.translatable("menu.overstuffed.maxweight"));
-        this.maxWeight.setValue(OverstuffedClientConfig.maxWeight.get()+"");
+        this.maxWeight.setValue(GluttonousClientConfig.maxWeight.get()+"");
         //So you can't go above 9999 because of this
         this.maxWeight.setMaxLength(4);
 
@@ -107,14 +105,14 @@ public class AdvancedConfigScreen extends Screen {
                 50,
                 weightEffect.getHeight(),
                 Component.translatable("menu.overstuffed.maxweight"));
-        this.minWeight.setValue(OverstuffedClientConfig.minWeight.get()+"");
+        this.minWeight.setValue(GluttonousClientConfig.minWeight.get()+"");
         //So you can't go above 9999 because of this
         this.minWeight.setMaxLength(4);
 
         this.hitboxScaling=new ToggleButton(centerW-160,weightEffect.getY()+100,
                 150,20,
                 Component.translatable("menu.overstuffed.scalingenabled"),
-                OverstuffedClientConfig.hitBoxScalingEnabled.get(),false);
+                GluttonousClientConfig.hitBoxScalingEnabled.get(),false);
         this.hitboxScaling.setLocked(false);
         this.hitboxScaling.setTooltipText(Component.translatable("menu.overstuffed.scalingtooltip"));
 
@@ -125,7 +123,7 @@ public class AdvancedConfigScreen extends Screen {
                 50,
                 weightEffect.getHeight(),
                 Component.translatable("menu.overstuffed.maxscaling"));
-        this.maxHitboxScaling.setValue(OverstuffedClientConfig.maxHitboxWidth.get()+"");
+        this.maxHitboxScaling.setValue(GluttonousClientConfig.maxHitboxWidth.get()+"");
 
 
 
@@ -237,8 +235,8 @@ public class AdvancedConfigScreen extends Screen {
                     if(Minecraft.getInstance().player != null)
                     {
                         //Normalizing old weight to new min and max
-                        double weightRatio=((double) ClientWeightBarData.getPlayerWeight()- OverstuffedClientConfig.minWeight.get());
-                        weightRatio=weightRatio/(OverstuffedClientConfig.maxWeight.get()- OverstuffedClientConfig.minWeight.get());
+                        double weightRatio=((double) ClientWeightBarData.getPlayerWeight()- GluttonousClientConfig.minWeight.get());
+                        weightRatio=weightRatio/(GluttonousClientConfig.maxWeight.get()- GluttonousClientConfig.minWeight.get());
                         //System.out.println("Ratio"+weightRatio);
                         int newRange=max-min;
 
@@ -247,8 +245,8 @@ public class AdvancedConfigScreen extends Screen {
                         //System.out.println(ClientWeightBarData.getPlayerWeight());
                         ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
 
-                        OverstuffedClientConfig.maxWeight.set(max);
-                        OverstuffedClientConfig.minWeight.set(min);
+                        GluttonousClientConfig.maxWeight.set(max);
+                        GluttonousClientConfig.minWeight.set(min);
                         ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
                         ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
                     }
@@ -266,17 +264,17 @@ public class AdvancedConfigScreen extends Screen {
             //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
         }
 
-        OverstuffedClientConfig.weightEffects.set(weightEffect.getSetting());
-        OverstuffedClientConfig.hitBoxScalingEnabled.set(hitboxScaling.getSetting());
+        GluttonousClientConfig.weightEffects.set(weightEffect.getSetting());
+        GluttonousClientConfig.hitBoxScalingEnabled.set(hitboxScaling.getSetting());
         try{
             float converted=Float.parseFloat(maxHitboxScaling.getValue());
-            OverstuffedClientConfig.maxHitboxWidth.set(converted);
+            GluttonousClientConfig.maxHitboxWidth.set(converted);
         }
         catch(NumberFormatException e)
         {
         //I AM LOSING MY MIND
         }
-        OverstuffedClientConfig.saveConfig();
+        GluttonousClientConfig.saveConfig();
         // Call last in case it interferes with the override
         super.onClose();
     }

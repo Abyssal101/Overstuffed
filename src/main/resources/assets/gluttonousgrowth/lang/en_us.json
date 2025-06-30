@@ -1,25 +1,25 @@
 {
 
-  "itemGroup.overstuffed": "Overstuffed Tab",
-  "key.overstuffed.stuffed_config": "Overstuffed GUI",
+  "itemGroup.overstuffed": "Gluttonous Growth Tab",
+  "key.overstuffed.stuffed_config": "Gluttonous Growth GUI",
 
 
-  "sounds.overstuffed.burp": "Burp",
-  "sounds.overstuffed.gurgle": "Gurgle",
-  "sounds.overstuffed.scaleon": "Scale stepped on",
-  "sounds.overstuffed.scaleoff": "Scale stepped off",
+  "sounds.gluttonousgrowth.burp": "Burp",
+  "sounds.gluttonousgrowth.gurgle": "Gurgle",
+  "sounds.gluttonousgrowth.scaleon": "Scale stepped on",
+  "sounds.gluttonousgrowth.scaleoff": "Scale stepped off",
 
 
-  "effect.overstuffed.goldendiet" : "Golden Diet",
+  "effect.gluttonousgrowth.goldendiet" : "Golden Diet",
 
-  "message.overstuffed.effect": "Overstuffed Effect Failed",
+  "message.overstuffed.effect": "Gluttonous Growth Effect Failed",
   "advancement.overstuffed.fattytitle": "Fatty",
   "advancement.overstuffed.fattydescription": "You managed to reach your max weight!",
 
   "advancements.overstuffed.recipes.scale.title": "Weight Watcher",
   "advancements.overstuffed.recipes.scale.description": "Craft a scale to measure your weight",
 
-  "block.overstuffed.scale": "Scale",
+  "block.gluttonousgrowth.scale": "Scale",
 
   "commands.overstuffed.stuffedupdatesuccess": "Stuffed layer successfully updated",
   "commands.overstuffed.weightupdatesuccess": "Weight layer successfully updated",
@@ -54,7 +54,7 @@
   "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
   "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
 
-  "menu.overstuffed.main":"Overstuffed",
+  "menu.overstuffed.main":"Main",
   "menu.overstuffed.client":"Client",
   "menu.overstuffed.advanced":"Advanced",
 
@@ -94,6 +94,7 @@
   "menu.overstuffed.callayerbox":"Calorie Layer",
   "menu.overstuffed.calxoffset":"Calorie Meter X Offset",
   "menu.overstuffed.calyoffset":"Calorie Meter Y Offset",
+  "menu.gluttonousgrowth.calmovementwarning":"If graphical issues occur when moving\nthe cal meter, resize your screen to fix it.",
 
 
   "menu.overstuffed.gaintypetooltip":"Granular: Weight updates are always calculated. \n Stages: Weight visually updates once you reach every threshold set by your stage amount",

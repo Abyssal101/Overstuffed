@@ -1,24 +1,24 @@
 package net.willsbr.overstuffed.StuffedBar;
 
 import net.minecraft.nbt.CompoundTag;
-import net.willsbr.overstuffed.config.OverstuffedWorldConfig;
+import net.willsbr.overstuffed.config.GluttonousWorldConfig;
 
 public class PlayerCalorieMeter {
 
-    private int maxCalories= OverstuffedWorldConfig.baseCalCap.get();
+    private int maxCalories= GluttonousWorldConfig.baseCalCap.get();
     private int currentCalories=0;
 
-    private double calorieGainMultipler=OverstuffedWorldConfig.calorieGainMultipler.get();
+    private double calorieGainMultipler= GluttonousWorldConfig.calorieGainMultipler.get();
 
-    private double modMetabolismThres=OverstuffedWorldConfig.modMetabolismThres.get();
-    private double slowMetabolismThres=OverstuffedWorldConfig.slowMetabolismThres.get();
+    private double modMetabolismThres= GluttonousWorldConfig.modMetabolismThres.get();
+    private double slowMetabolismThres= GluttonousWorldConfig.slowMetabolismThres.get();
 
 
     private int calLost =0;
     private int addState=0;
 
     //what the amount of stuffed lost should be before it adds new
-    private int interval=OverstuffedWorldConfig.capacityIncreaseInterval.get();
+    private int interval= GluttonousWorldConfig.capacityIncreaseInterval.get();
 
     private int calClearDelay=-1;
     private long foodEatenTick =-1;
@@ -54,8 +54,8 @@ public class PlayerCalorieMeter {
     {
         currentCalories=nbt.getInt("curcalories");
         maxCalories=nbt.getInt("maxcalories");
-        modMetabolismThres=OverstuffedWorldConfig.modMetabolismThres.get();
-        slowMetabolismThres=OverstuffedWorldConfig.slowMetabolismThres.get();
+        modMetabolismThres= GluttonousWorldConfig.modMetabolismThres.get();
+        slowMetabolismThres= GluttonousWorldConfig.slowMetabolismThres.get();
         calLost =nbt.getInt("stuffedlost");
         addState=nbt.getInt("addstate");
         calClearDelay=nbt.getInt("calcleardelay");
@@ -120,6 +120,10 @@ public class PlayerCalorieMeter {
     public void addCalories(int calories)
     {
         this.currentCalories+=calories;
+        if(this.currentCalories>this.maxCalories)
+        {
+            this.currentCalories=this.maxCalories;
+        }
     }
 
 
@@ -164,4 +168,7 @@ public class PlayerCalorieMeter {
     public void setCalorieGainMultipler(double calorieGainMultipler) {
         this.calorieGainMultipler = calorieGainMultipler;
     }
+
+
+
 }

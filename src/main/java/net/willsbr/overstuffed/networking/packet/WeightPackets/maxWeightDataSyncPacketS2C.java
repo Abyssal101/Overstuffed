@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
 import net.willsbr.overstuffed.WeightSystem.PlayerWeightBarProvider;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -43,7 +43,7 @@ public class maxWeightDataSyncPacketS2C {
             Objects.requireNonNull(player).getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 weightBar.setMaxWeight(this.maxWeight);
             });
-            OverstuffedClientConfig.maxWeight.set(this.maxWeight);
+            GluttonousClientConfig.maxWeight.set(this.maxWeight);
             CPMData.checkIfUpdateCPM("weight");
             context.getSender().sendSystemMessage(Component.translatable("maxweightupdatesuccess"));
         });

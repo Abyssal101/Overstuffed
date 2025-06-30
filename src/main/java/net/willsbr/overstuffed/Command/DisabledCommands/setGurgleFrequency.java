@@ -9,7 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 public class setGurgleFrequency {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
@@ -24,7 +24,7 @@ public class setGurgleFrequency {
 
             if(value>=0 && value<=10)
             {
-                OverstuffedClientConfig.gurgleFrequency.set(value);
+                GluttonousClientConfig.gurgleFrequency.set(value);
             }
             else {
                 player.sendSystemMessage(Component.literal("Error: Value outside of 1-10"));

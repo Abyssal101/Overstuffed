@@ -16,22 +16,24 @@ public class calIntervalUpdateS2CPacket {
 
     private static  int currentLost;
     private static  int interval;
+    private static int newMax;
 
-    public calIntervalUpdateS2CPacket(int currentL, int intervl){
+    public calIntervalUpdateS2CPacket(int currentL, int intervl,int newM){
         currentLost = currentL;
         interval = intervl;
-
+        newMax = newMax;
     }
 
     public calIntervalUpdateS2CPacket(FriendlyByteBuf buf){
         currentLost =buf.readInt();
         interval = buf.readInt();
-
+        newMax = buf.readInt();
     }
 
     public void toBytes(FriendlyByteBuf buf){
         buf.writeInt(currentLost);
         buf.writeInt(interval);
+        buf.writeInt(newMax);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
@@ -44,9 +46,11 @@ public class calIntervalUpdateS2CPacket {
                     Objects.requireNonNull(player).getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
                         stuffedBar.setInterval(interval);
                         stuffedBar.setCalLost(currentLost);
+                        stuffedBar.setMaxCalories(newMax);
                     });
                     ClientCalorieMeter.setInterval(interval);
                     ClientCalorieMeter.setCurrentLost(currentLost);
+                    ClientCalorieMeter.setMaxCalories(newMax);
                 }
         );
         return true;

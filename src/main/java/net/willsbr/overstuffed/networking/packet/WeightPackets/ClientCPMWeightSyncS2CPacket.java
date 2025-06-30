@@ -4,7 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.willsbr.overstuffed.CPMCompat.Capability.CPMData;
-import net.willsbr.overstuffed.config.OverstuffedClientConfig;
+import net.willsbr.overstuffed.config.GluttonousClientConfig;
 
 import java.util.function.Supplier;
 
@@ -43,9 +43,9 @@ public class ClientCPMWeightSyncS2CPacket {
         context.enqueueWork(() ->
         {
             //here we are on the client!
-            OverstuffedClientConfig.setWeightLayer(this.weightLayer);
+            GluttonousClientConfig.setWeightLayer(this.weightLayer);
             CPMData.checkIfUpdateCPM("weight");
-            if(OverstuffedClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayer))
+            if(GluttonousClientConfig.weightLayerConfigEntry.get().contentEquals(this.weightLayer))
             {
                 context.getSender().sendSystemMessage(Component.translatable("commands.overstuffed.weightupdatesuccess"));
             }
