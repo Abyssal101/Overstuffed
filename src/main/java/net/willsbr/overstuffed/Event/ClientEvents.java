@@ -444,12 +444,13 @@ public class ClientEvents {
     {
         CommandDispatcher<CommandSourceStack> commands = event.getDispatcher();
         CommandHandler.generateCommands(commands,event.getBuildContext());
-        SetLayer.register(commands, event.getBuildContext());
+        CommonEventMethods.registerCommands(event);
+        //SetLayer.register(commands, event.getBuildContext());
         setMaxWeightCommand.register(commands, event.getBuildContext());
         setMinWeightCommand.register(commands,event.getBuildContext());
         setCurrentWeight.register(commands,event.getBuildContext());
         //clearLayers.register(commands, event.getBuildContext());
-        debugViewCommand.register(commands, event.getBuildContext());
+        //debugViewCommand.register(commands, event.getBuildContext());
         setMaxCalories.register(commands, event.getBuildContext());
         setHitbox.register(commands, event.getBuildContext());
         //setWGMethod.register(commands,event.getBuildContext());

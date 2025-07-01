@@ -298,7 +298,6 @@ public class ModEvent {
 
             if(calorieMeter.checkClearCalories(event.player.tickCount))
             {
-
                 double conversionPercentage=GluttonousWorldConfig.calConvertedPercentage.get();
                 conversionPercentage=Math.min(conversionPercentage,1);
                 conversionPercentage=Math.max(conversionPercentage,0);
@@ -358,10 +357,10 @@ public class ModEvent {
                 }
 
                 calorieMeter.setCurrentCalories(calorieMeter.getCurrentCalories()-calRemoved);
-                calorieMeter.setFoodEatenTick((calorieMeter.getCurrentCalories()!=0) ? event.player.tickCount : 0);
+                calorieMeter.setFoodEatenTick((calorieMeter.getCurrentCalories()!=0) ? event.player.tickCount : -1);
 
-                int newDelay=Math.max(GluttonousWorldConfig.minCalClearDelay.get(),
-                        (int)(((double)calorieMeter.getCurrentCalories()/calorieMeter.getMaxCalories())*GluttonousWorldConfig.maxCalClearDelay.get()));
+                int newDelay=GluttonousWorldConfig.minCalClearDelay.get()+
+                        (int)(((double)calorieMeter.getCurrentCalories()/calorieMeter.getMaxCalories())*GluttonousWorldConfig.maxCalClearDelay.get());
                 calorieMeter.setCalClearDelay(newDelay);
 
                 ModMessages.sendToPlayer(new calIntervalUpdateS2CPacket(calorieMeter.getCalLost(),calorieMeter.getInterval(),calorieMeter.getMaxCalories()),(ServerPlayer)event.player);

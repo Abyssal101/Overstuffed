@@ -205,8 +205,6 @@ public class HudOverlay {
 
         }
 
-
-
     }
 
 
@@ -216,7 +214,7 @@ public class HudOverlay {
         int totalIcons=5;
 
         //because commands can force the maximum higher
-        int higherMax=Math.min(GluttonousWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
+        int higherMax=Math.max(GluttonousWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
 
         int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
         AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);

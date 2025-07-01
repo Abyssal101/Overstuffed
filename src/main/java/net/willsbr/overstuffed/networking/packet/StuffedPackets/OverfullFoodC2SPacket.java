@@ -85,6 +85,7 @@ public class OverfullFoodC2SPacket {
                                 {
                                     int timeToAdd=(int)(((double)calculatedCalories/calorieMeter.getMaxCalories()
                                             *(GluttonousWorldConfig.maxCalClearDelay.get()- GluttonousWorldConfig.minCalClearDelay.get())));
+                                    timeToAdd+=GluttonousWorldConfig.minCalClearDelay.get();
                                     calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
                                 }
 

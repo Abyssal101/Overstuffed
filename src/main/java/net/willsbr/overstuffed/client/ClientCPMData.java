@@ -70,9 +70,11 @@ public class ClientCPMData {
         {
             if(!GluttonousClientConfig.stuffedLayerConfigEntry.get().contentEquals(""))
             {
+
                 String layerName= GluttonousClientConfig.stuffedLayerConfigEntry.get();
                 Double percentFull= ((double) ClientCalorieMeter.getCurrentCalories()/ ClientCalorieMeter.getMax());
                 int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(layerName));
+                outOfMax=Math.min(outOfMax,playersAPI.getAnimationMaxValue(layerName));
                 playersAPI.playAnimation(layerName,outOfMax);
                 playersAPI.playAnimation(GluttonousClientConfig.lastStuffedLayer,0);
             }
