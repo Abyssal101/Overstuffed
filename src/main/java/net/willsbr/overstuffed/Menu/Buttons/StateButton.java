@@ -40,10 +40,6 @@ public class StateButton extends AbstractButton {
     @Override
     public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float pPartialTick) {
         super.render(guiGraphics, mouseX, mouseY, pPartialTick);
-        {
-
-
-        }
     }
 
     public Component isTooltipText() {

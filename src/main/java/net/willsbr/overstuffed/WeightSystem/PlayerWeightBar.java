@@ -53,6 +53,7 @@ public class PlayerWeightBar {
     private AttributeModifier SCALING_HEALTH_MODIFIER =
             new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"), "health increase from hitbox increase", 0, AttributeModifier.Operation.ADDITION);
     private float currentHitboxIncrease=0;
+    private float lastHitboxIncrease=0;
 
 
 
@@ -183,6 +184,8 @@ public class PlayerWeightBar {
        this.lastWeightStage=source.lastWeightStage;
        this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
        this.totalStages=source.totalStages;
+       this.currentHitboxIncrease=source.getCurrentHitboxIncrease();
+       this.lastHitboxIncrease=source.getLastHitboxIncrease();
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -206,6 +209,9 @@ public class PlayerWeightBar {
         //nbt.putBoolean("updateweight", this.readyToUpdateWeight);
         nbt.putInt("totalweightstages",this.totalStages);
 
+        // Save the current and last hitbox increase values
+        nbt.putFloat("currenthitboxincrease", this.currentHitboxIncrease);
+        nbt.putFloat("lasthitboxincrease", this.lastHitboxIncrease);
     }
     public void loadNBTData(CompoundTag nbt)
     {
@@ -221,6 +227,14 @@ public class PlayerWeightBar {
         this.lastWeightStage=nbt.getInt("weightstage");
         this.weightUpdateDelayModifier=nbt.getDouble("weightupdatedelaymodifier");
         this.totalStages=nbt.getInt("totalweightstages");
+
+        // Load the current and last hitbox increase values if they exist
+        if (nbt.contains("currenthitboxincrease")) {
+            this.currentHitboxIncrease = nbt.getFloat("currenthitboxincrease");
+        }
+        if (nbt.contains("lasthitboxincrease")) {
+            this.lastHitboxIncrease = nbt.getFloat("lasthitboxincrease");
+        }
     }
 
     public int getWeightUpdateDelay() {
@@ -363,10 +377,14 @@ public class PlayerWeightBar {
     public static void clearScaling(Player player,PlayerWeightBar weightBar)
     {
             if (ModList.get().isLoaded("pehkui")) {
-                ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
-                //removes anything added by Overstuffed
-                hitboxWidthData.setScale(hitboxWidthData.getScale() - weightBar.getCurrentHitboxIncrease());
-                weightBar.setCurrentHitboxIncrease(0);
+                if(weightBar.getCurrentHitboxIncrease()!=0)
+                {
+                    ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
+                    //removes anything added by Overstuffed
+                    hitboxWidthData.setScale(hitboxWidthData.getScale() - weightBar.getCurrentHitboxIncrease());
+                    weightBar.setCurrentHitboxIncrease(0);
+                    weightBar.setLastHitboxIncrease(0);
+                }
             }
     }
 
@@ -376,18 +394,29 @@ public class PlayerWeightBar {
         {
             if(ModList.get().isLoaded("pehkui"))
             {
-                ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
-                //removes anything added by Overstuffed
-                hitboxWidthData.setScale(hitboxWidthData.getScale()- weightBar.getCurrentHitboxIncrease());
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                     //recalculates what your supposed to have
                     float percentage=(float)(weightBar.getCurrentWeight()-weightBar.getMinWeight())/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
                     percentage=(float)(percentage*serverSettings.getMaxHitboxWidth());
-                    weightBar.setCurrentHitboxIncrease(percentage);
-                    hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
-                });
 
-                player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.SCALING_HEALTH_MODIFIER);
+                    // Only apply changes if the new scale is different from the last scale
+                    if (percentage != weightBar.getLastHitboxIncrease())
+                    {
+                        ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
+                        //removes anything added by Overstuffed
+                        hitboxWidthData.setScale(hitboxWidthData.getScale()- weightBar.getCurrentHitboxIncrease());
+
+                        // Update the current and last hitbox increase values
+                        weightBar.setLastHitboxIncrease(percentage);
+                        weightBar.setCurrentHitboxIncrease(percentage);
+
+                        // Apply the new scale
+                        hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
+
+                        // Update health modifier
+                        player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.SCALING_HEALTH_MODIFIER);
+                    }
+                });
             }
         });
     }
@@ -399,5 +428,13 @@ public class PlayerWeightBar {
 
     public void setCurrentHitboxIncrease(float currentHitboxIncrease) {
         this.currentHitboxIncrease = currentHitboxIncrease;
+    }
+
+    public float getLastHitboxIncrease() {
+        return lastHitboxIncrease;
+    }
+
+    public void setLastHitboxIncrease(float lastHitboxIncrease) {
+        this.lastHitboxIncrease = lastHitboxIncrease;
     }
 }

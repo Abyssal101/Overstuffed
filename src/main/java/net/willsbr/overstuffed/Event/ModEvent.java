@@ -408,7 +408,6 @@ public class ModEvent {
                     if(serverSettings.isHitboxScalingEnabled())
                     {
                         PlayerWeightBar.addCorrectScaling(player);
-
                     }
                 }
 

@@ -71,14 +71,14 @@ public class GluttonousGrowth
                 "gluttonousgrowth_server.toml");
 
         // register ConfigScreen as Config button in Mods list
-        ModLoadingContext.get().registerExtensionPoint(
-                ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(new BiFunction<Minecraft, Screen, Screen>() {
-                    @Override
-                    public Screen apply(Minecraft mc, Screen screen) {
-                        return new ConfigScreen();
-                    }
-                }));
+//        ModLoadingContext.get().registerExtensionPoint(
+//                ConfigScreenHandler.ConfigScreenFactory.class,
+//                () -> new ConfigScreenHandler.ConfigScreenFactory(new BiFunction<Minecraft, Screen, Screen>() {
+//                    @Override
+//                    public Screen apply(Minecraft mc, Screen screen) {
+//                        return new ConfigScreen();
+//                    }
+//                }));
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

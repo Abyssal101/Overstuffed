@@ -91,6 +91,8 @@ public class ConfigScreen extends Screen {
     private int calorieHeadingX;
     private int weightHeadingX;
 
+    private int loadedMaxCalories;
+
 
     private Window curWindow;
     private Font font;
@@ -176,6 +178,9 @@ public class ConfigScreen extends Screen {
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
         //todo make it so that you send the abs cal cap to the client to make this more reliable.
+
+
+
         this.caloriePreviewEditBox.setHint(Component.translatable("menu.overstuffed.calorierange",""+ GluttonousWorldConfig.absCalCap.get()).withStyle(ChatFormatting.GRAY));
         this.allEditBoxes.add(this.caloriePreviewEditBox);
 
@@ -269,35 +274,38 @@ public class ConfigScreen extends Screen {
         {
             editBox.tick();
         }
-        if(!weightPreviewEditBox.getValue().isEmpty())
+        if(weightPreviewEditBox!=null)
         {
-            try
+            if(!weightPreviewEditBox.getValue().isEmpty())
             {
-                int previewWeight=Integer.parseInt(weightPreviewEditBox.getValue());
-                previewWeight=Math.max(previewWeight, GluttonousClientConfig.getMinWeight());
-                previewWeight=Math.min(previewWeight, GluttonousClientConfig.getMaxWeight());
-                ClientCPMData.previewWeight(previewWeight);
-            }
-            catch(Exception e)
-            {
+                try
+                {
+                    int previewWeight=Integer.parseInt(weightPreviewEditBox.getValue());
+                    previewWeight=Math.max(previewWeight, GluttonousClientConfig.getMinWeight());
+                    previewWeight=Math.min(previewWeight, GluttonousClientConfig.getMaxWeight());
+                    ClientCPMData.previewWeight(previewWeight);
+                }
+                catch(Exception e)
+                {
 
+                }
+            }
+            if(!caloriePreviewEditBox.getValue().isEmpty())
+            {
+                try
+                {
+                    int previewCal=Integer.parseInt(caloriePreviewEditBox.getValue());
+                    previewCal=Math.max(previewCal,0);
+                    previewCal=Math.min(previewCal, GluttonousWorldConfig.absCalCap.get());
+                    ClientCPMData.previewStuffed(previewCal);
+                }
+                catch(Exception e)
+                {
+
+                }
             }
         }
-        if(!caloriePreviewEditBox.getValue().isEmpty())
-        {
-            try
-            {
-                int previewCal=Integer.parseInt(caloriePreviewEditBox.getValue());
-                previewCal=Math.max(previewCal,0);
-                previewCal=Math.min(previewCal, GluttonousWorldConfig.absCalCap.get());
-                System.out.println("preview cal: "+previewCal);
-                ClientCPMData.previewStuffed(previewCal);
-            }
-            catch(Exception e)
-            {
 
-            }
-        }
 
     }
 
@@ -348,7 +356,11 @@ public class ConfigScreen extends Screen {
         ModMenus.drawIssues(guiGraphics,font,centerW,playerDisplayY+playerDisplayHeight+10,errors,warnings);
         guiGraphics.fill(playerDisplayX-playerOutlineWidth,playerDisplayY-playerOutlineWidth,playerDisplayX+playerDisplayWidth+playerOutlineWidth,playerDisplayY+playerDisplayHeight+playerOutlineWidth,Color.GRAY.hashCode());
         guiGraphics.fill(playerDisplayX,playerDisplayY,playerDisplayX+playerDisplayWidth,playerDisplayY+playerDisplayHeight,Color.BLACK.hashCode());
-        renderEntityInInventoryFollowsMouse(guiGraphics, playerDisplayX+playerDisplayWidth/2, playerDisplayY+playerDisplayHeight-10, playerWidth, (float)(playerDisplayX+51)-mouseX,(float)(playerDisplayY+ 75 - 50)-mouseY, Minecraft.getInstance().player);
+        if(Minecraft.getInstance().player!=null)
+        {
+            renderEntityInInventoryFollowsMouse(guiGraphics, playerDisplayX+playerDisplayWidth/2, playerDisplayY+playerDisplayHeight-10, playerWidth, (float)(playerDisplayX+51)-mouseX,(float)(playerDisplayY+ 75 - 50)-mouseY, Minecraft.getInstance().player);
+
+        }
         // pose.popPose();
         // Render things after widgets (tooltips)
     }
