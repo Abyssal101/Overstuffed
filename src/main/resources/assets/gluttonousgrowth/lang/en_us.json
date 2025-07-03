@@ -17,7 +17,10 @@
   "advancement.overstuffed.fattydescription": "You managed to reach your max weight!",
 
   "advancements.overstuffed.recipes.scale.title": "Weight Watcher",
-  "advancements.overstuffed.recipes.scale.description": "Craft a scale to measure your weight",
+  "advancements.overstuffed.recipes.scale.description": "You better keep your weight in check!",
+
+  "advancements.overstuffed.has_scale.title": "Scale Collector",
+  "advancements.overstuffed.has_scale.description": "You have a scale in your inventory",
 
   "block.gluttonousgrowth.scale": "Scale",
 
@@ -102,6 +105,7 @@
 
   "menu.overstuffed.errorstitle": "Errors: Things that need to be fixed",
   "menu.overstuffed.warningstitle": "Warnings: Things you should know b/c certain features won't work",
+  "menu.gluttonousgrowth.shortwarning": "Warnings",
 
   "error.overstuffed.nocpm": "CPM is not installed",
 

@@ -54,10 +54,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -70,10 +70,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -89,10 +89,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -106,10 +106,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'overstuffed', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'gluttonousgrowth', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -197,8 +197,8 @@ dependencies {
 mixin {
     // MixinGradle Settings
 
-    add sourceSets.main, 'mixinconfig.overstuffed.refmap.json'
-    config 'mixinconfig.overstuffed.json'
+    add sourceSets.main, 'mixinconfig.gluttonousgrowth.refmap.json'
+    config 'mixinconfig.gluttonousgrowth.json'
 
 
     debug.verbose = false

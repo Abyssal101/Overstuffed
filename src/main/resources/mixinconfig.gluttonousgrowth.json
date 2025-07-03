@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "net.willsbr.gluttonousgrowth.Mixin",
+  "minVersion": "0.8",
+  "mixins":
+  [
+    "MixinCanEat"
+  ],
+  "client":
+  [
+    "MixinCanStartSprinting"
+  ],
+  "refmap":"mixinconfig.gluttonousgrowth.refmap.json"
+
+}
