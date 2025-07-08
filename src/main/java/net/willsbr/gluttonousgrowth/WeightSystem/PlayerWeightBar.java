@@ -20,11 +20,11 @@ import java.util.UUID;
 public class PlayerWeightBar {
     //
 
-    private int minWeight= GluttonousClientConfig.minWeight.get();
+    private int minWeight= 100;
     private int currentWeight;
 
     //this is what options will determine for display
-    private int curMaxWeight= GluttonousClientConfig.getMaxWeight();
+    private int curMaxWeight= 300;
 
     //this is what should be used to set curMaxWeight, infinite options is hard to balance
     //food queue situation so you slowly gain weight
@@ -364,13 +364,17 @@ public class PlayerWeightBar {
         int newWeightStage=weightBar.calculateCurrentWeightStage();
 
             //This clears the weight modifiers and sets it correctly when you join
-        if(newWeightStage!=0 || !GluttonousClientConfig.stageGain.get())
-        {
-            //TODO add setting if it's granualar versus staged
-            weightBar.setNewModifiers(newWeightStage);
-            player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
-            player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(weightBar.WEIGHT_SPEED_MODIFIER);
-        }
+            if(GluttonousClientConfig.GENERAL_SPEC.isLoaded())
+            {
+                if(newWeightStage!=0 || !GluttonousClientConfig.stageGain.get())
+                {
+                    //TODO add setting if it's granualar versus staged
+                    weightBar.setNewModifiers(newWeightStage);
+                    player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
+                    player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(weightBar.WEIGHT_SPEED_MODIFIER);
+                }
+            }
+
         });
     }
 

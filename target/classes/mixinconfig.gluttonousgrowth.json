@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.willsbr.gluttonousgrowth.Mixin",
+
+  "mixins":
+  [
+    "MixinCanEat"
+  ],
+  "refmap":"mixinconfig.gluttonousgrowth.refmap.json"
+
+
+
+
+}

@@ -137,9 +137,14 @@ public class ClientCPMData {
       }
       public static void previewStuffed(int inputCalories)
       {
-          Double percentFull= ((double) inputCalories/ GluttonousWorldConfig.absCalCap.get());
-          int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(GluttonousClientConfig.stuffedLayerConfigEntry.get()));
-          playersAPI.playAnimation(GluttonousClientConfig.stuffedLayerConfigEntry.get(),outOfMax);
+          if (ModList.get().isLoaded("cpm") && getPlayersAPI() != null) {
+              Double percentFull= ((double) inputCalories/ GluttonousWorldConfig.absCalCap.get());
+              int outOfMax=(int)(percentFull*playersAPI.getAnimationMaxValue(GluttonousClientConfig.stuffedLayerConfigEntry.get()));
+              playersAPI.playAnimation(GluttonousClientConfig.stuffedLayerConfigEntry.get(),outOfMax);
+
+
+          }
+
       }
 
     public static int getTotalWeightFrames() {

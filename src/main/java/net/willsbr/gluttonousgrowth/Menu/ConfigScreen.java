@@ -52,6 +52,8 @@ public class ConfigScreen extends Screen {
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
     private StateButton stageBasedWeight;
+    private ToggleButton figuraEnabled;
+
 
     private EditBox weightLayerEditBox;
     private EditBox calorieLayerEditBox;
@@ -147,6 +149,11 @@ public class ConfigScreen extends Screen {
         this.stageBasedWeight= new StateButton(weightHeadingX+12,headingY+20*3-5,50,20,Component.translatable("menu.overstuffed.stage"),Component.translatable("menu.overstuffed.granular"), GluttonousClientConfig.stageGain.get());
         this.stageBasedWeight.setTooltipText(Component.translatable("menu.overstuffed.gaintypetooltip"));
 
+        this.figuraEnabled=new ToggleButton(20,25,
+                        100,20,
+                        Component.translatable("menu.gluttonousgrowth.figuraenabled"),
+                        GluttonousClientConfig.usingFigura.get(),false);
+        this.figuraEnabled.setLocked(false);
         //ALL editbox sizes are based off this first editbox.
         this.allEditBoxes=new ArrayList<EditBox>();
         this.weightLayerEditBox = new EditBox(
@@ -229,6 +236,7 @@ public class ConfigScreen extends Screen {
                 }
         );
         this.addRenderableWidget(scaleUp);
+        this.addRenderableWidget(figuraEnabled);
 
         this.scaleDown=new PortProofButton(
                 playerDisplayX,
@@ -326,32 +334,35 @@ public class ConfigScreen extends Screen {
         drawCalorieSection(guiGraphics,calorieHeadingX,headingY);
 
        //Error Handling
-
-        if(!ModList.get().isLoaded("cpm"))
+        if(!figuraEnabled.getSetting())
         {
-            warnings.add(Component.translatable("error.overstuffed.nocpm"));
-        }
-        else if(ModList.get().isLoaded("cpm") && ClientCPMData.CPMUpdated()==-1)
-        {
-            warnings.add(Component.translatable("message.overstuffed.cpmversion",Component.literal(ClientCPMData.minCPMVersion)));
-        }
-        else{
-            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1
-                    &&  Minecraft.getInstance().player!=null)
+            if(!ModList.get().isLoaded("cpm"))
             {
-                warnings.add(Component.translatable("error.overstuffed.foundweightlayer"));
+                warnings.add(Component.translatable("error.overstuffed.nocpm"));
             }
-            if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.calorieLayerEditBox.getValue())==-1
-                    && Minecraft.getInstance().player!=null)
+            else if(ModList.get().isLoaded("cpm") && ClientCPMData.CPMUpdated()==-1)
             {
-                warnings.add(Component.translatable("error.overstuffed.foundcalorielayer"));
+                warnings.add(Component.translatable("message.overstuffed.cpmversion",Component.literal(ClientCPMData.minCPMVersion)));
             }
+            else{
+                if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.weightLayerEditBox.getValue())==-1
+                        &&  Minecraft.getInstance().player!=null)
+                {
+                    warnings.add(Component.translatable("error.overstuffed.foundweightlayer"));
+                }
+                if( getPlayersAPI()!=null && getPlayersAPI().getAnimationPlaying(this.calorieLayerEditBox.getValue())==-1
+                        && Minecraft.getInstance().player!=null)
+                {
+                    warnings.add(Component.translatable("error.overstuffed.foundcalorielayer"));
+                }
 
-            if(calorieLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
-            {
-                errors.add(Component.translatable("error.overstuffed.samelayer"));
+                if(calorieLayerEditBox.getValue().contentEquals(weightLayerEditBox.getValue()))
+                {
+                    errors.add(Component.translatable("error.overstuffed.samelayer"));
+                }
             }
         }
+
 
         ModMenus.drawIssues(guiGraphics,font,centerW,playerDisplayY+playerDisplayHeight+10,errors,warnings);
         guiGraphics.fill(playerDisplayX-playerOutlineWidth,playerDisplayY-playerOutlineWidth,playerDisplayX+playerDisplayWidth+playerOutlineWidth,playerDisplayY+playerDisplayHeight+playerOutlineWidth,Color.GRAY.hashCode());

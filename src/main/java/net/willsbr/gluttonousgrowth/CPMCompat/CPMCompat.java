@@ -9,6 +9,7 @@ import net.willsbr.gluttonousgrowth.client.ClientCPMData;
 import net.willsbr.gluttonousgrowth.config.GluttonousClientConfig;
 
 public class CPMCompat implements ICPMPlugin {
+
     public void initClient(IClientAPI api) {
         //Init client
 //          CPMMessageSenders.bellyPlaySender=((api.registerPluginMessage(Player.class, "playstuffedlevel",

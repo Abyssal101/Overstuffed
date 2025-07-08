@@ -46,6 +46,9 @@ public class GluttonousClientConfig {
     public static ForgeConfigSpec.ConfigValue<Float> maxHitboxWidth;
     public static ForgeConfigSpec.ConfigValue<Boolean> hitBoxScalingEnabled;
 
+    public static ForgeConfigSpec.ConfigValue<Boolean> usingFigura;
+
+
 
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
         builder.comment(" This category holds configs for CPM.");
@@ -116,6 +119,8 @@ public class GluttonousClientConfig {
 
         playerDisplayScale=builder.comment("The saved scale for a player in the GUI")
                 .define("displayscale,",30);
+        usingFigura=builder.comment("Boolean to determine if warnings regarding CPM should load")
+                .define("usingfigura,",false);
 
     }
 
@@ -147,6 +152,8 @@ public class GluttonousClientConfig {
         granularEffects.save();
         stageGain.save();
         totalStages.save();
+
+        usingFigura.save();
 
 
         if(Minecraft.getInstance().player!=null)

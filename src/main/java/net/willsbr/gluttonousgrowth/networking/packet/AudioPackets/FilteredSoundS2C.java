@@ -42,25 +42,25 @@ public class FilteredSoundS2C {
         context.enqueueWork(() ->
         {
 
-            if(Minecraft.getInstance().player!=null)
-            {
-                LocalPlayer player= Minecraft.getInstance().player;
-                if(GluttonousClientConfig.digestiveSoundsVolume.get()>0)
-                {
-                    if(name.contentEquals("burp"))
-                    {
-                        player.level().playSound(player,source, ModSounds.BURP_SOUNDS.get(soundIndex).get(),
-                                SoundSource.PLAYERS, (float) GluttonousClientConfig.digestiveSoundsVolume.get()/10, 1f);
-                    }
-                    else if(name.contentEquals("gurgle"))
-                    {
-                        player.level().playSound(player, source, ModSounds.GURGLE_SOUNDS.get(
-                                        player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size()-1)).get(),
-                                player.getSoundSource(), (float) GluttonousClientConfig.digestiveSoundsVolume.get()/10, 1f);
-                    }
-                }
-
-            }
+//            if(Minecraft.getInstance().player!=null)
+//            {
+//                LocalPlayer player= Minecraft.getInstance().player;
+//                if(GluttonousClientConfig.digestiveSoundsVolume.get()>0)
+//                {
+//                    if(name.contentEquals("burp"))
+//                    {
+//                        player.level().playSound(player,source, ModSounds.BURP_SOUNDS.get(soundIndex).get(),
+//                                SoundSource.PLAYERS, (float) GluttonousClientConfig.digestiveSoundsVolume.get()/10, 1f);
+//                    }
+//                    else if(name.contentEquals("gurgle"))
+//                    {
+//                        player.level().playSound(player, source, ModSounds.GURGLE_SOUNDS.get(
+//                                        player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size()-1)).get(),
+//                                player.getSoundSource(), (float) GluttonousClientConfig.digestiveSoundsVolume.get()/10, 1f);
+//                    }
+//                }
+//
+//            }
 
         });
         return true;

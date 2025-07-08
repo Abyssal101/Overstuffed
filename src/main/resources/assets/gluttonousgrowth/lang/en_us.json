@@ -106,6 +106,7 @@
   "menu.overstuffed.errorstitle": "Errors: Things that need to be fixed",
   "menu.overstuffed.warningstitle": "Warnings: Things you should know b/c certain features won't work",
   "menu.gluttonousgrowth.shortwarning": "Warnings",
+  "menu.gluttonousgrowth.figuraenabled": "Using Figura:",
 
   "error.overstuffed.nocpm": "CPM is not installed",
 
