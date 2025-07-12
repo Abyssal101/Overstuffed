@@ -96,7 +96,7 @@ public class ClientConfigScreen extends Screen {
         //TODO MAKE the Sliders have translateable components
         this.digestiveSoundVolume=new OptionSlider(centerW-152,170,150,20,Component.translatable("menu.overstuffed.digestvolume"), GluttonousClientConfig.digestiveSoundsVolume.get()*0.1);
         this.burpFrequency = new OptionSlider(centerW+2,170,150,20,Component.translatable("menu.overstuffed.burpfreq"), GluttonousClientConfig.burpFrequency.get()*0.1);
-        this.gurgleFrequency = new OptionSlider(centerW,190,150,20,Component.translatable("menu.overstuffed.gurglefreq"), GluttonousClientConfig.gurgleFrequency.get()*0.1);
+        this.gurgleFrequency = new OptionSlider(centerW+2,190,150,20,Component.translatable("menu.overstuffed.gurglefreq"), GluttonousClientConfig.gurgleFrequency.get()*0.1);
 
 
 

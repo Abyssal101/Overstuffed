@@ -38,13 +38,10 @@ public class setCurrentWeight {
                 if(index>weightBar.getCurMaxWeight() || index<weightBar.getMinWeight())
                 {
                     player.sendSystemMessage(Component.literal("Error: Set weight out of range of their max/min values"));
-
                 }
                 else{
-                    System.out.println(weightBar.getCurrentWeight());
                     weightBar.setCurrentWeight(index);
                     ModMessages.sendToPlayer(new setWeightS2CPacket(index),(ServerPlayer) player);
-                    PlayerWeightBar.addCorrectModifier(player);
                     player.sendSystemMessage(Component.translatable("commands.overstuffed.setweightsuccess",Component.literal(player.getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),Component.literal(index+"").withStyle(ChatFormatting.DARK_GRAY)));
                 }
 

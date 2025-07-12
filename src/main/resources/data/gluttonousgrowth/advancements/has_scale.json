@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "has_scale": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gluttonousgrowth:scale"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "gluttonousgrowth:scale"
+    },
+    "title": {
+      "translate": "advancements.overstuffed.recipes.scale.title"
+    },
+    "description": {
+      "translate": "advancements.overstuffed.recipes.scale.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "has_scale"
+    ]
+  ]
+}

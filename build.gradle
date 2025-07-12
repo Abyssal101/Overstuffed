@@ -131,7 +131,7 @@ mixin {
     config 'mixinconfig.gluttonousgrowth.json'
     debug.verbose = false
     debug.export = false
-    dumpTargetOnFailure = true
+    dumpTargetOnFailure = false
 
     // AP Settings
     disableTargetValidator = true

@@ -33,6 +33,7 @@ import net.willsbr.gluttonousgrowth.networking.ModMessages;
 import net.willsbr.gluttonousgrowth.networking.packet.SettingPackets.PlayerSyncAllSettingsPollS2C;
 import net.willsbr.gluttonousgrowth.networking.packet.StuffedPackets.CalorieMeterDelaySyncPacketS2C;
 import net.willsbr.gluttonousgrowth.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
+import net.willsbr.gluttonousgrowth.networking.packet.SyncAttributeValuesS2C;
 import net.willsbr.gluttonousgrowth.networking.packet.WeightPackets.BurstGainDataSyncPacketS2C;
 import net.willsbr.gluttonousgrowth.networking.packet.WeightPackets.QueuedWeightSyncS2CPacket;
 import net.willsbr.gluttonousgrowth.networking.packet.WeightPackets.WeightBarDataSyncPacketS2C;
@@ -150,8 +151,7 @@ public class ModEvent {
     }
     public static void burstGain(PlayerWeightBar weightBar,PlayerServerSettings serverSettings,TickEvent.PlayerTickEvent event,int curWeightStage)
     {
-        if(ModList.get().isLoaded("cpm"))
-        {
+
             if(curWeightStage!=weightBar.getLastWeightStage())
             {
 
@@ -172,10 +172,12 @@ public class ModEvent {
                     {
                         weightBar.setLastWeightStage(curWeightStage);
                         weightBar.setAmountThroughStage(0);
+                        weightBar.setEffectsReady(true);
                         ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
                     }
                     else
                     {
+
                         if(curWeightStage>=weightBar.getLastWeightStage()+1)
                         {
                             weightBar.setAmountThroughStage(weightBar.getAmountThroughStage()+1);
@@ -189,7 +191,7 @@ public class ModEvent {
                     }
                 }
             }
-        }
+
 
     }
 
@@ -203,7 +205,7 @@ public class ModEvent {
                 int curWeightStage = weightBar.calculateCurrentWeightStage();
                 int lastWeightStage = weightBar.getLastWeightStage();
                 //create weight updates here
-                if (serverSettings.stageBasedGain())
+                if(serverSettings.stageBasedGain())
                 {
                     burstGain(weightBar,serverSettings, event, curWeightStage);
                 }
@@ -378,9 +380,13 @@ public class ModEvent {
     }
 
 
-    public static void weightBarEffects(TickEvent.PlayerTickEvent event,PlayerServerSettings serverSettings, PlayerWeightBar weightBar, int xOf5, int lastWeightStage)
+    public static void weightBarEffects(TickEvent.PlayerTickEvent event,PlayerServerSettings serverSettings,
+                                        PlayerWeightBar weightBar, int curStage, int lastWeightStage)
     {
             ServerPlayer player = (ServerPlayer) event.player;
+            //First check if player even wants to have effects based off the server nbt saved setting
+            //Will attempt to clear the effects every time this runs accordingly, has checks within the
+            //method to only run based off certain changes
             if(!serverSettings.weightEffects())
             {
                 PlayerWeightBar.clearModifiers(player,weightBar);
@@ -388,33 +394,57 @@ public class ModEvent {
             }
             else
             {
+                //First we see if uses a stage based gain
                 if(serverSettings.stageBasedGain())
                 {
-                    if(xOf5!=lastWeightStage)
+                    if(curStage!=lastWeightStage)
                     {
 
-                        //This handles changing the modifiers when somehow the last weight stage and the new weight stage are greater than a one value jump
-                        //Maybe could make it just this, but slightly more effcient I think?
+                       //Basically if the new stage and old stage are different, we clear old effects and add new ones
+                        //with how I structured  calcualting effects, the methods can be exactly the same
+                        //It's just that the timing varies.
+                        //this calculated the current weight of the stage itself, not the true total weight
+                        if(weightBar.isEffectsReady())
+                        {
+                            weightBar.setEffectsReady(false);
+                            weightBar.setNewModifiers((int)((double)curStage/weightBar.getTotalStages()*(weightBar.getCurMaxWeight()-weightBar.getMinWeight()))+weightBar.getMinWeight());
+                            PlayerWeightBar.addCorrectModifier(player);
 
-                        PlayerWeightBar.addCorrectModifier(player);
-                        //handles adding the correct hitbox changes
-                        PlayerWeightBar.addCorrectScaling(player);
+                            //handles adding the correct hitbox changes
+                            PlayerWeightBar.clearScaling(player,weightBar);
+                            if(serverSettings.isHitboxScalingEnabled())
+                            {
+                                PlayerWeightBar.addCorrectScaling(player);
+                            }
+                        }
+
                     }
                 }
                 else
                 {
+
+                    //this is granular right here
+                    weightBar.setNewModifiers();
                     PlayerWeightBar.addCorrectModifier(player);
+
                     //handles adding the correct hitbox changes
+                    PlayerWeightBar.clearScaling(player,weightBar);
                     if(serverSettings.isHitboxScalingEnabled())
                     {
                         PlayerWeightBar.addCorrectScaling(player);
                     }
                 }
 
+                //Minecraft by default doesn't update the health till you get damanged,so players could lose weight
+                //and maintain a sort of bonus health if I didn't do this.
                 if(player.getHealth()>player.getMaxHealth())
                 {
                     player.setHealth(player.getMaxHealth());
                 }
+
+                ModMessages.sendToPlayer(new SyncAttributeValuesS2C
+                        (weightBar.getWeightHealth(),weightBar.getWeightSpeed(),
+                                weightBar.getCurrentHitboxIncrease(),weightBar.getScalingHealth()),player);
 
             }
     }
@@ -437,8 +467,10 @@ public class ModEvent {
                     weightBar.setCurrentWeight(Math.max(weightBar.getCurrentWeight(),weightBar.getMinWeight()));
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
                     //OverstuffedConfig.saveConfig();
-
+                    weightBar.setEffectsReady(true);
+                    weightBar.setNewModifiers();
                    PlayerWeightBar.addCorrectModifier(player);
+                   PlayerWeightBar.clearScaling(player,weightBar);
 
                 });
                 player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {

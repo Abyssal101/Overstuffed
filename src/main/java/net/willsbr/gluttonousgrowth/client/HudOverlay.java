@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,7 @@ import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -59,6 +61,7 @@ public class HudOverlay {
     private static final ResourceLocation SUPERSTUFFED_PART = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffed_part.png");
     private static final ResourceLocation SUPERSTUFFED_END = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffed_end.png");
     private static Font font;
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
     private static final ResourceLocation STOMACH_ICON_ONE = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomach4.png");
     private static final ResourceLocation STOMACH_ONE_MASK = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stomach/stomachmask4.png");
@@ -301,19 +304,29 @@ public class HudOverlay {
 
         if(gui.getMinecraft().player!=null)
         {   long countdown=0;
+            LocalPlayer clientPlayer=gui.getMinecraft().player;
             if(ClientCalorieMeter.getCurrentSavedTick()!=-1)
             {
-                 countdown= ClientCalorieMeter.getCurrentDelay()-(gui.getMinecraft().player.tickCount-ClientCalorieMeter.getCurrentSavedTick());
+                 countdown=ClientCalorieMeter.getCurrentDelay()-(clientPlayer.tickCount-ClientCalorieMeter.getCurrentSavedTick());
             }
             info.add(Component.translatable("message.overstuffed.debugcalorieclear",""+
                     countdown));
+
+
         }
 
         info.add(Component.translatable("message.overstuffed.debugqueueweight",""+
                 ClientWeightBarData.getQueuedWeight()));
         info.add(Component.translatable("message.overstuffed.debugtotalqueueweight",""+
                 ClientWeightBarData.getTotalQueuedWeight()));
-
+        info.add(Component.translatable("message.overstuffed.debugweighthealth",""+
+                ClientWeightBarData.getWeightHealthBoost()));
+        info.add(Component.translatable("message.overstuffed.debugweightspeed",
+    DECIMAL_FORMAT.format(ClientWeightBarData.getWeightSpeedLoss())));
+        info.add(Component.translatable("message.overstuffed.debughitboxincrease", 
+    DECIMAL_FORMAT.format(ClientWeightBarData.getCurrentAddedScale())));
+        info.add(Component.translatable("message.overstuffed.debughitboxhealth",""+
+                ClientWeightBarData.getScalingHealthBoost()));
 
         for(int i=0;i<info.size();i++)
         {

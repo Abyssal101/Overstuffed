@@ -71,6 +71,7 @@ public class SyncClientSettingsC2S {
             });
             context.getSender().getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
                 weightBar.setTotalStages(totalStages);
+                weightBar.setEffectsReady(true);
             });
 
         });

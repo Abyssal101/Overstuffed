@@ -2,6 +2,8 @@ package net.willsbr.gluttonousgrowth.networking;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -206,17 +208,30 @@ public class ModMessages {
                 .consumerMainThread(SyncWeightCapS2C::handle)
                 .add();
 
-        net.messageBuilder(CalorieMeterDelaySyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(CalorieMeterDelaySyncPacketS2C::new)
-                .encoder(CalorieMeterDelaySyncPacketS2C::toBytes)
-                .consumerMainThread(CalorieMeterDelaySyncPacketS2C::handle)
-                .add();
 
-        net.messageBuilder(FilteredSoundS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(FilteredSoundS2C::new)
-                .encoder(FilteredSoundS2C::toBytes)
-                .consumerMainThread(FilteredSoundS2C::handle)
+
+
+        net.messageBuilder(SyncAttributeValuesS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SyncAttributeValuesS2C::new)
+                .encoder(SyncAttributeValuesS2C::toBytes)
+                .consumerMainThread(SyncAttributeValuesS2C::handle)
                 .add();
+// Register client-side packets only if we're on the client
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            net.messageBuilder(FilteredSoundS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                    .decoder(FilteredSoundS2C::new)
+                    .encoder(FilteredSoundS2C::toBytes)
+                    .consumerMainThread(FilteredSoundS2C::handle)
+                    .add();
+            net.messageBuilder(CalorieMeterDelaySyncPacketS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                    .decoder(CalorieMeterDelaySyncPacketS2C::new)
+                    .encoder(CalorieMeterDelaySyncPacketS2C::toBytes)
+                    .consumerMainThread(CalorieMeterDelaySyncPacketS2C::handle)
+                    .add();
+        }
+
+
+
 
 
 
@@ -230,7 +245,6 @@ public class ModMessages {
     }
     public static <MSG> void sendToPlayer(MSG message, ServerPlayer player)
     {
-
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),message);
     }
 

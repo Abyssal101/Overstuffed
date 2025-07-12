@@ -3,6 +3,7 @@ package net.willsbr.gluttonousgrowth.Mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.willsbr.gluttonousgrowth.WeightSystem.PlayerWeightBarProvider;
+import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,7 @@ public abstract class MixinCanStartSprinting {
         if(Minecraft.getInstance().level.isClientSide)
         {
             Minecraft.getInstance().player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightbar -> {
-                if(weightbar.calculateCurrentWeightStage()>=4)
+                if(weightbar.calculateCurrentWeightPercentage()>GluttonousWorldConfig.sprintDisableThreshold.get())
                 {
                     cir.setReturnValue(false);
                 }

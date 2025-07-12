@@ -17,7 +17,7 @@ public class CommonEventMethods {
         setCurrentWeight.register(commands,event.getBuildContext());
         //clearLayers.register(commands, event.getBuildContext());
         //debugViewCommand.register(commands, event.getBuildContext());
-        //setMaxCalories.register(commands, event.getBuildContext());
+        setMaxCalories.register(commands, event.getBuildContext());
         //figuraNBTUpdateCommand.register(commands, event.getBuildContext());
         //setWGMethod.register(commands,event.getBuildContext());
         //setBurpFrequency.register(commands, event.getBuildContext());

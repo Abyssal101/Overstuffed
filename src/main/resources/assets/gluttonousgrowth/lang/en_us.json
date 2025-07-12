@@ -57,6 +57,17 @@
   "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
   "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
 
+  "message.overstuffed.debugweighthealth": "Added health from weight:%1$s",
+  "message.overstuffed.debugweightspeed": "Percentage speed lost from weight:%1$s",
+  "message.overstuffed.debughitboxincrease": "Hitbox Increase:%1$s",
+  "message.overstuffed.debughitboxhealth": "Added Health from hitbox:%1$s",
+
+
+
+
+
+
+
   "menu.overstuffed.main":"Main",
   "menu.overstuffed.client":"Client",
   "menu.overstuffed.advanced":"Advanced",

@@ -21,6 +21,8 @@ public class GluttonousWorldConfig {
 
     public static ForgeConfigSpec.ConfigValue<Integer> maxHearts;
     public static ForgeConfigSpec.ConfigValue<Double> maxSpeedDecrease;
+    public static ForgeConfigSpec.ConfigValue<Double> sprintDisableThreshold;
+
 
     public static ForgeConfigSpec.ConfigValue<Integer> multiplierForWGDelay;
     public static ForgeConfigSpec.ConfigValue<Integer> maxWGTickDelay;
@@ -87,6 +89,9 @@ public class GluttonousWorldConfig {
         maxSpeedDecrease=builder
                 .comment("Max Speed Decrease for all players at max weight")
                 .define("max_speed_decrease", 0.3);
+        sprintDisableThreshold= builder
+                .comment("Percentage of players weight that must be reached before sprinting is disabled")
+                .define("sprint_disabled_threshold", 0.85);
 
         multiplierForWGDelay=builder
                 .comment("Multiplier of ticks to create the delay between eating food and gaining weight. Lower value will make players gain weight faster")

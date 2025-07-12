@@ -12,6 +12,13 @@ public class ClientWeightBarData {
     private static int queuedWeight = 0;
     private static int totalQueuedWeight = 0;
 
+
+    private static int weightHealthBoost=0;
+    private static double weightSpeedLoss=0;
+
+    private static double currentAddedScale=0;
+    private static int scalingHealthBoost=0;
+
     public static void setCurrentWeight(int newWeight) {
 
         ClientWeightBarData.currentWeight = newWeight;
@@ -54,5 +61,37 @@ public class ClientWeightBarData {
 
     public static void setTotalQueuedWeight(int totalQueuedWeight) {
         ClientWeightBarData.totalQueuedWeight = totalQueuedWeight;
+    }
+
+    public static int getWeightHealthBoost() {
+        return weightHealthBoost;
+    }
+
+    public static void setWeightHealthBoost(int weightHealthBoost) {
+        ClientWeightBarData.weightHealthBoost = weightHealthBoost;
+    }
+
+    public static double getWeightSpeedLoss() {
+        return weightSpeedLoss;
+    }
+
+    public static void setWeightSpeedLoss(double weightSpeedLoss) {
+        ClientWeightBarData.weightSpeedLoss = weightSpeedLoss;
+    }
+
+    public static double getCurrentAddedScale() {
+        return currentAddedScale;
+    }
+
+    public static void setCurrentAddedScale(double currentAddedScale) {
+        ClientWeightBarData.currentAddedScale = currentAddedScale;
+    }
+
+    public static int getScalingHealthBoost() {
+        return scalingHealthBoost;
+    }
+
+    public static void setScalingHealthBoost(int scalingHealthBoost) {
+        ClientWeightBarData.scalingHealthBoost = scalingHealthBoost;
     }
 }

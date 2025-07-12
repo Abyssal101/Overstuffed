@@ -15,13 +15,13 @@ public class OverstuffedEffectC2SPacket {
     private static final String MESSAGE_OVERFULL_EFFECT ="message.overstuffed.effect";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
 
-    private static int effectIndex;
-    private static int effectDuration;
-    private static int effectAmplifier;
-    public OverstuffedEffectC2SPacket(int effectIndex, int duration, int amplifier){
-        this.effectIndex=effectIndex;
+    private int effectIndex;
+    private int effectDuration;
+    private int effectAmplifier;
+    public OverstuffedEffectC2SPacket(int effectInd, int duration, int amplifier){
+        effectIndex=effectInd;
         effectDuration=duration;
-        this.effectAmplifier=amplifier;
+        effectAmplifier=amplifier;
 
     }
 

@@ -52,6 +52,7 @@ public class AdvancedConfigScreen extends Screen {
 
     private ToggleButton weightEffect;
     private ToggleButton hitboxScaling;
+    private ToggleButton figuraEnabled;
 
 
     private EditBox maxWeight;
@@ -125,6 +126,11 @@ public class AdvancedConfigScreen extends Screen {
                 Component.translatable("menu.overstuffed.maxscaling"));
         this.maxHitboxScaling.setValue(GluttonousClientConfig.maxHitboxWidth.get()+"");
 
+        this.figuraEnabled=new ToggleButton(centerW-50,hitboxScaling.getY()+25,
+                100,20,
+                Component.translatable("menu.gluttonousgrowth.figuraenabled"),
+                GluttonousClientConfig.usingFigura.get(),false);
+        this.figuraEnabled.setLocked(false);
 
 
         this.addRenderableWidget(weightEffect);
@@ -133,6 +139,7 @@ public class AdvancedConfigScreen extends Screen {
 
         this.addRenderableWidget(maxHitboxScaling);
         this.addRenderableWidget(hitboxScaling);
+        this.addRenderableWidget(figuraEnabled);
 
 
 
@@ -163,6 +170,7 @@ public class AdvancedConfigScreen extends Screen {
         super.tick();
 
     }
+
 
     // mouseX and mouseY indicate the scaled coordinates of where the cursor is in
     // on the screen
@@ -266,6 +274,7 @@ public class AdvancedConfigScreen extends Screen {
 
         GluttonousClientConfig.weightEffects.set(weightEffect.getSetting());
         GluttonousClientConfig.hitBoxScalingEnabled.set(hitboxScaling.getSetting());
+        GluttonousClientConfig.usingFigura.set(figuraEnabled.getSetting());
         try{
             float converted=Float.parseFloat(maxHitboxScaling.getValue());
             GluttonousClientConfig.maxHitboxWidth.set(converted);

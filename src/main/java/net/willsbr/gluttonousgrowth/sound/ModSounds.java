@@ -79,6 +79,7 @@ public class ModSounds {
     {
             if(!player.level().isClientSide)
             {
+
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                     if(player.getRandom().nextIntBetweenInclusive(0,10)<serverSettings.getBurpFrequency())
                     {
@@ -116,7 +117,15 @@ public class ModSounds {
                             {
                                 if(eachPlayer.level().dimension() == player.level().dimension())
                                 {
-                                    ModMessages.sendToPlayer(new FilteredSoundS2C(soundIndex,player.blockPosition(),"gurgle"), eachPlayer);
+                                    if(eachPlayer.getUUID().equals(player.getUUID()))
+                                    {
+                                        ModMessages.sendToPlayer(new FilteredSoundS2C(soundIndex,player.blockPosition(),"gurgle"), eachPlayer);
+
+                                    }
+                                    else{
+                                        ModMessages.sendToPlayer(new FilteredSoundS2C(soundIndex,player.blockPosition(),"gurgle"), eachPlayer);
+
+                                    }
                                 }
                             }
                         }

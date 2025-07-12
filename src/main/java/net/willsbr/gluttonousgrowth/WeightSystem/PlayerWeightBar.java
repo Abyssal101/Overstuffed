@@ -46,6 +46,8 @@ public class PlayerWeightBar {
     private int lastWeightStage;
 
     private int amountThroughStage;
+    private boolean effectsReady=false;
+
     private AttributeModifier WEIGHT_HEALTH_MODIFIER =
             new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.ADDITION);
     private AttributeModifier WEIGHT_SPEED_MODIFIER =
@@ -309,18 +311,19 @@ public class PlayerWeightBar {
 
     public void setNewModifiers()
     {
-        double percentageEffect= (double)this.currentWeight/(this.getCurMaxWeight()-this.getMinWeight());
-        this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
-                "health increase from OS",
-                (int)(percentageEffect* GluttonousWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
-
-        this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
-                "speed increase from OS",
-                -(percentageEffect* GluttonousWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
+        double percentageEffect= (double)(this.currentWeight-this.getMinWeight())/(this.getCurMaxWeight()-this.getMinWeight());
+       setNewModifierLogic(percentageEffect);
     }
-    public void setNewModifiers(int currentStage)
+    //assumes that the currentWeight includes the minWeight
+    public void setNewModifiers(int currentWeight)
     {
-        double percentageEffect= (double)currentStage/this.getTotalStages();
+
+        double percentageEffect= (double)(currentWeight-this.getMinWeight())/(this.getCurMaxWeight()-this.getMinWeight());
+        setNewModifierLogic(percentageEffect);
+    }
+
+    private void setNewModifierLogic(double percentageEffect)
+    {
         this.WEIGHT_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"),
                 "health increase from OS",
                 (int)(percentageEffect* GluttonousWorldConfig.maxHearts.get()), AttributeModifier.Operation.ADDITION);
@@ -328,12 +331,6 @@ public class PlayerWeightBar {
         this.WEIGHT_SPEED_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2704-458d-a799-3d06b1e3a36c"),
                 "speed increase from OS",
                 -(percentageEffect* GluttonousWorldConfig.maxSpeedDecrease.get()), AttributeModifier.Operation.MULTIPLY_BASE);
-
-
-        this.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
-                "hitbox health increase from OS",
-                (int)(this.currentHitboxIncrease/ GluttonousWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
-
 
     }
 
@@ -361,19 +358,10 @@ public class PlayerWeightBar {
 
         PlayerWeightBar.clearModifiers(player, weightBar);
         ModMessages.sendToPlayer(new WeightMaxMinPollS2C(),player);
-        int newWeightStage=weightBar.calculateCurrentWeightStage();
 
-            //This clears the weight modifiers and sets it correctly when you join
-            if(GluttonousClientConfig.GENERAL_SPEC.isLoaded())
-            {
-                if(newWeightStage!=0 || !GluttonousClientConfig.stageGain.get())
-                {
-                    //TODO add setting if it's granualar versus staged
-                    weightBar.setNewModifiers(newWeightStage);
-                    player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
-                    player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(weightBar.WEIGHT_SPEED_MODIFIER);
-                }
-            }
+        //This clears the weight modifiers and sets it correctly when you join
+            player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.WEIGHT_HEALTH_MODIFIER);
+            player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(weightBar.WEIGHT_SPEED_MODIFIER);
 
         });
     }
@@ -400,7 +388,21 @@ public class PlayerWeightBar {
             {
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                     //recalculates what your supposed to have
-                    float percentage=(float)(weightBar.getCurrentWeight()-weightBar.getMinWeight())/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
+                    int curWeight;
+                    //Could I make a copy of this method and pass the this calculation, yes but it would
+                    //make my code so much more ugly
+
+                    if(serverSettings.stageBasedGain())
+                    {
+                        curWeight=(int)((double)weightBar.calculateCurrentWeightStage()
+                                /weightBar.getTotalStages()*(weightBar.getCurMaxWeight()-weightBar.getMinWeight()));
+                    }
+                    else
+                    {
+                        curWeight = weightBar.getCurrentWeight()-weightBar.getMinWeight();
+                    }
+
+                    float percentage=(float)(curWeight)/(weightBar.getCurMaxWeight()-weightBar.getMinWeight());
                     percentage=(float)(percentage*serverSettings.getMaxHitboxWidth());
 
                     // Only apply changes if the new scale is different from the last scale
@@ -417,6 +419,9 @@ public class PlayerWeightBar {
                         // Apply the new scale
                         hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
 
+                        weightBar.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
+                                "hitbox health increase from OS",
+                                (int)(weightBar.currentHitboxIncrease/GluttonousWorldConfig.blocksPerHeart.get()), AttributeModifier.Operation.ADDITION);
                         // Update health modifier
                         player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(weightBar.SCALING_HEALTH_MODIFIER);
                     }
@@ -440,5 +445,26 @@ public class PlayerWeightBar {
 
     public void setLastHitboxIncrease(float lastHitboxIncrease) {
         this.lastHitboxIncrease = lastHitboxIncrease;
+    }
+    public int getWeightHealth()
+    {
+        return (int)WEIGHT_HEALTH_MODIFIER.getAmount();
+    }
+    public double getWeightSpeed()
+    {
+        return WEIGHT_SPEED_MODIFIER.getAmount();
+    }
+    public int getScalingHealth()
+    {
+        return (int)SCALING_HEALTH_MODIFIER.getAmount();
+    }
+
+
+    public boolean isEffectsReady() {
+        return effectsReady;
+    }
+
+    public void setEffectsReady(boolean effectsReady) {
+        this.effectsReady = effectsReady;
     }
 }

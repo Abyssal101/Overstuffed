@@ -52,7 +52,6 @@ public class ConfigScreen extends Screen {
     // Not a final field because this cannot be initialized in the constructor,
     // as explained below
     private StateButton stageBasedWeight;
-    private ToggleButton figuraEnabled;
 
 
     private EditBox weightLayerEditBox;
@@ -149,11 +148,7 @@ public class ConfigScreen extends Screen {
         this.stageBasedWeight= new StateButton(weightHeadingX+12,headingY+20*3-5,50,20,Component.translatable("menu.overstuffed.stage"),Component.translatable("menu.overstuffed.granular"), GluttonousClientConfig.stageGain.get());
         this.stageBasedWeight.setTooltipText(Component.translatable("menu.overstuffed.gaintypetooltip"));
 
-        this.figuraEnabled=new ToggleButton(20,25,
-                        100,20,
-                        Component.translatable("menu.gluttonousgrowth.figuraenabled"),
-                        GluttonousClientConfig.usingFigura.get(),false);
-        this.figuraEnabled.setLocked(false);
+
         //ALL editbox sizes are based off this first editbox.
         this.allEditBoxes=new ArrayList<EditBox>();
         this.weightLayerEditBox = new EditBox(
@@ -236,7 +231,6 @@ public class ConfigScreen extends Screen {
                 }
         );
         this.addRenderableWidget(scaleUp);
-        this.addRenderableWidget(figuraEnabled);
 
         this.scaleDown=new PortProofButton(
                 playerDisplayX,
@@ -334,7 +328,7 @@ public class ConfigScreen extends Screen {
         drawCalorieSection(guiGraphics,calorieHeadingX,headingY);
 
        //Error Handling
-        if(!figuraEnabled.getSetting())
+        if(!GluttonousClientConfig.usingFigura.get())
         {
             if(!ModList.get().isLoaded("cpm"))
             {
@@ -487,16 +481,24 @@ public class ConfigScreen extends Screen {
         y=y+20;
         guiGraphics.drawString(font, Component.translatable("menu.overstuffed.preview"),x,y,Color.white.hashCode());
         //This should also show up when stage based gainig is selected
-        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stage"),x+100,y,Color.white.hashCode());
+        //guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stage"),x+100,y,Color.white.hashCode());
 
 
         y=y+20;
         guiGraphics.drawString(font, Component.translatable("menu.overstuffed.gaintype"),x,y,Color.white.hashCode());
 
         //TODO Make these show up only when stage based gaining is selected
-        y=y+20;
-        guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stages"),x,y,Color.white.hashCode());
 
+        if(stageBasedWeight.getSetting())
+        {
+            this.totalStagesEditBox.visible=true;
+            y=y+20;
+            guiGraphics.drawString(font, Component.translatable("menu.overstuffed.stages"),x,y,Color.white.hashCode());
+        }
+        else{
+            this.totalStagesEditBox.visible=false;
+
+        }
 
 
 

@@ -61,7 +61,7 @@ public class OverfullFoodC2SPacket {
 
                                 if(stageGain.get())
                                 {
-                                    double currentStagePercentage=weightBar.calculateCurrentWeightStage()*(100.0/weightBar.getTotalStages());
+                                    double currentStagePercentage=(double)weightBar.calculateCurrentWeightStage()/weightBar.getTotalStages();
                                     calReductionFromWeight=(1-currentStagePercentage*0.5);
                                 }
                                 else
