@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -137,8 +138,8 @@ public class ClientConfigScreen extends Screen {
                 Component.translatable("menu.overstuffed.calyoffset"));
         this.stuffedHudYOffset.setValue(GluttonousClientConfig.stuffedHudYOffset.get()+"");
 
-        this.stuffedHudXOffset.setHint(Component.translatable("menu.gluttonousgrowth.calmovementwarning"));
-        this.stuffedHudYOffset.setHint(Component.translatable("menu.gluttonousgrowth.calmovementwarning"));
+        this.stuffedHudXOffset.setTooltip(Tooltip.create(Component.translatable("menu.gluttonousgrowth.calmovementwarning")));
+        this.stuffedHudYOffset.setTooltip(Tooltip.create(Component.translatable("menu.gluttonousgrowth.calmovementwarning")));
 
         this.debugView= new ToggleButton(screenW/2-50,140,100,20,
                 Component.translatable("message.overstuffed.debugbutton"), GluttonousClientConfig.debugView.get());
@@ -160,7 +161,7 @@ public class ClientConfigScreen extends Screen {
         this.addRenderableWidget(this.stuffedHudXOffset);
         this.addRenderableWidget(this.stuffedHudYOffset);
 
-        this.addRenderableWidget(debugView);
+        //this.addRenderableWidget(debugView);
 
         // Add the "Done" button
         this.addRenderableWidget(new PortProofButton(

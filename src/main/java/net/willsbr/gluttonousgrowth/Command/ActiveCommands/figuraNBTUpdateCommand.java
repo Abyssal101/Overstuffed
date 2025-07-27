@@ -1,4 +1,4 @@
-package net.willsbr.gluttonousgrowth.Command;
+package net.willsbr.gluttonousgrowth.Command.ActiveCommands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -22,7 +22,7 @@ public class figuraNBTUpdateCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
         pDispatcher.register(Commands.literal("ggconfig").then(Commands.literal("updateNBT").executes((p_138618_) -> {
-            if(p_138618_.getSource().getPlayer()!=null)
+            if(p_138618_.getSource().isPlayer())
             {
                 return updateNBT(p_138618_.getSource(),p_138618_.getSource().getPlayer());
             }

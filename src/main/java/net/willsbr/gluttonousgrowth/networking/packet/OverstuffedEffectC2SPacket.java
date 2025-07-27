@@ -63,6 +63,11 @@ public class OverstuffedEffectC2SPacket {
                             {
                                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, effectDuration ,effectAmplifier));
                             }
+                            else if(effectIndex==2)
+                            {
+                                MobEffectInstance wedgeSlowness=new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, effectDuration,effectAmplifier);
+                                player.addEffect(wedgeSlowness);
+                            }
                         });
                     }
 

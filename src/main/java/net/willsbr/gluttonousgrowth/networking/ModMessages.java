@@ -216,8 +216,7 @@ public class ModMessages {
                 .encoder(SyncAttributeValuesS2C::toBytes)
                 .consumerMainThread(SyncAttributeValuesS2C::handle)
                 .add();
-// Register client-side packets only if we're on the client
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+
             net.messageBuilder(FilteredSoundS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                     .decoder(FilteredSoundS2C::new)
                     .encoder(FilteredSoundS2C::toBytes)
@@ -228,7 +227,14 @@ public class ModMessages {
                     .encoder(CalorieMeterDelaySyncPacketS2C::toBytes)
                     .consumerMainThread(CalorieMeterDelaySyncPacketS2C::handle)
                     .add();
-        }
+        net.messageBuilder(CommandDebugViewSetS2C.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(CommandDebugViewSetS2C::new)
+                .encoder(CommandDebugViewSetS2C::toBytes)
+                .consumerMainThread(CommandDebugViewSetS2C::handle)
+                .add();
+
+
+
 
 
 

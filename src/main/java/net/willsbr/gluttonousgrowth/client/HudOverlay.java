@@ -164,7 +164,7 @@ public class HudOverlay {
         {
             renderStomachIcon(gui,guiGraphics,poseStack,barLeft,barTop);
         }
-        renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ GluttonousClientConfig.weightDisplayXOffset.get(),top-5+ GluttonousClientConfig.weightDisplayYOffSet.get());
+        renderWeightIcon(gui,guiGraphics,poseStack,screenWidth/2-12+ GluttonousClientConfig.weightDisplayXOffset.get(),top-8+ GluttonousClientConfig.weightDisplayYOffSet.get());
 
         if(GluttonousClientConfig.debugView.get())
         {
@@ -220,6 +220,10 @@ public class HudOverlay {
         int higherMax=Math.max(GluttonousWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
 
         int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
+        if(ClientCalorieMeter.getCurrentCalories()==ClientCalorieMeter.getMax())
+        {
+            currentIconIndex=Math.max(currentIconIndex+1,totalIcons-1);
+        }
         AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);
 
         GL11.glEnable(GL11.GL_STENCIL_TEST); // Turn on da test
@@ -262,7 +266,7 @@ public class HudOverlay {
 
         //int currentCalories=100;
 
-        int acidOffset=18-(int)((double)ClientCalorieMeter.getCurrentCalories()/ClientCalorieMeter.getMax()*18);
+        int acidOffset=17-(int)((double)ClientCalorieMeter.getCurrentCalories()/ClientCalorieMeter.getMax()*17);
         acidOffset=Math.max(acidOffset,0);
 
         // Draw the content that will be masked

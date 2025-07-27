@@ -59,7 +59,7 @@ public class PlayerCalorieMeter {
         calLost =nbt.getInt("stuffedlost");
         addState=nbt.getInt("addstate");
         calClearDelay=nbt.getInt("calcleardelay");
-        foodEatenTick =0;
+        foodEatenTick=0;
     }
 
 

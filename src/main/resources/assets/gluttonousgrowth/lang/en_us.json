@@ -93,6 +93,9 @@
   "menu.overstuffed.scalingenabled":"Hitbox scaling:",
   "menu.overstuffed.scalingtooltip": "When enabled, your hitbox will scale with your weight.\n Bonus health will also be given based off how much bigger you are from your base size",
 
+  "menu.gluttonousgrowth.previewtooltip": "Preview only works on servers/lan worlds due to restriction in CPM",
+  "menu.gluttonousgrowth.calbaroffsettooltip": "If you get a graphical error when moving, briefly resize screen.",
+
 
   "menu.overstuffed.weightlayerbox":"Weight Layer",
   "menu.overstuffed.weightxoffset":"Weight Display X Offset",

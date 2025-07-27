@@ -54,8 +54,9 @@ public class GluttonousGrowth
         ModPotions.register(modEventBus);
         ModEffects.register(modEventBus);
         // Register the methods for modloading
-        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC); // CPM Compat
+
+        modEventBus.addListener(this::commonSetup);
 
         // generate/read config/overstuffed.toml
         ModLoadingContext.get().registerConfig(

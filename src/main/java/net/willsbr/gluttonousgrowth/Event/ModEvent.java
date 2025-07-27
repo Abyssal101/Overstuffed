@@ -13,13 +13,12 @@ import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.willsbr.gluttonousgrowth.AdvancementToggle.PlayerUnlocks;
 import net.willsbr.gluttonousgrowth.AdvancementToggle.PlayerUnlocksProvider;
 import net.willsbr.gluttonousgrowth.CPMCompat.Capability.CPMData;
 import net.willsbr.gluttonousgrowth.CPMCompat.Capability.CPMDataProvider;
-import net.willsbr.gluttonousgrowth.Command.figuraNBTUpdateCommand;
+import net.willsbr.gluttonousgrowth.Command.ActiveCommands.figuraNBTUpdateCommand;
 import net.willsbr.gluttonousgrowth.Effects.ModEffects;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 import net.willsbr.gluttonousgrowth.ServerPlayerSettings.PlayerServerSettings;
@@ -138,15 +137,19 @@ public class ModEvent {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.side == LogicalSide.SERVER) {
-            //Making it a little more effcient
-            if((event.player.tickCount&3)==0)
+            if(!event.player.level().isClientSide())
             {
-                stuffedSystem(event);
+                //Making it a little more effcient
+                if((event.player.tickCount&3)==0)
+                {
+                    stuffedSystem(event);
+                }
+                if((event.player.tickCount&2)==0)
+                {
+                    weightSystem(event);
+                }
             }
-            if((event.player.tickCount&2)==0)
-            {
-                weightSystem(event);
-            }
+
         }
     }
     public static void burstGain(PlayerWeightBar weightBar,PlayerServerSettings serverSettings,TickEvent.PlayerTickEvent event,int curWeightStage)
@@ -411,10 +414,13 @@ public class ModEvent {
                             PlayerWeightBar.addCorrectModifier(player);
 
                             //handles adding the correct hitbox changes
-                            PlayerWeightBar.clearScaling(player,weightBar);
                             if(serverSettings.isHitboxScalingEnabled())
                             {
                                 PlayerWeightBar.addCorrectScaling(player);
+                            }
+                            else
+                            {
+                                PlayerWeightBar.clearScaling(player,weightBar);
                             }
                         }
 
@@ -428,10 +434,13 @@ public class ModEvent {
                     PlayerWeightBar.addCorrectModifier(player);
 
                     //handles adding the correct hitbox changes
-                    PlayerWeightBar.clearScaling(player,weightBar);
                     if(serverSettings.isHitboxScalingEnabled())
                     {
                         PlayerWeightBar.addCorrectScaling(player);
+                    }
+                    else
+                    {
+                        PlayerWeightBar.clearScaling(player,weightBar);
                     }
                 }
 

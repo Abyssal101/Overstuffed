@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
@@ -180,7 +181,7 @@ public class ConfigScreen extends Screen {
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
         //todo make it so that you send the abs cal cap to the client to make this more reliable.
-
+        this.caloriePreviewEditBox.setTooltip(Tooltip.create(Component.translatable("menu.gluttonousgrowth.previewtooltip")));
 
 
         this.caloriePreviewEditBox.setHint(Component.translatable("menu.overstuffed.calorierange",""+ GluttonousWorldConfig.absCalCap.get()).withStyle(ChatFormatting.GRAY));
@@ -192,8 +193,10 @@ public class ConfigScreen extends Screen {
                 50,
                 15,
                 Component.translatable("menu.overstuffed.weightlayerbox"));
+        this.weightPreviewEditBox.setTooltip(Tooltip.create(Component.translatable("menu.gluttonousgrowth.previewtooltip")));
         this.weightPreviewEditBox.setHint(Component.translatable("menu.overstuffed.weightrange", GluttonousClientConfig.getMinWeight(), GluttonousClientConfig.getMaxWeight()).withStyle(ChatFormatting.GRAY));
         this.allEditBoxes.add(this.weightPreviewEditBox);
+
 
         this.totalStagesEditBox = new EditBox(
                 font,

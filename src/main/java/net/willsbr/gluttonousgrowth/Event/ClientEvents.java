@@ -255,8 +255,7 @@ public class ClientEvents {
 
             if(noOpenSpace)
             {
-                MobEffectInstance wedgeSlowness=new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100,4);
-                player.addEffect(wedgeSlowness);
+                ModMessages.sendToServer(new OverstuffedEffectC2SPacket(2,100,4));
             }
 
 
@@ -396,8 +395,7 @@ public class ClientEvents {
 
             if(noOpenSpace)
             {
-                MobEffectInstance wedgeSlowness=new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100,4);
-                player.addEffect(wedgeSlowness);
+                ModMessages.sendToServer(new OverstuffedEffectC2SPacket(2,100,4));
             }
 
 

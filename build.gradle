@@ -121,7 +121,7 @@ dependencies {
 
     //implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-    runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
+    //runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
     implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}")
 }
 
@@ -129,8 +129,8 @@ mixin {
     add sourceSets.main, "mixinconfig.gluttonousgrowth.refmap.json"
 
     config 'mixinconfig.gluttonousgrowth.json'
-    debug.verbose = false
-    debug.export = false
+    debug.verbose = true
+    debug.export = true
     dumpTargetOnFailure = false
 
     // AP Settings

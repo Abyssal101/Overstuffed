@@ -56,6 +56,7 @@ public class PlayerWeightBar {
             new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"), "health increase from hitbox increase", 0, AttributeModifier.Operation.ADDITION);
     private float currentHitboxIncrease=0;
     private float lastHitboxIncrease=0;
+    private float lastBaseScale=0;
 
 
 
@@ -408,16 +409,26 @@ public class PlayerWeightBar {
                     // Only apply changes if the new scale is different from the last scale
                     if (percentage != weightBar.getLastHitboxIncrease())
                     {
+
                         ScaleData hitboxWidthData = ScaleTypes.HITBOX_WIDTH.getScaleData(player);
                         //removes anything added by Overstuffed
-                        hitboxWidthData.setScale(hitboxWidthData.getScale()- weightBar.getCurrentHitboxIncrease());
+                        //this can be above 1 by default, so if "remove" my hitbox increase but the player has a higher
+                        //default scale, than it'll still multiply for example, if they are at 1.5 scale
+                        //and it tries to reset it, it'll set to "1.5" and that'll multiply with the current 1.5
+
+                        float baseScale=ScaleTypes.BASE.getScaleData(player).getBaseScale();
+
+
+
+                        hitboxWidthData.setScale(hitboxWidthData.getScale()/baseScale-weightBar.getCurrentHitboxIncrease());
 
                         // Update the current and last hitbox increase values
                         weightBar.setLastHitboxIncrease(percentage);
                         weightBar.setCurrentHitboxIncrease(percentage);
+                        weightBar.setLastBaseScale(baseScale);
 
                         // Apply the new scale
-                        hitboxWidthData.setScale(hitboxWidthData.getScale()+(float)weightBar.getCurrentHitboxIncrease());
+                        hitboxWidthData.setScale(hitboxWidthData.getScale()/baseScale+(float)weightBar.getCurrentHitboxIncrease());
 
                         weightBar.SCALING_HEALTH_MODIFIER=new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a26c"),
                                 "hitbox health increase from OS",
@@ -466,5 +477,13 @@ public class PlayerWeightBar {
 
     public void setEffectsReady(boolean effectsReady) {
         this.effectsReady = effectsReady;
+    }
+
+    public float getLastBaseScale() {
+        return lastBaseScale;
+    }
+
+    public void setLastBaseScale(float lastBaseScale) {
+        this.lastBaseScale = lastBaseScale;
     }
 }
