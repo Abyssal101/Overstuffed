@@ -20,6 +20,8 @@ public class CommonEventMethods {
         setMaxCalories.register(commands, event.getBuildContext());
         debugViewEnabled.register(commands, event.getBuildContext());
         figuraNBTUpdateCommand.register(commands, event.getBuildContext());
+        clearWeightHitbox.register(commands, event.getBuildContext());
+
         //setWGMethod.register(commands,event.getBuildContext());
         //setBurpFrequency.register(commands, event.getBuildContext());
         //setGurgleFrequency.register(commands, event.getBuildContext());
