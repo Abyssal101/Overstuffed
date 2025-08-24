@@ -55,6 +55,7 @@ public class ClientEvents {
         {
             if(useItemEvent.getEntity() instanceof  Player)
             {
+
                 Player currentPlayer=(Player)useItemEvent.getEntity();
                 Level currentLevel=currentPlayer.level();
                 if(currentLevel.isClientSide())
@@ -70,7 +71,8 @@ public class ClientEvents {
                     }
                     else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
-                        ModMessages.sendToServer(new OverfullFoodC2SPacket());
+                        ModMessages.sendToServer(new OverfullFoodC2SPacket(heldItem.getFoodProperties(currentPlayer).getNutrition()
+                        ,heldItem.getFoodProperties(currentPlayer).getSaturationModifier()));
                         //creating the weight change your gonna send, uses the base nutrition value
                         //this line gets it from the player
 //                        int weightForQueue=0;

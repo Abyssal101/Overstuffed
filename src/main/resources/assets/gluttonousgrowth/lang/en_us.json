@@ -131,6 +131,10 @@
   "error.overstuffed.badinterval": "Min is higher than Max",
   "error.overstuffed.nonnumber": "Non-number character detected",
 
+  "error.overstuffed.scalehigh": "Max scale set higher than server max",
+  "error.overstuffed.scalelow": "Max scale set lower than 0",
+
+
 
 
   "menu.overstuffed.stagebasedweightbutton":"Stage Based Weight:",

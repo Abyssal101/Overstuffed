@@ -395,55 +395,43 @@ public class ModEvent {
                 PlayerWeightBar.clearModifiers(player,weightBar);
                 PlayerWeightBar.clearScaling(player,weightBar);
             }
-            else
-            {
+            else {
                 //First we see if uses a stage based gain
-                if(serverSettings.stageBasedGain())
-                {
-                    if(curStage!=lastWeightStage)
-                    {
+                if (serverSettings.stageBasedGain()) {
+                    if (curStage != lastWeightStage) {
 
-                       //Basically if the new stage and old stage are different, we clear old effects and add new ones
+                        //Basically if the new stage and old stage are different, we clear old effects and add new ones
                         //with how I structured  calcualting effects, the methods can be exactly the same
                         //It's just that the timing varies.
                         //this calculated the current weight of the stage itself, not the true total weight
-                        if(weightBar.isEffectsReady())
-                        {
+                        if (weightBar.isEffectsReady()) {
                             weightBar.setEffectsReady(false);
-                            weightBar.setNewModifiers((int)((double)curStage/weightBar.getTotalStages()*(weightBar.getCurMaxWeight()-weightBar.getMinWeight()))+weightBar.getMinWeight());
+                            weightBar.setNewModifiers((int) ((double) curStage / weightBar.getTotalStages() * (weightBar.getCurMaxWeight() - weightBar.getMinWeight())) + weightBar.getMinWeight());
                             PlayerWeightBar.addCorrectModifier(player);
 
                             //handles adding the correct hitbox changes
-                            if(serverSettings.isHitboxScalingEnabled())
-                            {
+                            if (serverSettings.isHitboxScalingEnabled()) {
                                 PlayerWeightBar.addCorrectScaling(player);
-                            }
-                            else
-                            {
-                                PlayerWeightBar.clearScaling(player,weightBar);
+                            } else {
+                                PlayerWeightBar.clearScaling(player, weightBar);
                             }
                         }
 
                     }
-                }
-                else
-                {
+                } else {
 
                     //this is granular right here
                     weightBar.setNewModifiers();
                     PlayerWeightBar.addCorrectModifier(player);
 
                     //handles adding the correct hitbox changes
-                    if(serverSettings.isHitboxScalingEnabled())
-                    {
+                    if (serverSettings.isHitboxScalingEnabled()) {
                         PlayerWeightBar.addCorrectScaling(player);
-                    }
-                    else
-                    {
-                        PlayerWeightBar.clearScaling(player,weightBar);
+                    } else {
+                        PlayerWeightBar.clearScaling(player, weightBar);
                     }
                 }
-
+            }
                 //Minecraft by default doesn't update the health till you get damanged,so players could lose weight
                 //and maintain a sort of bonus health if I didn't do this.
                 if(player.getHealth()>player.getMaxHealth())
@@ -455,7 +443,7 @@ public class ModEvent {
                         (weightBar.getWeightHealth(),weightBar.getWeightSpeed(),
                                 weightBar.getCurrentHitboxIncrease(),weightBar.getScalingHealth()),player);
 
-            }
+
     }
 
     @SubscribeEvent

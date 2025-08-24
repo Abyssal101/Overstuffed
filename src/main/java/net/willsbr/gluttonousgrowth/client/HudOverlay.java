@@ -176,14 +176,16 @@ public class HudOverlay {
     public static void renderWeightIcon(ForgeGui gui,GuiGraphics guiGraphics, PoseStack poseStack,int x, int y)
     {
         int outOf100=(int)((((double)ClientWeightBarData.getPlayerWeight()- GluttonousClientConfig.getMinWeight())/(GluttonousClientConfig.maxWeight.get()- GluttonousClientConfig.getMinWeight()))*100);
+        int spriteIndex;
         if(outOf100/20==5)
         {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[4],x,y,24,24);
+            spriteIndex=4;
         }
         else
         {
-            AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[outOf100/20],x,y,24,24);
+            spriteIndex=outOf100/20;
         }
+        AbstractDraw(gui,guiGraphics,WEIGHTSTAGESPRITES[spriteIndex],x,y,24,24);
 
         //Number Logic;
         if(GluttonousClientConfig.stageGain.get())
@@ -222,7 +224,7 @@ public class HudOverlay {
         int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
         if(ClientCalorieMeter.getCurrentCalories()==ClientCalorieMeter.getMax())
         {
-            currentIconIndex=Math.max(currentIconIndex+1,totalIcons-1);
+            currentIconIndex=Math.min(currentIconIndex+1,totalIcons-1);
         }
         AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);
 

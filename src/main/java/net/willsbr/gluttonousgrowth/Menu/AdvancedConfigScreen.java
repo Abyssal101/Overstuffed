@@ -13,6 +13,7 @@ import net.willsbr.gluttonousgrowth.Menu.Buttons.SwapScreenButton;
 import net.willsbr.gluttonousgrowth.Menu.Buttons.ToggleButton;
 import net.willsbr.gluttonousgrowth.client.ClientWeightBarData;
 import net.willsbr.gluttonousgrowth.config.GluttonousClientConfig;
+import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
 import net.willsbr.gluttonousgrowth.networking.ModMessages;
 import net.willsbr.gluttonousgrowth.networking.packet.WeightPackets.setMaxWeightDataSyncPacketC2S;
 import net.willsbr.gluttonousgrowth.networking.packet.WeightPackets.setMinWeightDataSyncPacketC2S;
@@ -231,8 +232,12 @@ public class AdvancedConfigScreen extends Screen {
         // Save mod configuration
         nonNumFlag=false;
 
+
+        //all integer parsing happens here
         int max;
         int min;
+
+        float maxScale;
         try{
             max=Integer.parseInt(maxWeight.getValue());
             min=Integer.parseInt(minWeight.getValue());
@@ -245,12 +250,10 @@ public class AdvancedConfigScreen extends Screen {
                         //Normalizing old weight to new min and max
                         double weightRatio=((double) ClientWeightBarData.getPlayerWeight()- GluttonousClientConfig.minWeight.get());
                         weightRatio=weightRatio/(GluttonousClientConfig.maxWeight.get()- GluttonousClientConfig.minWeight.get());
-                        //System.out.println("Ratio"+weightRatio);
                         int newRange=max-min;
 
                         int relativeWeight=(int)Math.round(weightRatio*newRange)+min;
                         ClientWeightBarData.setCurrentWeight(relativeWeight);
-                        //System.out.println(ClientWeightBarData.getPlayerWeight());
                         ModMessages.sendToServer(new setWeightC2SPacket(ClientWeightBarData.getPlayerWeight()));
 
                         GluttonousClientConfig.maxWeight.set(max);
@@ -258,22 +261,36 @@ public class AdvancedConfigScreen extends Screen {
                         ModMessages.sendToServer(new setMinWeightDataSyncPacketC2S(min));
                         ModMessages.sendToServer(new setMaxWeightDataSyncPacketC2S(max));
                     }
-
-                    //System.out.println("CLient Weight:"+ClientWeightBarData.getPlayerWeight());
-                    //System.out.println("CLient Min Weight:"+min);
-
-
                 }
 
+            }
+            maxScale=Float.parseFloat(maxHitboxScaling.getValue());
+            if(maxScale>0 && maxScale<GluttonousWorldConfig.absMaxHitboxIncrease.get())
+            {
+                GluttonousClientConfig.maxHitboxWidth.set(maxScale);
+            }
+            else
+            {
+                if(maxScale<0)
+                {
+                    warnings.add(Component.translatable("error.overstuffed.scalelow"));
+                }
+                else
+                {
+                    warnings.add(Component.translatable("error.overstuffed.scalehigh"));
+                }
             }
         }
         catch (Exception e)
         {
-            //Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error: Non-Number Character contained in the weight box"));
+            errors.add(Component.translatable("error.overstuffed.nonnumber"));
         }
 
         GluttonousClientConfig.weightEffects.set(weightEffect.getSetting());
         GluttonousClientConfig.hitBoxScalingEnabled.set(hitboxScaling.getSetting());
+
+
+
         GluttonousClientConfig.usingFigura.set(figuraEnabled.getSetting());
         try{
             float converted=Float.parseFloat(maxHitboxScaling.getValue());

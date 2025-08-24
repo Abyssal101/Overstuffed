@@ -19,16 +19,23 @@ public class OverfullFoodC2SPacket {
 
     private static final String MESSAGE_OVERFULL_FOOD ="message.overstuffed.OverfullFood";
     //private static final String MESSAGE_DRINK_WATER_FAILED ="message.overstuffed.drink_water_failed";
-    public OverfullFoodC2SPacket(){
 
+    private int nutrition=0;
+    private float saturationModifier=0;
+
+    public OverfullFoodC2SPacket(int nut,float sat){
+    this.nutrition=nut;
+    this.saturationModifier=sat;
     }
 
     public OverfullFoodC2SPacket(FriendlyByteBuf buf){
-
+        this.nutrition=buf.readInt();
+        this.saturationModifier=buf.readFloat();
     }
 
     public void toBytes(FriendlyByteBuf buf){
-
+        buf.writeInt(nutrition);
+        buf.writeFloat(saturationModifier);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier)
     {
@@ -50,11 +57,9 @@ public class OverfullFoodC2SPacket {
                                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                                     stageGain.set(serverSettings.stageBasedGain());
                                 });
-                                ItemStack lastFood=player.getItemInHand(player.getUsedItemHand());
-                                //This packet should NEVER be sent when the food isn't edible.
 
-                                int calculatedCalories=lastFood.getItem().getFoodProperties().getNutrition();
-                                calculatedCalories=calculatedCalories+(int)(calculatedCalories*lastFood.getItem().getFoodProperties().getSaturationModifier());
+                                int calculatedCalories=nutrition;
+                                calculatedCalories=calculatedCalories+(int)(calculatedCalories*saturationModifier);
                                 calculatedCalories=(int)(calculatedCalories*calorieMeter.getCalorieGainMultipler());
 
                                 double calReductionFromWeight=0;
