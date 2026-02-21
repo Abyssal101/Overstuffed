@@ -98,7 +98,7 @@ public class OverfullFoodC2SPacket {
                                 ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
                                         calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
                                         calorieMeter.getSlowMetabolismThres()),player);
-                                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),player);
+                                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(player.tickCount)),player);
                             });
 
                         });

@@ -40,7 +40,7 @@ public class PlayerWeightBar {
 
 
     private int weightLossDelay;
-    private long savedTickforWeightLoss;
+    private long savedTickforWeightLoss = -1; // -1 means timer not running
 
     //this is the boolean controlling if it's gradual or if it rapidly increases in stages
     private int lastWeightStage;
@@ -182,13 +182,21 @@ public class PlayerWeightBar {
        this.queuedWeight=source.queuedWeight;
        this.weightChanges=source.weightChanges;
        this.readyToUpdateWeight=source.readyToUpdateWeight;
-       this.savedTickForWeight=source.savedTickForWeight;
+       // savedTickForWeight is an absolute tickCount reference.
+       // After death the new entity's tickCount starts fresh, so carrying the old value
+       // would make (tickCount - savedTickForWeight) negative and freeze weight updates.
+       // Reset to 0 so the delay check fires immediately on the next tick.
+       this.savedTickForWeight = 0;
+       // Similarly, reset weight loss timer so it doesn't fire immediately or freeze.
+       this.savedTickforWeightLoss = -1;
        this.weightUpdateDelay=source.weightUpdateDelay;
        this.lastWeightStage=source.lastWeightStage;
        this.weightUpdateDelayModifier=source.weightUpdateDelayModifier;
        this.totalStages=source.totalStages;
        this.currentHitboxIncrease=source.getCurrentHitboxIncrease();
        this.lastHitboxIncrease=source.getLastHitboxIncrease();
+       // Copy effectsReady so stage-based effects apply correctly after death.
+       this.effectsReady=source.effectsReady;
     }
 
     public void saveNBTData(CompoundTag nbt)

@@ -71,18 +71,13 @@ public class ClientEvents {
                     }
                     else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
                     {
-                        ModMessages.sendToServer(new OverfullFoodC2SPacket(heldItem.getFoodProperties(currentPlayer).getNutrition()
-                        ,heldItem.getFoodProperties(currentPlayer).getSaturationModifier()));
-                        //creating the weight change your gonna send, uses the base nutrition value
-                        //this line gets it from the player
-//                        int weightForQueue=0;
-//                        try{
-//                            weightForQueue=heldItem.getItem().getFoodProperties(heldItem,currentPlayer).getNutrition();
-//                        }
-//                        catch(NullPointerException e)
-//                        {
-//
-//                        }
+                        // Use Item.getFoodProperties(stack, entity) instead of ItemStack.getFoodProperties(entity).
+                        // The latter only returns static base FoodProperties, while the former lets the Item
+                        // compute dynamic values from NBT (e.g. Some Assembly Required sandwiches).
+                        net.minecraft.world.food.FoodProperties foodProps = heldItem.getItem().getFoodProperties(heldItem, currentPlayer);
+                        if (foodProps != null) {
+                            ModMessages.sendToServer(new OverfullFoodC2SPacket(foodProps.getNutrition(), foodProps.getSaturationModifier()));
+                        }
                         //Makes weight have more of an impact I guess
                         //Moved to modEvents stuffed system
                         //ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));

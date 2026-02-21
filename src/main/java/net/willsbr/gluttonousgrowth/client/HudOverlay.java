@@ -221,38 +221,44 @@ public class HudOverlay {
         //because commands can force the maximum higher
         int higherMax=Math.max(GluttonousWorldConfig.absCalCap.get(),ClientCalorieMeter.getMax());
 
-        int currentIconIndex=Math.min((int)((((double)ClientCalorieMeter.getMax())/higherMax)*5),totalIcons-1);
-        if(ClientCalorieMeter.getCurrentCalories()==ClientCalorieMeter.getMax())
+        // Icon index scales with how close maxCalories is to absCalCap.
+        // When current == max, bump one index higher (fuller stomach icon).
+        // Clamp always to [0, totalIcons-1] to prevent ArrayIndexOutOfBoundsException.
+        int currentIconIndex = Math.min((int)((((double)ClientCalorieMeter.getMax()) / higherMax) * 5), totalIcons - 1);
+        if(ClientCalorieMeter.getCurrentCalories() == ClientCalorieMeter.getMax())
         {
-            currentIconIndex=Math.min(currentIconIndex+1,totalIcons-1);
+            currentIconIndex = Math.min(currentIconIndex + 1, totalIcons - 1);
         }
         AbstractDraw(gui,guiGraphics,STOMACH_ICONS[currentIconIndex],x,y,18,18);
 
-        GL11.glEnable(GL11.GL_STENCIL_TEST); // Turn on da test
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); // Flush old data
-        // Enable alpha blending for transparency
-//        GL11.glEnable(GL11.GL_BLEND);
-//        GL11.glEnable(GL11.);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc(); // Sets up standard blend function for transparency
+        // --- Stencil setup ---
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
-        GL11.glStencilMask(0xFF); // Writing = ON
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always "add" to frame
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE); // Replace on success
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        // Write mask shape into stencil buffer (no color output)
+        GL11.glStencilMask(0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
         RenderSystem.colorMask(false, false, false, false);
 
         AbstractDraw(gui,guiGraphics,STOMACH_MASKS[currentIconIndex],x,y,18,18);
 
-
-        GL11.glStencilMask(0x00); // Writing = OFF
-        GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF); // Anything that wasn't defined above will not be rendered.
+        // Draw acid only where mask was written
+        GL11.glStencilMask(0x00);
+        GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF);
         RenderSystem.colorMask(true, true, true, true);
 
-        //Anything rendered here will be cut if goes beyond frame defined before.
         drawAcid(gui,guiGraphics,x,y);
 
-        GL11.glDisable(GL11.GL_STENCIL_TEST); // Turn this shit off!
-        //drawContent(guiGraphics);
+        // Restore ALL GL state so other HUDs (e.g. TaCZ scopes) are not affected
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilMask(0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 0, 0xFF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        RenderSystem.disableBlend();
 
     }
 
