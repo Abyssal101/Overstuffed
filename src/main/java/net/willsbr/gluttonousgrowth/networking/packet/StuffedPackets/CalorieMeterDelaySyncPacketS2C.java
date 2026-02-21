@@ -15,27 +15,33 @@ import java.util.function.Supplier;
 
 public class CalorieMeterDelaySyncPacketS2C {
     private int delay;
-    private long foodTick;
+    // Remaining ticks until calorie clear, as computed on the server.
+    // Using remaining ticks (not absolute foodEatenTick) avoids server/client tickCount drift
+    // that caused the debug display to show garbage values after dimension changes or death.
+    private int remainingTicks;
 
-    public CalorieMeterDelaySyncPacketS2C(int delay, long foodTick) {
+    /**
+     * @param delay          calClearDelay value
+     * @param remainingTicks ticks remaining until the next calorie clear (-1 if timer not running)
+     */
+    public CalorieMeterDelaySyncPacketS2C(int delay, int remainingTicks) {
         this.delay = delay;
-        this.foodTick = foodTick;
+        this.remainingTicks = remainingTicks;
     }
 
     public CalorieMeterDelaySyncPacketS2C(FriendlyByteBuf buf) {
         this.delay = buf.readInt();
-        this.foodTick = buf.readLong();
+        this.remainingTicks = buf.readInt();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(delay);
-        buf.writeLong(foodTick);
+        buf.writeInt(remainingTicks);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            // Use DistExecutor to safely run client-only code
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleOnClient());
         });
         return true;
@@ -43,19 +49,26 @@ public class CalorieMeterDelaySyncPacketS2C {
 
     @OnlyIn(Dist.CLIENT)
     private void handleOnClient() {
-        // All client-side logic goes here
-        ClientCalorieMeter.setCurrentDelay(delay);
-        ClientCalorieMeter.setCurrentSavedTick(foodTick);
-
         Player player = Minecraft.getInstance().player;
-        if (player != null) {
-            player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER)
-                    .ifPresent(calorieMeter -> {
-                        calorieMeter.setCalClearDelay(delay);
-                        calorieMeter.setFoodEatenTick(foodTick);
-                    });
+        if (player == null) return;
 
-            CPMData.checkIfUpdateCPM("stuffed");
+        ClientCalorieMeter.setCurrentDelay(delay);
+
+        if (remainingTicks <= 0) {
+            // Timer not running
+            ClientCalorieMeter.setCurrentSavedTick(-1);
+        } else {
+            // Anchor to the client's own tickCount so drawDebug can compute:
+            //   countdown = delay - (clientPlayer.tickCount - currentSavedTick)
+            // using only client-side ticks, avoiding server/client drift entirely.
+            ClientCalorieMeter.setCurrentSavedTick(player.tickCount - (delay - remainingTicks));
         }
+
+        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER)
+                .ifPresent(calorieMeter -> {
+                    calorieMeter.setCalClearDelay(delay);
+                });
+
+        CPMData.checkIfUpdateCPM("stuffed");
     }
 }

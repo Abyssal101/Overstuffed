@@ -23,6 +23,10 @@ public class PlayerCalorieMeter {
     private int calClearDelay=-1;
     private long foodEatenTick =-1;
 
+    // Temporary field used only during load: stores remaining ticks until calorie clear.
+    // Set by loadNBTData, consumed by rearmFoodEatenTick(currentServerTick), then reset to -1.
+    private int pendingRemainingTicks = -1;
+
 
     public void copyFrom(PlayerCalorieMeter source)
     {
@@ -34,8 +38,10 @@ public class PlayerCalorieMeter {
         this.addState=source.addState;
         this.interval=source.interval;
         this.calClearDelay=source.calClearDelay;
-        this.foodEatenTick =source.foodEatenTick;
-
+        // foodEatenTick is an absolute tick reference and cannot be safely copied across death.
+        // Set pendingRemainingTicks so rearmFoodEatenTick() in onPlayerJoinWorld re-anchors it.
+        this.foodEatenTick = -1;
+        this.pendingRemainingTicks = (source.currentCalories > 0) ? source.calClearDelay : -1;
     }
 
     public void saveNBTData(CompoundTag nbt)
@@ -46,9 +52,18 @@ public class PlayerCalorieMeter {
         nbt.putDouble("slowmetabolismthreshold", this.slowMetabolismThres);
         nbt.putInt("callost", this.calLost);
         nbt.putInt("addstate",this.addState);
-
         nbt.putInt("calcleardelay",this.calClearDelay);
-        nbt.putLong("lastfoodeatentick", this.foodEatenTick);
+
+        // Store remaining ticks instead of absolute tick so it survives restarts/dimension changes.
+        // If foodEatenTick is -1 (timer not running), store -1.
+        if (this.foodEatenTick == -1 || this.calClearDelay == -1) {
+            nbt.putInt("remainingcalclearticks", -1);
+        } else {
+            // We don't have access to the current server tick here, so store the full calClearDelay
+            // as a safe upper bound. rearmFoodEatenTick() will use this to re-anchor the timer.
+            // This means after a save/load the timer resets to full delay, which is acceptable.
+            nbt.putInt("remainingcalclearticks", this.calClearDelay);
+        }
     }
     public void loadNBTData(CompoundTag nbt)
     {
@@ -59,7 +74,41 @@ public class PlayerCalorieMeter {
         calLost =nbt.getInt("callost");
         addState=nbt.getInt("addstate");
         calClearDelay=nbt.getInt("calcleardelay");
-        foodEatenTick = nbt.contains("lastfoodeatentick") ? nbt.getLong("lastfoodeatentick") : -1;
+
+        // Do NOT set foodEatenTick here — we don't know the current server tick.
+        // rearmFoodEatenTick() must be called from onPlayerJoinWorld with the current tick.
+        foodEatenTick = -1;
+        if (nbt.contains("remainingcalclearticks")) {
+            // New format: remaining ticks stored directly
+            pendingRemainingTicks = nbt.getInt("remainingcalclearticks");
+        } else if (nbt.contains("lastfoodeatentick")) {
+            // Legacy format migration: we can't recover the exact remaining ticks without knowing
+            // the server tick at save time, so conservatively restore the full delay.
+            // This means the timer resets to full on first load after upgrading, which is safe.
+            pendingRemainingTicks = (currentCalories > 0 && calClearDelay > 0) ? calClearDelay : -1;
+        } else {
+            pendingRemainingTicks = -1;
+        }
+    }
+
+    /**
+     * Called from onPlayerJoinWorld (where server tick is available) to re-anchor
+     * foodEatenTick to the current server tick, preserving the remaining delay.
+     */
+    public void rearmFoodEatenTick(long currentServerTick) {
+        if (currentCalories <= 0 || calClearDelay <= 0) {
+            // No calories or no delay configured — timer should not run.
+            foodEatenTick = -1;
+        } else if (pendingRemainingTicks > 0) {
+            // Restore with remaining ticks preserved.
+            // foodEatenTick is set so that checkClearCalories fires after pendingRemainingTicks more ticks.
+            foodEatenTick = currentServerTick - (calClearDelay - pendingRemainingTicks);
+        } else {
+            // pendingRemainingTicks is 0 or -1 but calories exist — restart timer from full delay.
+            // This covers dimension changes and fresh loads where remaining ticks couldn't be saved.
+            foodEatenTick = currentServerTick;
+        }
+        pendingRemainingTicks = -1;
     }
 
 
@@ -78,8 +127,16 @@ public class PlayerCalorieMeter {
 
     public boolean checkClearCalories(long tick)
     {
-
         return foodEatenTick != -1 && tick - foodEatenTick > calClearDelay;
+    }
+
+    /**
+     * Returns ticks remaining until the next calorie clear, given the current server tick.
+     * Returns -1 if the timer is not running.
+     */
+    public int getRemainingTicks(long currentServerTick) {
+        if (foodEatenTick == -1 || calClearDelay == -1) return -1;
+        return (int) Math.max(0, calClearDelay - (currentServerTick - foodEatenTick));
     }
 
 

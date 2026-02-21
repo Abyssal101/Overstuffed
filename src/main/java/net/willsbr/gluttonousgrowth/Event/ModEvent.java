@@ -391,7 +391,7 @@ public class ModEvent {
                 ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),
                         calorieMeter.getModMetabolismThres(),
                         calorieMeter.getModMetabolismThres()),(ServerPlayer) event.player);
-                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(),calorieMeter.getFoodEatenTick()),(ServerPlayer) event.player);
+                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(event.player.tickCount)),(ServerPlayer) event.player);
 
             }
         });
@@ -469,7 +469,12 @@ public class ModEvent {
 
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter -> {
+                    // Re-anchor foodEatenTick to current server tick so the timer is correct
+                    // after restarts, dimension changes, or death.
+                    calorieMeter.rearmFoodEatenTick(player.tickCount);
                     ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),calorieMeter.getMaxCalories(),calorieMeter.getSlowMetabolismThres()), player);
+                    // Also sync the delay timer so the client countdown doesn't show garbage values after dimension changes
+                    ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(player.tickCount)), player);
                 });
 
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
@@ -485,7 +490,11 @@ public class ModEvent {
                     weightBar.setNewModifiers();
                    PlayerWeightBar.addCorrectModifier(player);
                    PlayerWeightBar.clearScaling(player,weightBar);
-
+                    // Re-anchor savedTickForWeight to the current server tick so the weight update
+                    // timer doesn't freeze after dimension changes (tickCount-based drift).
+                    weightBar.setWeightTick(player.tickCount);
+                    // Also reset weight loss timer to avoid stale tick reference.
+                    weightBar.setSavedTickforWeightLoss(-1);
                 });
                 player.getCapability(PlayerUnlocksProvider.PLAYER_UNLOCKS).ifPresent(playerUnlocks -> {
 
