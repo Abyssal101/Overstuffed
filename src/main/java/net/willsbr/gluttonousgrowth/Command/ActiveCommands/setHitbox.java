@@ -11,6 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.ModList;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleType;

@@ -71,7 +71,7 @@ public class PlayerCalorieMeter {
         maxCalories=nbt.getInt("maxcalories");
         modMetabolismThres= GluttonousWorldConfig.modMetabolismThres.get();
         slowMetabolismThres= GluttonousWorldConfig.slowMetabolismThres.get();
-        calLost =nbt.getInt("stuffedlost");
+        calLost =nbt.getInt("callost");
         addState=nbt.getInt("addstate");
         calClearDelay=nbt.getInt("calcleardelay");
 

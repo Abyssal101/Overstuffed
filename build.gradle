@@ -25,8 +25,8 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             // Add these Mixin properties
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+//            property 'mixin.env.remapRefMap', 'true'
+//            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.tsrg"
 
             mods {
                 gluttonousgrowth {
@@ -42,8 +42,8 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             // Add these Mixin properties
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+//            property 'mixin.env.remapRefMap', 'true'
+//            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.tsrg"
 
             mods {
                 gluttonousgrowth {
@@ -103,10 +103,21 @@ repositories {
                 name = "Modrinth"
                 url = "https://api.modrinth.com/maven"
             }
+
         }
         forRepositories(fg.repository)
         filter {
             includeGroup "maven.modrinth"
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
         }
     }
 }
@@ -121,8 +132,12 @@ dependencies {
 
     //implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-    //runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
+    runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
     implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}")
+
+    //Makes any mods in libs properly compile
+
+
 }
 
 mixin {

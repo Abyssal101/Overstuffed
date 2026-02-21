@@ -4,8 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -13,10 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -436,19 +431,12 @@ public class ClientEvents {
     public static void registerCommands(RegisterCommandsEvent event)
     {
         CommandDispatcher<CommandSourceStack> commands = event.getDispatcher();
-        CommandHandler.generateCommands(commands,event.getBuildContext());
-        CommonEventMethods.registerCommands(event);
-        //SetLayer.register(commands, event.getBuildContext());
-        setMaxWeightCommand.register(commands, event.getBuildContext());
-        setMinWeightCommand.register(commands,event.getBuildContext());
-        setCurrentWeight.register(commands,event.getBuildContext());
-        //clearLayers.register(commands, event.getBuildContext());
-        //debugViewCommand.register(commands, event.getBuildContext());
-        setMaxCalories.register(commands, event.getBuildContext());
-        setHitbox.register(commands, event.getBuildContext());
-        //setWGMethod.register(commands,event.getBuildContext());
-        //setBurpFrequency.register(commands, event.getBuildContext());
-        //setGurgleFrequency.register(commands, event.getBuildContext());
+        //CommandHandler.generateCommands(commands,event.getBuildContext());
+        CommonEventMethods.registerCommonCommands(event);
 
     }
+
+
+
+
 }

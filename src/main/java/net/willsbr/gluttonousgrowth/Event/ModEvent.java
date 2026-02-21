@@ -47,7 +47,7 @@ public class ModEvent {
     @SubscribeEvent
     public static void commandRegister(RegisterCommandsEvent event)
     {
-        CommonEventMethods.registerCommands(event);
+        CommonEventMethods.registerCommonCommands(event);
     }
 
     //START OF STUFF NEEDED FOR A CAPABILITY
@@ -87,6 +87,10 @@ public class ModEvent {
             event.getOriginal().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
+                    // Reset cross-life timers to avoid comparing new tickCount to old life's tick values
+                    newStore.setCurrentCalories(0);
+                    newStore.setFoodEatenTick(-1);
+                    newStore.setCalClearDelay(-1);
                 });
             });
 
@@ -165,6 +169,10 @@ public class ModEvent {
                     event.player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
                         // Now you can safely use cpmData here
                         totalWeightFrames.set(cpmData.getWeightLayerFrames());
+                        if(totalWeightFrames.get()==-1)
+                        {
+                            totalWeightFrames.set(100);
+                        }
                     });
 
                     double percentageThroughStage=(((double)weightBar.getAmountThroughStage())/totalWeightFrames.get())*100;
@@ -188,6 +196,7 @@ public class ModEvent {
                         }
                         else
                         {
+
                             weightBar.setAmountThroughStage(weightBar.getAmountThroughStage()-1);
                             ModMessages.sendToPlayer(new BurstGainDataSyncPacketS2C(weightBar.getLastWeightStage(), weightBar.getAmountThroughStage()), (ServerPlayer) event.player);
                         }
@@ -327,9 +336,16 @@ public class ModEvent {
                 totalCalories=totalCalories-caloriesLostToHunger;
                 if(caloriesLostToHunger>0)
                 {
+                    //If your hunger negates all your calories,
+                    // then you need to take what you can from current calories
+                    if(totalCalories<=0)
+                    {
+                        caloriesLostToHunger=caloriesLostToHunger+totalCalories;
+                    }
                     if(event.player.getFoodData().getFoodLevel()<20)
                     {
-                        int newFood=Math.min(20,event.player.getFoodData().getFoodLevel()+caloriesLostToHunger/6);
+                        int newFood=Math.min(20,event.player.getFoodData()
+                                .getFoodLevel()+caloriesLostToHunger/6);
                         event.player.getFoodData().setFoodLevel(newFood);
                     }
                 }
@@ -466,6 +482,7 @@ public class ModEvent {
                 });
 
                 player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+
                     weightBar.setCurrentWeight(Math.max(weightBar.getCurrentWeight(),weightBar.getMinWeight()));
                     ModMessages.sendToPlayer(new WeightBarDataSyncPacketS2C(weightBar.getCurrentWeight()),player);
                     //OverstuffedConfig.saveConfig();
