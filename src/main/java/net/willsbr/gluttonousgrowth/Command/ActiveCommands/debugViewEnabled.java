@@ -33,7 +33,6 @@ public class debugViewEnabled {
     private static int setDebugView(CommandSourceStack pSource, Boolean enabled) throws CommandSyntaxException {
         if(pSource.hasPermission(2))
         {
-
             if(pSource.isPlayer())
             {
                 //TODO Make it so you can target other people
