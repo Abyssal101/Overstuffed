@@ -199,25 +199,29 @@ public class AdvancedConfigScreen extends Screen {
 
         int max=1;
         int min=0;
-        try{
-            max=Integer.parseInt(maxWeight.getValue());
-            min=Integer.parseInt(minWeight.getValue());
+        try {
+            max = Integer.parseInt(maxWeight.getValue());
+            min = Integer.parseInt(minWeight.getValue());
+
+            if (max < min) {
+                errors.add(Component.translatable("error.overstuffed.badinterval"));
+            } else if (Math.abs(max - min) < 100) {
+                errors.add(Component.translatable("menu.overstuffed.rangesmall"));
+            }
+
+            float maxScale;
+            maxScale = Float.parseFloat(maxHitboxScaling.getValue());
+            if (maxScale < 0) {
+                warnings.add(Component.translatable("error.overstuffed.scalelow"));
+            } else if (maxScale > GluttonousWorldConfig.absMaxHitboxIncrease.get()) {
+                warnings.add(Component.translatable("error.overstuffed.scalehigh"));
+            }
         }
         catch (NumberFormatException e)
         {
-            errors.add(Component.translatable("error.overstuffed.nonnumber"));
+                errors.add(Component.translatable("error.overstuffed.nonnumber"));
         }
-
-        if(max<min)
-        {
-            errors.add(Component.translatable("error.overstuffed.badinterval"));
-        }
-        else if(Math.abs(max-min)<100)
-        {
-            errors.add(Component.translatable("menu.overstuffed.rangesmall"));
-        }
-
-        ModMenus.drawIssues(guiGraphics,font,centerW,weightEffect.getY()+10,errors,warnings);
+        ModMenus.drawIssues(guiGraphics,font,centerW,figuraEnabled.getY()+20,errors,warnings);
 
         pose.pushPose();
 
@@ -265,21 +269,11 @@ public class AdvancedConfigScreen extends Screen {
 
             }
             maxScale=Float.parseFloat(maxHitboxScaling.getValue());
-            if(maxScale>0 && maxScale<GluttonousWorldConfig.absMaxHitboxIncrease.get())
+            if(maxScale>0 && maxScale<=GluttonousWorldConfig.absMaxHitboxIncrease.get())
             {
                 GluttonousClientConfig.maxHitboxWidth.set(maxScale);
             }
-            else
-            {
-                if(maxScale<0)
-                {
-                    warnings.add(Component.translatable("error.overstuffed.scalelow"));
-                }
-                else
-                {
-                    warnings.add(Component.translatable("error.overstuffed.scalehigh"));
-                }
-            }
+
         }
         catch (Exception e)
         {
