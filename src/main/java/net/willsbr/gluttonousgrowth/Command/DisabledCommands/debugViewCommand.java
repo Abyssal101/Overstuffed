@@ -1,0 +1,63 @@
+package net.willsbr.gluttonousgrowth.Command.DisabledCommands;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.willsbr.gluttonousgrowth.CPMCompat.Capability.CPMDataProvider;
+import net.willsbr.gluttonousgrowth.StuffedBar.PlayerCalorieMeterProvider;
+import net.willsbr.gluttonousgrowth.config.GluttonousClientConfig;
+
+public class debugViewCommand {
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(Component.translatable("commands.setLayer.failed"));
+
+
+    public static void register(CommandDispatcher<CommandSourceStack> pDispatcher, CommandBuildContext pContext) {
+        pDispatcher.register(Commands.literal("overstuffed")
+                .then(Commands.literal("debugView")
+                        .executes((p_138618_) -> {
+            return viewEverything(p_138618_.getSource(),p_138618_.getSource().getPlayer());
+        })));
+    }
+
+    private static int viewEverything(CommandSourceStack pSource, Player player) throws CommandSyntaxException {
+
+        player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
+
+            player.sendSystemMessage(Component.literal("Current Config CPM Layers"));
+            player.sendSystemMessage(Component.literal("Current Stuffed Layer: "+ GluttonousClientConfig.stuffedLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Stuffed Layer: "+ GluttonousClientConfig.lastStuffedLayer));
+            player.sendSystemMessage(Component.literal("Current Weight Layer: "+ GluttonousClientConfig.weightLayerConfigEntry.get()));
+            player.sendSystemMessage(Component.literal("Last Weight Layer: "+ GluttonousClientConfig.lastWeightLayer));
+
+            player.sendSystemMessage(Component.literal("-------------------------------"));
+        });
+
+        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(stuffedBar -> {
+
+            //TODO UPDATE DEBUG VIEW COMMAND
+//            player.sendSystemMessage(Component.literal("Stuffed Level: "+stuffedBar.getCurrentStuffedLevel()));
+//            player.sendSystemMessage(Component.literal("Full points: "+stuffedBar.getFullLevel()));
+//            player.sendSystemMessage(Component.literal("Stuffed points: "+stuffedBar.getStuffedLevel()));
+//            player.sendSystemMessage(Component.literal("Overstuffed points: "+stuffedBar.getOverstuffedLevel()));
+            player.sendSystemMessage(Component.literal("Progress to next Point: "+stuffedBar.getCalLost()));
+            player.sendSystemMessage(Component.literal("Add State: "+stuffedBar.getAddState()));
+            player.sendSystemMessage(Component.literal("Interval between points: "+stuffedBar.getInterval()));
+
+            player.sendSystemMessage(Component.literal("-------------------------------"));
+        });
+
+
+
+
+
+        return 0;
+    }
+
+
+
+}

@@ -4,60 +4,32 @@ plugins {
     id 'net.minecraftforge.gradle' version '6+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
-
-
 }
 
-version = '1.2-1.20.1'
-group = 'com.github.Abyssal101' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'overstuffed'
+version = '1.3.1-1.20.1'
+group = 'com.github.Abyssal101'
+archivesBaseName = 'gluttonousgrowth'
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+
 minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
-    //
-    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
-    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
-    //f
-    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
-    // Additional setup is needed to use their mappings: https://github.com/ParchmentMC/Parchment/wiki/Getting-Started
-    //
-    // Use non-default mappings at your own risk. They may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: mapping_channel, version: mapping_version
 
-
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            // Add these Mixin properties
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -65,34 +37,29 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'REGISTRIES'
-
             property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            // Add these Mixin properties
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
         }
 
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'REGISTRIES'
-
             property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', 'overstuffed'
+            property 'forge.enabledGameTestNamespaces', 'gluttonousgrowth'
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -100,16 +67,12 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'REGISTRIES'
-
             property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'overstuffed', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'gluttonousgrowth', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                overstuffed {
+                gluttonousgrowth {
                     source sourceSets.main
                 }
             }
@@ -117,14 +80,12 @@ minecraft {
     }
 }
 
-// Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
     maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
-
     maven {
         name = "tom5454 maven"
         url = "https://raw.githubusercontent.com/tom5454/maven/main"
@@ -143,108 +104,69 @@ repositories {
                 url = "https://api.modrinth.com/maven"
             }
         }
-        forRepositories(fg.repository) // Only add this if you're using ForgeGradle, otherwise remove this line
+        forRepositories(fg.repository)
         filter {
             includeGroup "maven.modrinth"
         }
     }
-
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 dependencies {
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${forge_version}"
+
+    // Update to latest mixin processor
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    apply plugin: 'org.spongepowered.mixin'
 
 
 
+    //implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
     compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-    //runtimeOnly fg.deobf("maven.modrinth:better-third-person:${BTP_version}")
-
-    runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
-
-
-
-    implementation fg.deobf("org.figuramc:figura-forge:${figura_version}")
-
+    //runtimeOnly fg.deobf("com.tom5454.cpm:CustomPlayerModels-${project.cpm_mc_version}:${project.cpm_runtime_version}")
     implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}")
-
-
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
-
-
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-//MIXIN
 mixin {
-    // MixinGradle Settings
+    add sourceSets.main, "mixinconfig.gluttonousgrowth.refmap.json"
 
-    add sourceSets.main, 'mixinconfig.overstuffed.refmap.json'
-    config 'mixinconfig.overstuffed.json'
-
-
-    debug.verbose = false
-    debug.export = false
-    dumpTargetOnFailure = true
+    config 'mixinconfig.gluttonousgrowth.json'
+    debug.verbose = true
+    debug.export = true
+    dumpTargetOnFailure = false
 
     // AP Settings
     disableTargetValidator = true
     overwriteErrorLevel = 'error'
     quiet
-    //extraMappings file("my_custom_srgs.tsrg")
-
 }
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
+    options.encoding = 'UTF-8'
 }
 
 java {
     withSourcesJar()
-
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-
-// Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "overstuffed",
-                "Specification-Vendor"    : "overstuffedsareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Title"     : "gluttonousgrowth",
+                "Specification-Vendor"    : "abyssal010",
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.version,
-                "Implementation-Vendor"   : "overstuffedsareus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Vendor"   : "abyssal010",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                // Add this line for Mixin
+                "MixinConfigs"            : "mixinconfig.gluttonousgrowth.json"
         ])
     }
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
 
 publishing {
     publications {
@@ -255,11 +177,6 @@ publishing {
     repositories {
         maven {
             url "file://${project.projectDir}/overstuffedrepo"
-
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

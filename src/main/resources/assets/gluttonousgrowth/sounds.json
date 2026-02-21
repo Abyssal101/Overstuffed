@@ -1,0 +1,80 @@
+{
+  "burp1": {
+    "subtitle": "sounds.gluttonousgrowth.burp",
+    "sounds": [
+      "gluttonousgrowth:burp1"
+    ]
+  },
+  "belch2": {
+    "subtitle": "sounds.gluttonousgrowth.burp",
+    "sounds": [
+      "gluttonousgrowth:belch2"
+    ]
+  },
+  "belch3": {
+    "subtitle": "sounds.gluttonousgrowth.burp",
+    "sounds": [
+      "gluttonousgrowth:belch3"
+    ]
+  },
+  "belch4": {
+    "subtitle": "sounds.gluttonousgrowth.burp",
+    "sounds": [
+      "gluttonousgrowth:belch4"
+    ]
+  },
+  "belch5": {
+    "subtitle": "sounds.gluttonousgrowth.burp",
+    "sounds": [
+      "gluttonousgrowth:belch5"
+    ]
+  },
+  "gurgle1": {
+    "subtitle": "sounds.gluttonousgrowth.gurgle",
+    "sounds": [
+      "gluttonousgrowth:gurgle1"
+    ]
+  },
+  "gurgle2": {
+    "subtitle": "sounds.gluttonousgrowth.gurgle",
+    "sounds": [
+      "gluttonousgrowth:gurgle2"
+    ]
+  },
+  "gurgle3": {
+    "subtitle": "sounds.gluttonousgrowth.gurgle",
+    "sounds": [
+      "gluttonousgrowth:gurgle3"
+    ]
+  },
+  "gurgle4": {
+    "subtitle": "sounds.gluttonousgrowth.gurgle",
+    "sounds": [
+      "gluttonousgrowth:gurgle4"
+    ]
+  },
+  "gurgle5": {
+    "subtitle": "sounds.gluttonousgrowth.gurgle",
+    "sounds": [
+      "gluttonousgrowth:gurgle5"
+    ]
+  },
+
+  "scaleon": {
+    "subtitle": "sounds.gluttonousgrowth.scaleon",
+    "sounds": [
+      "gluttonousgrowth:scale/scaleon"
+    ]
+  },
+  "scaleoff": {
+    "subtitle": "sounds.gluttonousgrowth.scaleoff",
+    "sounds": [
+      "gluttonousgrowth:scale/scaleoff"
+    ]
+  }
+
+
+
+
+
+}

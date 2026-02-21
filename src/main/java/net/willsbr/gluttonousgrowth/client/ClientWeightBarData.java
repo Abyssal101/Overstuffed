@@ -1,0 +1,97 @@
+package net.willsbr.gluttonousgrowth.client;
+
+import net.willsbr.gluttonousgrowth.config.GluttonousClientConfig;
+
+public class ClientWeightBarData {
+
+    public static int currentWeight = GluttonousClientConfig.minWeight.get();
+    //this is the percent for burstGain
+    private static int lastWeightStage = 0;
+    private static int amountThroughStage;
+
+    private static int queuedWeight = 0;
+    private static int totalQueuedWeight = 0;
+
+
+    private static int weightHealthBoost=0;
+    private static double weightSpeedLoss=0;
+
+    private static double currentAddedScale=0;
+    private static int scalingHealthBoost=0;
+
+    public static void setCurrentWeight(int newWeight) {
+
+        ClientWeightBarData.currentWeight = newWeight;
+    }
+
+    public static int getPlayerWeight() {
+        return currentWeight;
+    }
+
+
+    public static int getLastWeightStage() {
+        return lastWeightStage;
+    }
+
+    public static void setLastWeightStage(int lastWeightStage) {
+        ClientWeightBarData.lastWeightStage = lastWeightStage;
+    }
+
+
+    public static int getAmountThroughStage() {
+        return amountThroughStage;
+    }
+
+    public static void setAmountThroughStage(int amountThroughStage) {
+        ClientWeightBarData.amountThroughStage = amountThroughStage;
+    }
+
+    public static int getQueuedWeight() {
+        return queuedWeight;
+    }
+
+    public static void setQueuedWeight(int queuedWeight, int totalQueuedWeight) {
+        ClientWeightBarData.queuedWeight = queuedWeight;
+        ClientWeightBarData.totalQueuedWeight = totalQueuedWeight;
+    }
+
+    public static int getTotalQueuedWeight() {
+        return totalQueuedWeight;
+    }
+
+    public static void setTotalQueuedWeight(int totalQueuedWeight) {
+        ClientWeightBarData.totalQueuedWeight = totalQueuedWeight;
+    }
+
+    public static int getWeightHealthBoost() {
+        return weightHealthBoost;
+    }
+
+    public static void setWeightHealthBoost(int weightHealthBoost) {
+        ClientWeightBarData.weightHealthBoost = weightHealthBoost;
+    }
+
+    public static double getWeightSpeedLoss() {
+        return weightSpeedLoss;
+    }
+
+    public static void setWeightSpeedLoss(double weightSpeedLoss) {
+        ClientWeightBarData.weightSpeedLoss = weightSpeedLoss;
+    }
+
+    public static double getCurrentAddedScale() {
+        return currentAddedScale;
+    }
+
+    public static void setCurrentAddedScale(double currentAddedScale) {
+        ClientWeightBarData.currentAddedScale = currentAddedScale;
+    }
+
+    public static int getScalingHealthBoost() {
+        return scalingHealthBoost;
+    }
+
+    public static void setScalingHealthBoost(int scalingHealthBoost) {
+        ClientWeightBarData.scalingHealthBoost = scalingHealthBoost;
+    }
+}

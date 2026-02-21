@@ -1,0 +1,148 @@
+{
+
+  "itemGroup.overstuffed": "Gluttonous Growth Tab",
+  "key.overstuffed.stuffed_config": "Gluttonous Growth GUI",
+
+
+  "sounds.gluttonousgrowth.burp": "Burp",
+  "sounds.gluttonousgrowth.gurgle": "Gurgle",
+  "sounds.gluttonousgrowth.scaleon": "Scale stepped on",
+  "sounds.gluttonousgrowth.scaleoff": "Scale stepped off",
+
+
+  "effect.gluttonousgrowth.goldendiet" : "Golden Diet",
+
+  "message.overstuffed.effect": "Gluttonous Growth Effect Failed",
+  "advancement.overstuffed.fattytitle": "Fatty",
+  "advancement.overstuffed.fattydescription": "You managed to reach your max weight!",
+
+  "advancements.overstuffed.recipes.scale.title": "Weight Watcher",
+  "advancements.overstuffed.recipes.scale.description": "You better keep your weight in check!",
+
+  "advancements.overstuffed.has_scale.title": "Scale Collector",
+  "advancements.overstuffed.has_scale.description": "You have a scale in your inventory",
+
+  "block.gluttonousgrowth.scale": "Scale",
+
+  "commands.overstuffed.stuffedupdatesuccess": "Stuffed layer successfully updated",
+  "commands.overstuffed.weightupdatesuccess": "Weight layer successfully updated",
+  "commands.overstuffed.maxweightupdatesuccess": "Max Weight successfully updated",
+  "commands.overstuffed.minweightupdatesuccess": "Minimum Weight successfully updated",
+  "commands.overstuffed.setweightsuccess": "Succesfully set the weight of %1$s to %2$s",
+  "commands.setHitbox.failed": "Failed to set dimensions",
+  "commands.setHitbox.nopehkui":"Pekhui is not loaded, cannot use scaling",
+
+  "commands.overstuffed.errorsamename": "ERROR: Your layer already has that name",
+  "commands.overstuffed.setbelowzero": "ERROR: Set below zero",
+  "commands.overstuffed.maxbelowmin": "ERROR: Set max below min",
+  "commands.overstuffed.minabovemax": "ERROR: Set min above max",
+
+  "message.overstuffed.cpmversion": "ERROR: CPM Version is lower than %1$s",
+
+
+  "debug.overstuffed.true": "True",
+  "debug.overstuffed.false": "False",
+
+  "message.overstuffed.debugbutton": "Debug View:",
+
+  "message.overstuffed.debugcurrentweight": "Current Weight: %1$s",
+  "message.overstuffed.debugmaxweight": "Max Weight: %1$s",
+  "message.overstuffed.debugminweight": "Min Weight: %1$s",
+
+  "message.overstuffed.debugcurrentcalories": "Current Calories: %1$s",
+  "message.overstuffed.debugmaxcalories": "Max Calories: %1$s",
+  "message.overstuffed.debugnextmax": "# of of calorie to next upgrade: %1$s",
+  "message.overstuffed.debugcalorieclear": "Time till calories clear: %1$s",
+
+  "message.overstuffed.debugqueueweight": "Current Queued Weight:%1$s",
+  "message.overstuffed.debugtotalqueueweight": "Total Queued Weight:%1$s",
+
+  "message.overstuffed.debugweighthealth": "Added health from weight:%1$s",
+  "message.overstuffed.debugweightspeed": "Percentage speed lost from weight:%1$s",
+  "message.overstuffed.debughitboxincrease": "Hitbox Increase:%1$s",
+  "message.overstuffed.debughitboxhealth": "Added Health from hitbox:%1$s",
+
+
+
+
+
+
+
+  "menu.overstuffed.main":"Main",
+  "menu.overstuffed.client":"Client",
+  "menu.overstuffed.advanced":"Advanced",
+
+  "menu.overstuffed.maintooltip":"Tooltip",
+  "menu.overstuffed.clienttooltip":"Tooltip 2",
+  "menu.overstuffed.advancedtooltip":"Tooltip 3",
+
+  "menu.overstuffed.weightheading":"Weight",
+  "menu.overstuffed.calorieheading":"Calories",
+  "menu.overstuffed.layname":"Layer Name",
+  "menu.overstuffed.preview":"Preview",
+
+  "menu.overstuffed.calorierange":"0-%1$s",
+  "menu.overstuffed.weightrange":"%1$s-%2$s",
+
+  "menu.overstuffed.gaintype":"Gain Type",
+  "menu.overstuffed.granular":"Granular",
+  "menu.overstuffed.stage":"Stage",
+  "menu.overstuffed.stages":"Total Stages",
+  "menu.overstuffed.weighteffects":"Enables/Disables effects related to gaining and losing weight",
+  "menu.overstuffed.maxscaling":"Max hitbox scaling",
+  "menu.overstuffed.scalingenabled":"Hitbox scaling:",
+  "menu.overstuffed.scalingtooltip": "When enabled, your hitbox will scale with your weight.\n Bonus health will also be given based off how much bigger you are from your base size",
+
+  "menu.gluttonousgrowth.previewtooltip": "Preview only works on servers/lan worlds due to restriction in CPM",
+  "menu.gluttonousgrowth.calbaroffsettooltip": "If you get a graphical error when moving, briefly resize screen.",
+
+
+  "menu.overstuffed.weightlayerbox":"Weight Layer",
+  "menu.overstuffed.weightxoffset":"Weight Display X Offset",
+  "menu.overstuffed.weightyoffset":"Weight Display Y Offset",
+  "menu.overstuffed.minweight":"Min Weight",
+  "menu.overstuffed.maxweight":"Max Weight",
+  "menu.overstuffed.minmaxrange":"Range:0-9999",
+  "menu.overstuffed.rangesmall":"The range between your max and min \" +\n  \"weight is too low. Must be at least 100",
+
+
+
+
+  "menu.overstuffed.callayerbox":"Calorie Layer",
+  "menu.overstuffed.calxoffset":"Calorie Meter X Offset",
+  "menu.overstuffed.calyoffset":"Calorie Meter Y Offset",
+  "menu.gluttonousgrowth.calmovementwarning":"If graphical issues occur when moving\nthe cal meter, resize your screen to fix it.",
+
+
+  "menu.overstuffed.gaintypetooltip":"Granular: Weight updates are always calculated. \n Stages: Weight visually updates once you reach every threshold set by your stage amount",
+
+
+  "menu.overstuffed.errorstitle": "Errors: Things that need to be fixed",
+  "menu.overstuffed.warningstitle": "Warnings: Things you should know b/c certain features won't work",
+  "menu.gluttonousgrowth.shortwarning": "Warnings",
+  "menu.gluttonousgrowth.figuraenabled": "Using Figura:",
+
+  "error.overstuffed.nocpm": "CPM is not installed",
+
+  "error.overstuffed.foundweightlayer": "Weight layer inputted was not found",
+  "error.overstuffed.foundcalorielayer": " Calorie layer inputted was not found",
+  "error.overstuffed.samelayer": "Calorie and Weight Layer same",
+  "error.overstuffed.samemaxmin": "Min and Max weight are the same",
+  "error.overstuffed.badinterval": "Min is higher than Max",
+  "error.overstuffed.nonnumber": "Non-number character detected",
+
+  "error.overstuffed.scalehigh": "Max scale set higher than server max",
+  "error.overstuffed.scalelow": "Max scale set lower than 0",
+
+
+
+
+  "menu.overstuffed.stagebasedweightbutton":"Stage Based Weight:",
+  "menu.overstuffed.weightmomentumbutton":"Weight Momentum:",
+  "menu.overstuffed.weighteffectsbutton":"Weight Effects:",
+
+  "menu.overstuffed.digestvolume":"Digestive Sound Volume",
+  "menu.overstuffed.gurglefreq":"Gurgle Frequency",
+  "menu.overstuffed.burpfreq":"Burp Frequency"
+
+}
