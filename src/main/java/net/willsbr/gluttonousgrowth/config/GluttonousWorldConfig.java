@@ -60,6 +60,10 @@ public class GluttonousWorldConfig {
     public static ForgeConfigSpec.ConfigValue<Double> absMaxHitboxIncrease;
 
 
+    //start of block config items
+    public static ForgeConfigSpec.ConfigValue<Boolean> trapdoorUseRelative;
+    public static ForgeConfigSpec.ConfigValue<Double> trapdoorMinWeightPercentage;
+
 
 
     private static void setupConfig(ForgeConfigSpec.Builder builder)
@@ -166,6 +170,14 @@ public class GluttonousWorldConfig {
         absMaxHitboxIncrease=builder
                 .comment("Absolute max increase of hitbox size that players can set to occur")
                 .define("abs_max_hitbox_increase", 3.0);
+
+        trapdoorUseRelative=builder
+                .comment("Defines if a trapdoor will break from a user being above the set minweight threshold"
+                +"true means users above their own personal threshold will break it, false means the current max weight will set it")
+                .define("trapdoor_relative", true);
+        trapdoorMinWeightPercentage=builder
+                .comment("Set percentage of weight that causes a user to start breaking a trapdoor.")
+                .define("trap_min_percentage", 0.5);
 
     }
 

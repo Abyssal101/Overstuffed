@@ -10,6 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.gluttonousgrowth.Block.custom.Scale;
+import net.willsbr.gluttonousgrowth.Block.custom.WeightTrapdoor;
 import net.willsbr.gluttonousgrowth.Item.ModItems;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 
@@ -20,6 +21,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SCALE=registerBlock("scale",
             () ->new Scale(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3f,3f).dynamicShape().noOcclusion()));
+
+    public static final RegistryObject<Block> WEIGHT_TRAPDOOR = registerBlock("weight_trapdoor",
+            () -> new WeightTrapdoor(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 3.0F).dynamicShape().noOcclusion()));
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block)
     {

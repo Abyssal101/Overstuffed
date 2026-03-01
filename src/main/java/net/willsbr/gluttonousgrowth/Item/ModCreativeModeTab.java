@@ -19,6 +19,7 @@ public class ModCreativeModeTab extends CreativeModeTab {
                     .title(Component.translatable("itemGroup.overstuffed"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModBlocks.SCALE.get());
+                        pOutput.accept(ModBlocks.WEIGHT_TRAPDOOR.get());
                     })
                     .build());
 
