@@ -21,6 +21,7 @@ public class ModCreativeModeTab extends CreativeModeTab {
                         pOutput.accept(ModBlocks.SCALE.get());
                         pOutput.accept(ModBlocks.WEIGHT_TRAPDOOR.get());
                         pOutput.accept(ModBlocks.FUNNEL.get());
+                        pOutput.accept(ModItems.FATBIT.get());
                     })
                     .build());
 

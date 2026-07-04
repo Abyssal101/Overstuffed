@@ -25,6 +25,7 @@ import net.willsbr.gluttonousgrowth.Menu.ConfigScreen;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 import net.willsbr.gluttonousgrowth.Renderer.ScaleBER;
 import net.willsbr.gluttonousgrowth.Renderer.FunnelBER;
+import net.willsbr.gluttonousgrowth.Renderer.FatbitItemRenderer;
 import net.willsbr.gluttonousgrowth.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.gluttonousgrowth.client.HudOverlay;
 import net.willsbr.gluttonousgrowth.networking.ModMessages;
@@ -380,6 +381,15 @@ public class ClientEvents {
             event.registerBlockEntityRenderer(ModEntities.SCALE.get(), ScaleBER::new);
                         event.registerBlockEntityRenderer(ModEntities.FUNNEL.get(), FunnelBER::new);
 
+        }
+
+        // The fatbit's item model is builtin/entity, so its BEWLR draws the geometry. That means the
+        // placeholder base model has to be baked as a standalone model — register it here so the
+        // renderer can fetch it from the model manager.
+        @SubscribeEvent
+        public static void registerAdditionalModels(ModelEvent.RegisterAdditional event)
+        {
+            event.register(FatbitItemRenderer.FATBIT_BASE_MODEL);
         }
 
 

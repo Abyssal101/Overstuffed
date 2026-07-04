@@ -24,6 +24,10 @@
 
   "block.gluttonousgrowth.scale": "Scale",
   "block.gluttonousgrowth.weight_trapdoor": "Weight Trapdoor",
+  "block.gluttonousgrowth.funnel": "Funnel",
+
+
+  "item.gluttonousgrowth.fatbit": "Fatbit",
 
   "commands.overstuffed.stuffedupdatesuccess": "Stuffed layer successfully updated",
   "commands.overstuffed.weightupdatesuccess": "Weight layer successfully updated",
