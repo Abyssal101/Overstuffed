@@ -2,15 +2,26 @@ package net.willsbr.gluttonousgrowth.Event;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.willsbr.gluttonousgrowth.util.ModTags;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -144,11 +155,11 @@ public class ModEvent {
             if(!event.player.level().isClientSide())
             {
                 //Making it a little more effcient
-                if((event.player.tickCount&3)==0)
+                if((event.player.tickCount % 4)==0)
                 {
                     stuffedSystem(event);
                 }
-                if((event.player.tickCount&2)==0)
+                if((event.player.tickCount % 2)==0)
                 {
                     weightSystem(event);
                 }
@@ -163,7 +174,7 @@ public class ModEvent {
             {
 
                 //Come back to if really jarring
-                if((event.player.tickCount&5)==0)
+                if((event.player.tickCount % 5)==0)
                 {
                     AtomicInteger totalWeightFrames = new AtomicInteger(100); // Default value
                     event.player.getCapability(CPMDataProvider.PLAYER_CPM_DATA).ifPresent(cpmData -> {
@@ -390,7 +401,7 @@ public class ModEvent {
 
                 ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),
                         calorieMeter.getModMetabolismThres(),
-                        calorieMeter.getModMetabolismThres()),(ServerPlayer) event.player);
+                        calorieMeter.getSlowMetabolismThres()),(ServerPlayer) event.player);
                 ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(event.player.tickCount)),(ServerPlayer) event.player);
 
             }
@@ -403,6 +414,7 @@ public class ModEvent {
                                         PlayerWeightBar weightBar, int curStage, int lastWeightStage)
     {
             ServerPlayer player = (ServerPlayer) event.player;
+            boolean modifiersChanged = false;
             //First check if player even wants to have effects based off the server nbt saved setting
             //Will attempt to clear the effects every time this runs accordingly, has checks within the
             //method to only run based off certain changes
@@ -410,6 +422,8 @@ public class ModEvent {
             {
                 PlayerWeightBar.clearModifiers(player,weightBar);
                 PlayerWeightBar.clearScaling(player,weightBar);
+                //Force a re-apply the next time effects are switched back on.
+                weightBar.setLastAppliedWeight(-1);
             }
             else {
                 //First we see if uses a stage based gain
@@ -431,20 +445,28 @@ public class ModEvent {
                             } else {
                                 PlayerWeightBar.clearScaling(player, weightBar);
                             }
+                            weightBar.setLastAppliedWeight(weightBar.getCurrentWeight());
+                            modifiersChanged = true;
                         }
 
                     }
                 } else {
 
-                    //this is granular right here
-                    weightBar.setNewModifiers();
-                    PlayerWeightBar.addCorrectModifier(player);
+                    //Granular mode runs on every weight tick, so only touch attributes and re-sync
+                    //when the weight actually changed. Otherwise this cleared and re-added modifiers
+                    //(and polled the client) several times a second for no reason.
+                    if (weightBar.getCurrentWeight() != weightBar.getLastAppliedWeight()) {
+                        weightBar.setNewModifiers();
+                        PlayerWeightBar.addCorrectModifier(player);
 
-                    //handles adding the correct hitbox changes
-                    if (serverSettings.isHitboxScalingEnabled()) {
-                        PlayerWeightBar.addCorrectScaling(player);
-                    } else {
-                        PlayerWeightBar.clearScaling(player, weightBar);
+                        //handles adding the correct hitbox changes
+                        if (serverSettings.isHitboxScalingEnabled()) {
+                            PlayerWeightBar.addCorrectScaling(player);
+                        } else {
+                            PlayerWeightBar.clearScaling(player, weightBar);
+                        }
+                        weightBar.setLastAppliedWeight(weightBar.getCurrentWeight());
+                        modifiersChanged = true;
                     }
                 }
             }
@@ -455,11 +477,75 @@ public class ModEvent {
                     player.setHealth(player.getMaxHealth());
                 }
 
-                ModMessages.sendToPlayer(new SyncAttributeValuesS2C
-                        (weightBar.getWeightHealth(),weightBar.getWeightSpeed(),
-                                weightBar.getCurrentHitboxIncrease(),weightBar.getScalingHealth()),player);
+                //Only re-sync the debug attribute values when the modifiers were actually updated.
+                if (modifiersChanged) {
+                    ModMessages.sendToPlayer(new SyncAttributeValuesS2C
+                            (weightBar.getWeightHealth(),weightBar.getWeightSpeed(),
+                                    weightBar.getCurrentHitboxIncrease(),weightBar.getScalingHealth()),player);
+                }
 
 
+    }
+
+    //Handles the "overstuffing" that occurs when a player finishes eating. Runs on the server so the
+    //client can no longer fabricate calorie/nutrition values. Replaces the old client-side path that
+    //sent OverfullFoodC2SPacket and OverstuffedEffectC2SPacket for the golden diet.
+    @SubscribeEvent
+    public static void onFoodFinishUsing(LivingEntityUseItemEvent.Finish event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        if (player.level().isClientSide()) {
+            return;
+        }
+
+        ItemStack heldItem = event.getItem();
+        if (heldItem.is(ModTags.Items.GOLDEN_DIET_FOODS)) {
+            int duration = heldItem.is(Items.GOLDEN_APPLE) ? 600 : 200;
+            player.addEffect(new MobEffectInstance(ModEffects.GOLDEN_DIET.get(), duration, 0));
+        } else if (!player.isCreative() && heldItem.isEdible() && player.getFoodData().getFoodLevel() >= 20) {
+            // Use Item.getFoodProperties(stack, entity) instead of ItemStack.getFoodProperties(entity):
+            // the latter only returns static base FoodProperties, while the former lets the Item compute
+            // dynamic values from NBT (e.g. Some Assembly Required sandwiches).
+            FoodProperties foodProps = heldItem.getItem().getFoodProperties(heldItem, player);
+            if (foodProps != null) {
+                player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter ->
+                        calorieMeter.handleCalorieAddition(foodProps.getNutrition(), foodProps.getSaturationModifier(), player));
+            }
+        }
+    }
+
+    //Cake isn't eaten through the "use item over time" flow (LivingEntityUseItemEvent.Finish never
+    //fires for it) — CakeBlock#eat consumes a bite instantly on right-click and adds hunger/saturation
+    //directly. Mirror that same addition into the calorie meter so cake contributes like normal food.
+    @SubscribeEvent
+    public static void onCakeEat(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
+        if (event.getHand() != InteractionHand.MAIN_HAND) {
+            return;
+        }
+        if (event.getUseBlock() == Event.Result.DENY) {
+            return;
+        }
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        BlockState state = event.getLevel().getBlockState(event.getPos());
+        if (!(state.getBlock() instanceof CakeBlock)) {
+            return;
+        }
+        //Matches CakeBlock#eat's own gate (player.canEat(false)) — our canEat mixin applies the same
+        //way here, so we only add calories when vanilla will actually consume a bite.
+        if (!player.canEat(false)) {
+            return;
+        }
+
+        //Mirrors the exact hunger/saturation values CakeBlock#eat grants: foodData.eat(2, 0.1F).
+        player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter ->
+                calorieMeter.handleCalorieAddition(2, 0.1, player));
     }
 
     @SubscribeEvent
@@ -472,7 +558,7 @@ public class ModEvent {
                     // Re-anchor foodEatenTick to current server tick so the timer is correct
                     // after restarts, dimension changes, or death.
                     calorieMeter.rearmFoodEatenTick(player.tickCount);
-                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),calorieMeter.getMaxCalories(),calorieMeter.getSlowMetabolismThres()), player);
+                    ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(), calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),calorieMeter.getSlowMetabolismThres()), player);
                     // Also sync the delay timer so the client countdown doesn't show garbage values after dimension changes
                     ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(player.tickCount)), player);
                 });
@@ -490,6 +576,12 @@ public class ModEvent {
                     weightBar.setNewModifiers();
                    PlayerWeightBar.addCorrectModifier(player);
                    PlayerWeightBar.clearScaling(player,weightBar);
+                    // Seed the applied-weight tracker and send the initial attribute values so the
+                    // client debug HUD is populated without weightBarEffects re-applying every tick.
+                    weightBar.setLastAppliedWeight(weightBar.getCurrentWeight());
+                    ModMessages.sendToPlayer(new SyncAttributeValuesS2C
+                            (weightBar.getWeightHealth(), weightBar.getWeightSpeed(),
+                                    weightBar.getCurrentHitboxIncrease(), weightBar.getScalingHealth()), player);
                     // Re-anchor savedTickForWeight to the current server tick so the weight update
                     // timer doesn't freeze after dimension changes (tickCount-based drift).
                     weightBar.setWeightTick(player.tickCount);

@@ -20,6 +20,7 @@ public class ModCreativeModeTab extends CreativeModeTab {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModBlocks.SCALE.get());
                         pOutput.accept(ModBlocks.WEIGHT_TRAPDOOR.get());
+                        pOutput.accept(ModBlocks.FUNNEL.get());
                     })
                     .build());
 

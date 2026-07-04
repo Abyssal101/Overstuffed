@@ -50,57 +50,8 @@ public class OverfullFoodC2SPacket {
                     {
                         player.getCapability(PlayerCalorieMeterProvider.PLAYER_CALORIE_METER).ifPresent(calorieMeter ->
                         {
-                            player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
 
-                                AtomicBoolean stageGain=new AtomicBoolean(false);
-
-                                player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
-                                    stageGain.set(serverSettings.stageBasedGain());
-                                });
-
-                                int calculatedCalories=nutrition;
-                                calculatedCalories=calculatedCalories+(int)(calculatedCalories*saturationModifier);
-                                calculatedCalories=(int)(calculatedCalories*calorieMeter.getCalorieGainMultipler());
-
-                                double calReductionFromWeight=0;
-
-                                if(stageGain.get())
-                                {
-                                    double currentStagePercentage=(double)weightBar.calculateCurrentWeightStage()/weightBar.getTotalStages();
-                                    calReductionFromWeight=(1-currentStagePercentage*0.5);
-                                }
-                                else
-                                {
-                                    calReductionFromWeight=(1-weightBar.calculateCurrentWeightPercentage()*0.5);
-                                }
-
-
-                                calculatedCalories=(int)(calculatedCalories*calReductionFromWeight);
-                                calculatedCalories=Math.max(1,calculatedCalories);
-
-                                calorieMeter.addCalories(calculatedCalories);
-
-                                //only does it on the first time it's been cosnumed
-                                if(calorieMeter.getFoodEatenTick()==-1)
-                                {
-                                    calorieMeter.setFoodEatenTick(player.tickCount);
-                                    calorieMeter.setCalClearDelay(GluttonousWorldConfig.minCalClearDelay.get());
-                                }
-                                else
-                                {
-                                    int timeToAdd=(int)(((double)calculatedCalories/calorieMeter.getMaxCalories()
-                                            *(GluttonousWorldConfig.maxCalClearDelay.get()- GluttonousWorldConfig.minCalClearDelay.get())));
-                                    timeToAdd+=GluttonousWorldConfig.minCalClearDelay.get();
-                                    calorieMeter.setCalClearDelay(calorieMeter.getCalClearDelay()+timeToAdd);
-                                }
-
-                                ModSounds.playBurp(player);
-                                ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(calorieMeter.getCurrentCalories(),
-                                        calorieMeter.getMaxCalories(),calorieMeter.getModMetabolismThres(),
-                                        calorieMeter.getSlowMetabolismThres()),player);
-                                ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(calorieMeter.getCalClearDelay(), calorieMeter.getRemainingTicks(player.tickCount)),player);
-                            });
-
+                               calorieMeter.handleCalorieAddition(this.nutrition,this.saturationModifier,player);
                         });
                     }
                 }

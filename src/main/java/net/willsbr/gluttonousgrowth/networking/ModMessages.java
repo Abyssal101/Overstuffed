@@ -109,11 +109,6 @@ public class ModMessages {
                 .encoder(BurstGainDataSyncPacketS2C::toBytes)
                 .consumerMainThread(BurstGainDataSyncPacketS2C::handle)
                 .add();
-        net.messageBuilder(addWeightC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(addWeightC2SPacket::new)
-                .encoder(addWeightC2SPacket::toBytes)
-                .consumerMainThread(addWeightC2SPacket::handle)
-                .add();
         net.messageBuilder(setWeightS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(setWeightS2CPacket::new)
                 .encoder(setWeightS2CPacket::toBytes)

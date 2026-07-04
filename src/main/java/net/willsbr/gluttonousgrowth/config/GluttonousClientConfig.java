@@ -67,9 +67,9 @@ public class GluttonousClientConfig {
                 .define("config_stages",5);
 
         maxWeight=builder.comment("The maximum displayable weight.")
-                .define("max_weight,",300);
+                .define("max_weight",300);
         minWeight=builder.comment("The minimum displayable weight.")
-                .define("min_weight,",100);
+                .define("min_weight",100);
 
         builder.pop();
         builder.push("Gameplay Options");
@@ -79,9 +79,9 @@ public class GluttonousClientConfig {
         granularEffects=builder.comment("Do effects get calculated by the immediate current weight versus when a new stage is reached")
                 .define("config_granular",false);
         hitBoxScalingEnabled=builder.comment("Does your hitbox increase in size")
-                .define("hitbox_scaling,",true);
+                .define("hitbox_scaling",true);
         maxHitboxWidth=builder.comment("Max multipler to your hitbox being at max weight should effect")
-                .define("max_hitbox_width,",2.0f);
+                .define("max_hitbox_width",2.0f);
 
 
 
@@ -89,12 +89,12 @@ public class GluttonousClientConfig {
 
         builder.push("Audio Options");
         digestiveSoundsVolume=builder.comment("Volume which digestive sounds play")
-                .define("digestive_sound_volume,",10);
+                .define("digestive_sound_volume",10);
 
         burpFrequency=builder.comment("1-10, the frequency that burps occur")
-                .define("config_burp_frequency,",5);
+                .define("config_burp_frequency",5);
         gurgleFrequency=builder.comment("1-10, the frequency that gurgles occur")
-                .define("config_gurgle_frequency,",3);
+                .define("config_gurgle_frequency",3);
         builder.pop();
 
 
@@ -103,24 +103,24 @@ public class GluttonousClientConfig {
         builder.push("Overstuffed Graphics Options");
 
         weightDisplayXOffset =builder.comment("The weight display's current X position")
-                .define("weightdisplayx,",0);
+                .define("weightdisplayx",0);
 
         weightDisplayYOffSet =builder.comment("The weight display's current Y position")
-                .define("weightdisplayy,",0);
+                .define("weightdisplayy",0);
 
         stuffedHudXOffset =builder.comment("The stuffed hud's X offset from it's default position")
-                .define("stuffedhudx,",0);
+                .define("stuffedhudx",0);
 
         stuffedHudYOffset =builder.comment("The stuffed hud's Y offset from it's default position")
-                .define("stuffedhudy,",0);
+                .define("stuffedhudy",0);
 
         debugView =builder.comment("Boolean to determine if the debug view should be on ")
-                .define("debugview,",false);
+                .define("debugview",false);
 
         playerDisplayScale=builder.comment("The saved scale for a player in the GUI")
-                .define("displayscale,",30);
+                .define("displayscale",30);
         usingFigura=builder.comment("Boolean to determine if warnings regarding CPM should load")
-                .define("usingfigura,",false);
+                .define("usingfigura",false);
 
     }
 

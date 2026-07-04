@@ -64,6 +64,9 @@ public class GluttonousWorldConfig {
     public static ForgeConfigSpec.ConfigValue<Boolean> trapdoorUseRelative;
     public static ForgeConfigSpec.ConfigValue<Double> trapdoorMinWeightPercentage;
 
+    public static ForgeConfigSpec.ConfigValue<Integer> absMaxWeight;
+    public static ForgeConfigSpec.ConfigValue<Integer> absMinWeight;
+
 
 
     private static void setupConfig(ForgeConfigSpec.Builder builder)
@@ -178,6 +181,13 @@ public class GluttonousWorldConfig {
         trapdoorMinWeightPercentage=builder
                 .comment("Set percentage of weight that causes a user to start breaking a trapdoor.")
                 .define("trap_min_percentage", 0.5);
+
+        absMaxWeight=builder
+                .comment("Absolute max weight used as the top of the range for weight-driven block behavior (e.g. the scale's redstone signal).")
+                .define("abs_max_weight", 300);
+        absMinWeight=builder
+                .comment("Absolute min weight used as the bottom of the range for weight-driven block behavior (e.g. the scale's redstone signal).")
+                .define("abs_min_weight", 100);
 
     }
 

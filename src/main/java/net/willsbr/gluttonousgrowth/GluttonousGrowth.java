@@ -23,6 +23,7 @@ import net.willsbr.gluttonousgrowth.Item.ModCreativeModeTab;
 import net.willsbr.gluttonousgrowth.Item.ModItems;
 import net.willsbr.gluttonousgrowth.config.GluttonousClientConfig;
 import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
+import net.willsbr.gluttonousgrowth.fluid.ModFluids;
 import net.willsbr.gluttonousgrowth.networking.ModMessages;
 import net.willsbr.gluttonousgrowth.potion.ModPotions;
 import net.willsbr.gluttonousgrowth.sound.ModSounds;
@@ -46,6 +47,7 @@ public class GluttonousGrowth
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModFluids.register(modEventBus);
         ModCreativeModeTab.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);

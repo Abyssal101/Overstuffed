@@ -174,32 +174,32 @@ public class ClientCPMData {
         String[] v1Parts = version1.split("\\.");
         String[] v2Parts = version2.split("\\.");
 
-        //does the min, ideally they are always the same but this way they don't crash.
-        int length = Math.min(v1Parts.length, v2Parts.length);
+        //Compare every segment; missing segments count as 0 so "0.6" vs "0.6.20" resolves correctly.
+        int length = Math.max(v1Parts.length, v2Parts.length);
         for (int i = 0; i < length; i++) {
-            try
-            {
-                int v1=0;
-                int v2=0;
-                for(int e=0;e<v1Parts[i].length();e++)
-                {
-                    v1=0;
-                    v2=0;
-                    v1+=v1Parts[i].charAt(e);
-                    v2+=v2Parts[i].charAt(e);
-                    if (v1 < v2) return -1;
-                    if (v1 > v2) return 1;
-                }
-
-
-            } catch (NumberFormatException e) {
-
-            }
-
-
-
+            int v1 = (i < v1Parts.length) ? parseLeadingInt(v1Parts[i]) : 0;
+            int v2 = (i < v2Parts.length) ? parseLeadingInt(v2Parts[i]) : 0;
+            if (v1 < v2) return -1;
+            if (v1 > v2) return 1;
         }
         return 0;
+    }
+
+    //Parses the leading numeric portion of a version segment, ignoring any trailing
+    //non-digit suffix (e.g. "20a" -> 20). Returns 0 when there are no leading digits.
+    private static int parseLeadingInt(String part) {
+        int end = 0;
+        while (end < part.length() && Character.isDigit(part.charAt(end))) {
+            end++;
+        }
+        if (end == 0) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(part.substring(0, end));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }
 

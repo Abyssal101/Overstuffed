@@ -34,7 +34,7 @@ public class WeightTrapdoorBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        CompoundTag scaleData=pTag.getCompound(GluttonousGrowth.MODID+"scaledata");
+        CompoundTag scaleData=pTag.getCompound(GluttonousGrowth.MODID+"weighttrapdoordata");
         this.totalDelay =scaleData.getInt("delay");
     }
 

@@ -48,6 +48,11 @@ public class PlayerWeightBar {
     private int amountThroughStage;
     private boolean effectsReady=false;
 
+    // Tracks the weight the granular effects were last applied at, so weightBarEffects only
+    // re-applies attribute modifiers and re-syncs the client when the weight actually changed.
+    // -1 forces a re-apply (used on join and whenever effects are toggled off).
+    private int lastAppliedWeight = -1;
+
     private AttributeModifier WEIGHT_HEALTH_MODIFIER =
             new AttributeModifier(UUID.fromString("65d64bf1-2703-458d-a799-3d06b1e3a36c"), "health increase per percentage", 0, AttributeModifier.Operation.ADDITION);
     private AttributeModifier WEIGHT_SPEED_MODIFIER =
@@ -95,7 +100,7 @@ public class PlayerWeightBar {
     }
     public void loseWeight()
     {
-        if(currentWeight-1>this.minWeight)
+        if(currentWeight-1>=this.minWeight)
         {
             currentWeight--;
         }
@@ -478,6 +483,14 @@ public class PlayerWeightBar {
         return (int)SCALING_HEALTH_MODIFIER.getAmount();
     }
 
+
+    public int getLastAppliedWeight() {
+        return lastAppliedWeight;
+    }
+
+    public void setLastAppliedWeight(int lastAppliedWeight) {
+        this.lastAppliedWeight = lastAppliedWeight;
+    }
 
     public boolean isEffectsReady() {
         return effectsReady;

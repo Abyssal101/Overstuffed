@@ -83,7 +83,7 @@ public class ModSounds {
                 player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
                     if(player.getRandom().nextIntBetweenInclusive(0,10)<serverSettings.getBurpFrequency())
                     {
-                        int soundIndex=player.getRandom().nextIntBetweenInclusive(1,ModSounds.BURP_SOUNDS.size()-1);
+                        int soundIndex=player.getRandom().nextIntBetweenInclusive(0,ModSounds.BURP_SOUNDS.size()-1);
                         if(player.level().getServer().getPlayerList()!=null)
                         {
                             List< ServerPlayer> players = player.level().getServer().getPlayerList().getPlayers();
@@ -109,7 +109,7 @@ public class ModSounds {
                     if (serverSettings.getGurgleFrequency() > 0 & weightBar.getLastWeightStage() >= 1 &&
                             player.getRandom().nextFloat() < (0.001f * Math.sqrt(serverSettings.getGurgleFrequency() * weightBar.getLastWeightStage())))
                     {
-                        int soundIndex=player.getRandom().nextIntBetweenInclusive(1,ModSounds.GURGLE_SOUNDS.size()-1);
+                        int soundIndex=player.getRandom().nextIntBetweenInclusive(0,ModSounds.GURGLE_SOUNDS.size()-1);
                         if(player.level().getServer().getPlayerList()!=null)
                         {
                             List<ServerPlayer> players = player.level().getServer().getPlayerList().getPlayers();

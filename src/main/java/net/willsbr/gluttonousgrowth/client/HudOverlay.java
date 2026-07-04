@@ -26,7 +26,7 @@ import static net.willsbr.gluttonousgrowth.client.AbstractClientMethods.Abstract
 
 
 public class HudOverlay {
-        private static final ResourceLocation STUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffedpoint.png");
+//        private static final ResourceLocation STUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/stuffedpoint.png");
        private static final ResourceLocation OVERSTUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/overstuffedpoint.png");
 
     private static final ResourceLocation SUPERSTUFFED_POINT = new ResourceLocation(GluttonousGrowth.MODID, "textures/hud/superstuffedpoint.png");

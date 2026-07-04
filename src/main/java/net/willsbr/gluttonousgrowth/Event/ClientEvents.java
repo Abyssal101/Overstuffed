@@ -2,11 +2,11 @@ package net.willsbr.gluttonousgrowth.Event;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -14,7 +14,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,13 +24,12 @@ import net.willsbr.gluttonousgrowth.Entity.ModEntities;
 import net.willsbr.gluttonousgrowth.Menu.ConfigScreen;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 import net.willsbr.gluttonousgrowth.Renderer.ScaleBER;
+import net.willsbr.gluttonousgrowth.Renderer.FunnelBER;
 import net.willsbr.gluttonousgrowth.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.gluttonousgrowth.client.HudOverlay;
 import net.willsbr.gluttonousgrowth.networking.ModMessages;
-import net.willsbr.gluttonousgrowth.networking.packet.StuffedPackets.OverfullFoodC2SPacket;
 import net.willsbr.gluttonousgrowth.networking.packet.OverstuffedEffectC2SPacket;
 import net.willsbr.gluttonousgrowth.util.KeyBinding;
-import net.willsbr.gluttonousgrowth.util.ModTags;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid= GluttonousGrowth.MODID,value= Dist.CLIENT)
@@ -46,49 +44,12 @@ public class ClientEvents {
         }
 
         @SubscribeEvent
-        public static void onFoodUse(LivingEntityUseItemEvent.Finish useItemEvent)
-        {
-            if(useItemEvent.getEntity() instanceof  Player)
-            {
-
-                Player currentPlayer=(Player)useItemEvent.getEntity();
-                Level currentLevel=currentPlayer.level();
-                if(currentLevel.isClientSide())
-                {
-                    ItemStack heldItem=useItemEvent.getItem();
-                    //heldItem.getItem().getFoodProperties(heldItem, (LivingEntity) currentPlayer).
-                    if(heldItem.is(ModTags.Items.GOLDEN_DIET_FOODS))
-                    {
-                        int duration = heldItem.is(Items.GOLDEN_APPLE) ? 600 : 200;
-                        int amplifier = 0;
-                        ModMessages.sendToServer(new OverstuffedEffectC2SPacket(0,duration,amplifier));
-
-                    }
-                    else if(!currentPlayer.isCreative() && heldItem.isEdible() && currentPlayer.getFoodData().getFoodLevel()>=20)
-                    {
-                        // Use Item.getFoodProperties(stack, entity) instead of ItemStack.getFoodProperties(entity).
-                        // The latter only returns static base FoodProperties, while the former lets the Item
-                        // compute dynamic values from NBT (e.g. Some Assembly Required sandwiches).
-                        net.minecraft.world.food.FoodProperties foodProps = heldItem.getItem().getFoodProperties(heldItem, currentPlayer);
-                        if (foodProps != null) {
-                            ModMessages.sendToServer(new OverfullFoodC2SPacket(foodProps.getNutrition(), foodProps.getSaturationModifier()));
-                        }
-                        //Makes weight have more of an impact I guess
-                        //Moved to modEvents stuffed system
-                        //ModMessages.sendToServer(new addWeightC2SPacket(weightForQueue));
-                    }
-
-                }
-
-            }
-
-        }
-
-        @SubscribeEvent
         public static void onClientPlayerTick(LivingEvent.LivingTickEvent event)
         {
-            //Minecraft.getInstance().player.sendSystemMessage(Component.literal("EEE"));
-            if(event.getEntity() instanceof Player)
+            //Only run the wedge check for the local client player. Running it for every rendered
+            //player would apply the slowness effect to the wrong player (it targets the packet sender)
+            //and would touch Minecraft.getInstance() from the integrated server thread.
+            if(event.getEntity() == Minecraft.getInstance().player && event.getEntity().level().isClientSide())
             {
                 Player player=(Player)event.getEntity();
                 //player.sendSystemMessage(Component.literal("EEE"));
@@ -281,7 +242,7 @@ public class ClientEvents {
 
             playerBoundBox=playerBoundBox.inflate(addedHitboxSize);
             AABB playerRightBB=playerBoundBox.move(0,0,playerBoundBox.getZsize()/2);
-            AABB playerLeftBB=playerBoundBox.move(0,0,-playerBoundBox.getXsize()/2);
+            AABB playerLeftBB=playerBoundBox.move(0,0,-playerBoundBox.getZsize()/2);
 
             //Testing Code creates a platform of brich wood
 //        for(int i=0;i<10;i++)
@@ -396,11 +357,6 @@ public class ClientEvents {
         }
 
 
-        @SubscribeEvent
-        public static void commandRegister(RegisterCommandsEvent event)
-        {
-            registerCommands(event);
-        }
     }
     @Mod.EventBusSubscriber(modid= GluttonousGrowth.MODID,value= Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents
@@ -422,6 +378,7 @@ public class ClientEvents {
             //RENDERERS ARE CREATED CLIENT SIDE, GOOD TO KNOW
             //Block Entities
             event.registerBlockEntityRenderer(ModEntities.SCALE.get(), ScaleBER::new);
+                        event.registerBlockEntityRenderer(ModEntities.FUNNEL.get(), FunnelBER::new);
 
         }
 
@@ -434,6 +391,12 @@ public class ClientEvents {
         //CommandHandler.generateCommands(commands,event.getBuildContext());
         CommonEventMethods.registerCommonCommands(event);
 
+    }
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent event) {
+        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+
+        }
     }
 
 

@@ -1,7 +1,20 @@
 package net.willsbr.gluttonousgrowth.StuffedBar;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.willsbr.gluttonousgrowth.ServerPlayerSettings.PlayerServerSettingsProvider;
+import net.willsbr.gluttonousgrowth.WeightSystem.PlayerWeightBar;
+import net.willsbr.gluttonousgrowth.WeightSystem.PlayerWeightBarProvider;
 import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
+import net.willsbr.gluttonousgrowth.networking.ModMessages;
+import net.willsbr.gluttonousgrowth.networking.packet.StuffedPackets.CalorieMeterDelaySyncPacketS2C;
+import net.willsbr.gluttonousgrowth.networking.packet.StuffedPackets.OverfullFoodDataSyncPacketS2C;
+import net.willsbr.gluttonousgrowth.sound.ModSounds;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static net.willsbr.gluttonousgrowth.config.GluttonousClientConfig.stageGain;
 
 public class PlayerCalorieMeter {
 
@@ -182,6 +195,84 @@ public class PlayerCalorieMeter {
             this.currentCalories=this.maxCalories;
         }
     }
+
+    static public int calRawCalories(int nutrition, double saturationModifier)
+    {
+        int calculatedCalories=nutrition;
+        calculatedCalories=calculatedCalories+(int)(calculatedCalories*saturationModifier);
+        return calculatedCalories;
+    }
+
+    public int calcPlayerCalories(int nutrition, double saturationModifier, PlayerWeightBar weightBar
+    ,AtomicBoolean curStageGain)
+    {
+
+        int calculatedCalories=(int)(calRawCalories(nutrition,saturationModifier)*calorieGainMultipler);
+        double calReductionFromWeight=0;
+
+        if(curStageGain.get())
+        {
+            double currentStagePercentage=(double)weightBar.calculateCurrentWeightStage()/weightBar.getTotalStages();
+            calReductionFromWeight=(1-currentStagePercentage*0.5);
+        }
+        else
+        {
+            calReductionFromWeight=(1-weightBar.calculateCurrentWeightPercentage()*0.5);
+        }
+
+
+        calculatedCalories=(int)(calculatedCalories*calReductionFromWeight);
+        calculatedCalories=Math.max(1,calculatedCalories);
+
+        return calculatedCalories;
+    }
+
+    private void handleCalorieTiming(int calculatedCalories,Player player)
+    {
+        if(this.getFoodEatenTick()==-1)
+        {
+            this.setFoodEatenTick(player.tickCount);
+            this.setCalClearDelay(GluttonousWorldConfig.minCalClearDelay.get());
+        }
+        else
+        {
+            int timeToAdd=(int)(((double)calculatedCalories/this.getMaxCalories()
+                    *(GluttonousWorldConfig.maxCalClearDelay.get()- GluttonousWorldConfig.minCalClearDelay.get())));
+            timeToAdd+=GluttonousWorldConfig.minCalClearDelay.get();
+            this.setCalClearDelay(this.getCalClearDelay()+timeToAdd);
+        }
+    }
+
+    private void handleEatingSounds(ServerPlayer player)
+    {
+        ModSounds.playBurp(player);
+        ModMessages.sendToPlayer(new OverfullFoodDataSyncPacketS2C(this.getCurrentCalories(),
+                this.getMaxCalories(),this.getModMetabolismThres(),
+                this.getSlowMetabolismThres()),player);
+        ModMessages.sendToPlayer(new CalorieMeterDelaySyncPacketS2C(this.getCalClearDelay(), this.getRemainingTicks(player.tickCount)),player);
+    }
+
+    //(ON SERVER ONLY)Handles calculating the calories, adding them to the player server side, syncing with client, and activating souds
+    public void handleCalorieAddition(int nutrition, double saturationModifier,
+                                      ServerPlayer player)
+    {
+        player.getCapability(PlayerWeightBarProvider.PLAYER_WEIGHT_BAR).ifPresent(weightBar -> {
+            AtomicBoolean curStageGain=new AtomicBoolean(false);
+
+            //Grabs the if the stage setting is set
+            player.getCapability(PlayerServerSettingsProvider.PLAYER_SERVER_SETTINGS).ifPresent(serverSettings -> {
+                curStageGain.set(serverSettings.stageBasedGain());
+            });
+
+            int calculatedCalories=this.calcPlayerCalories(nutrition,saturationModifier,weightBar,curStageGain);
+            this.addCalories(calculatedCalories);
+            //only does it on the first time it's been cosnumed
+            this.handleCalorieTiming(calculatedCalories,player);
+            this.handleEatingSounds(player);
+        });
+
+    }
+
 
 
 

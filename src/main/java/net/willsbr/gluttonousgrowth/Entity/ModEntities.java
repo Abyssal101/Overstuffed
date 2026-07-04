@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.gluttonousgrowth.Block.ModBlocks;
 import net.willsbr.gluttonousgrowth.Entity.BlockEntity.ScaleBlockEntity;
 import net.willsbr.gluttonousgrowth.Entity.BlockEntity.WeightTrapdoorBlockEntity;
+import net.willsbr.gluttonousgrowth.Entity.BlockEntity.FunnelBlockEntity;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 
 public class ModEntities {
@@ -18,6 +19,9 @@ public class ModEntities {
 
     public static RegistryObject<BlockEntityType<WeightTrapdoorBlockEntity>> WEIGHT_TRAPDOOR=BLOCK_ENTITIES.register("weight_trapdoor_block_entity"
             ,() -> BlockEntityType.Builder.of(WeightTrapdoorBlockEntity::new, ModBlocks.WEIGHT_TRAPDOOR.get()).build(null));
+
+    public static RegistryObject<BlockEntityType<FunnelBlockEntity>> FUNNEL=BLOCK_ENTITIES.register("funnel_block_entity"
+            ,() -> BlockEntityType.Builder.of(FunnelBlockEntity::new, ModBlocks.FUNNEL.get()).build(null));
   public static void register(IEventBus eventbus)
   {
       BLOCK_ENTITIES.register(eventbus);

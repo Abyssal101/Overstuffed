@@ -38,7 +38,7 @@ public class ScaleBlockEntity extends BlockEntity {
 
         if (!level.isClientSide()) {
 
-            if((level.getGameTime()&20)==0)
+            if((level.getGameTime() % 20)==0)
             {
                 int check=scaleBE.getDisplayWeight();
                 int playerWeights = scaleBE.checkOnTop(level, pos);

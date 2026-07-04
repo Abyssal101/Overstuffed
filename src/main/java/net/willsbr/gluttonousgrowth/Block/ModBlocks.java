@@ -3,6 +3,7 @@ package net.willsbr.gluttonousgrowth.Block;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -11,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.willsbr.gluttonousgrowth.Block.custom.Scale;
 import net.willsbr.gluttonousgrowth.Block.custom.WeightTrapdoor;
+import net.willsbr.gluttonousgrowth.Block.custom.Funnel;
 import net.willsbr.gluttonousgrowth.Item.ModItems;
 import net.willsbr.gluttonousgrowth.GluttonousGrowth;
 
@@ -20,10 +22,13 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS= DeferredRegister.create(ForgeRegistries.BLOCKS, GluttonousGrowth.MODID);
 
     public static final RegistryObject<Block> SCALE=registerBlock("scale",
-            () ->new Scale(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3f,3f).dynamicShape().noOcclusion()));
+            () ->new Scale(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3f,3f).sound(SoundType.METAL).dynamicShape().noOcclusion()));
 
     public static final RegistryObject<Block> WEIGHT_TRAPDOOR = registerBlock("weight_trapdoor",
-            () -> new WeightTrapdoor(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 3.0F).dynamicShape().noOcclusion()));
+            () -> new WeightTrapdoor(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 3.0F).sound(SoundType.METAL).dynamicShape().noOcclusion()));
+
+    public static final RegistryObject<Block> FUNNEL = registerBlock("funnel",
+            () -> new Funnel(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 3.0F).sound(SoundType.METAL).dynamicShape().noOcclusion()));
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block)
     {

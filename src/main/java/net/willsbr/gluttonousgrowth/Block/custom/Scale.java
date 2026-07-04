@@ -3,6 +3,7 @@ package net.willsbr.gluttonousgrowth.Block.custom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -23,6 +24,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.willsbr.gluttonousgrowth.Entity.BlockEntity.ScaleBlockEntity;
 import net.willsbr.gluttonousgrowth.Entity.ModEntities;
+import net.willsbr.gluttonousgrowth.config.GluttonousWorldConfig;
 import org.jetbrains.annotations.Nullable;
 
 public class Scale extends BaseEntityBlock {
@@ -182,15 +184,9 @@ public class Scale extends BaseEntityBlock {
 
     @Override
     public int getSignal(BlockState pState, BlockGetter level, BlockPos pos, Direction pDirection) {
-        if(level.getBlockEntity(pos) instanceof ScaleBlockEntity)
+        if(level.getBlockEntity(pos) instanceof ScaleBlockEntity scaleBE)
         {
-            ScaleBlockEntity scaleBE=(ScaleBlockEntity)level.getBlockEntity(pos);
-            int displayWeight=scaleBE.getDisplayWeight();
-            if(displayWeight<=1500)
-            {
-                return displayWeight/100;
-            }
-
+            return calculateSignal(scaleBE.getDisplayWeight());
         }
        return 0;
     }
@@ -198,18 +194,27 @@ public class Scale extends BaseEntityBlock {
 
     @Override
     public int getDirectSignal(BlockState pState, BlockGetter level, BlockPos pos, Direction pDirection) {
-        if(level.getBlockEntity(pos) instanceof ScaleBlockEntity)
+        if(level.getBlockEntity(pos) instanceof ScaleBlockEntity scaleBE)
         {
-            ScaleBlockEntity scaleBE=(ScaleBlockEntity)level.getBlockEntity(pos);
-            int displayWeight=scaleBE.getDisplayWeight();
-            if(displayWeight<=1500)
-            {
-                return displayWeight/100;
-            }
-
+            return calculateSignal(scaleBE.getDisplayWeight());
         }
         return 0;
 
+    }
+
+    //Scales the weight on top of the scale into a 0-15 redstone signal using the server-configured
+    //absolute min/max weight as the normalization range. Multiple players stack their weight, so a
+    //full group can still saturate the signal at 15 even past a single player's max.
+    private static int calculateSignal(int displayWeight)
+    {
+        int min = GluttonousWorldConfig.absMinWeight.get();
+        int max = GluttonousWorldConfig.absMaxWeight.get();
+        if (max <= min)
+        {
+            return 0;
+        }
+        double ratio = (double)(displayWeight - min) / (max - min);
+        return Mth.clamp((int) Math.round(ratio * 15), 0, 15);
     }
 }
 
