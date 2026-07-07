@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north,tilt=none": { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 0 },
+    "facing=east,tilt=none":  { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 90 },
+    "facing=south,tilt=none": { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 180 },
+    "facing=west,tilt=none":  { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 270 },
+
+    "facing=north,tilt=unstable": { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 0 },
+    "facing=east,tilt=unstable":  { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 90 },
+    "facing=south,tilt=unstable": { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 180 },
+    "facing=west,tilt=unstable":  { "model": "gluttonousgrowth:block/weighttrapdoornone", "y": 270 },
+
+    "facing=north,tilt=partial": { "model": "gluttonousgrowth:block/weighttrapdoorpartial", "y": 0 },
+    "facing=east,tilt=partial":  { "model": "gluttonousgrowth:block/weighttrapdoorpartial", "y": 90 },
+    "facing=south,tilt=partial": { "model": "gluttonousgrowth:block/weighttrapdoorpartial", "y": 180 },
+    "facing=west,tilt=partial":  { "model": "gluttonousgrowth:block/weighttrapdoorpartial", "y": 270 },
+
+    "facing=north,tilt=full": { "model": "gluttonousgrowth:block/weighttrapdoorfull", "y": 0 },
+    "facing=east,tilt=full":  { "model": "gluttonousgrowth:block/weighttrapdoorfull", "y": 90 },
+    "facing=south,tilt=full": { "model": "gluttonousgrowth:block/weighttrapdoorfull", "y": 180 },
+    "facing=west,tilt=full":  { "model": "gluttonousgrowth:block/weighttrapdoorfull", "y": 270 }
+  }
+}

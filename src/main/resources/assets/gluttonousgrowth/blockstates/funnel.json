@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "facing=down,enabled=false": { "model": "gluttonousgrowth:block/funnel" },
+    "facing=down,enabled=true":  { "model": "gluttonousgrowth:block/funnel" },
+
+    "facing=north,enabled=false": { "model": "gluttonousgrowth:block/funnel", "y": 180 },
+    "facing=north,enabled=true":  { "model": "gluttonousgrowth:block/funnel", "y": 180 },
+
+    "facing=south,enabled=false": { "model": "gluttonousgrowth:block/funnel", "y": 0 },
+    "facing=south,enabled=true":  { "model": "gluttonousgrowth:block/funnel", "y": 0 },
+
+    "facing=west,enabled=false": { "model": "gluttonousgrowth:block/funnel", "y": 270 },
+    "facing=west,enabled=true":  { "model": "gluttonousgrowth:block/funnel", "y": 270 },
+
+    "facing=east,enabled=false": { "model": "gluttonousgrowth:block/funnel", "y": 90 },
+    "facing=east,enabled=true":  { "model": "gluttonousgrowth:block/funnel", "y": 90 }
+  }
+}
